@@ -136,9 +136,9 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 
 func (self *ReadingHandler) readingGoEnroll(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
 	rsp := &proto.Response{Code: proto.RESPONSE_OK}
-	//defer func() {
-	//	writeRsp(w, rsp)
-	//}()
+	defer func() {
+		writeRsp(w, rsp)
+	}()
 	
 	req := &proto.ReadingEnrollReq{}
 	err := json.Unmarshal(rr.Val, &req)
