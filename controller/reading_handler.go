@@ -152,8 +152,11 @@ func (self *ReadingHandler) readingGoEnroll(rr *HandlerRequest, w http.ResponseW
 
 func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
 	holmes.Debug("in reading pay")
-	userinfo, err := self.getOauthUserInfo(w, r)
+	ifRedirect, userinfo, err := self.getOauthUserInfo(w, r)
 	if err != nil {
+		return
+	}
+	if ifRedirect {
 		return
 	}
 	
@@ -167,12 +170,12 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 	renderView(w, "./views/reading_pay.html", readingUserInfo)
 }
 
-func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Request) (*mpoauth2.UserInfo, error) {
+func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Request) (bool, *mpoauth2.UserInfo, error) {
 	queryValues, err := url.ParseQuery(r.URL.RawQuery)
 	if err != nil {
 		io.WriteString(w, err.Error())
 		holmes.Error("url parse query error: %v", err)
-		return nil, err
+		return false, nil, err
 	}
 	
 	code := queryValues.Get("code")
@@ -183,14 +186,14 @@ func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Requ
 			redirectUrl,
 			self.l.cfg.ReadingOauth.ReadingOauth2ScopeUser, state)
 		http.Redirect(w, r, AuthCodeURL, http.StatusFound)
-		return nil, err
+		return true, nil, nil
 	}
 	
 	token, err := self.oauth2Client.ExchangeToken(code)
 	if err != nil {
 		//holmes.Error("exchange token error: %v", err)
 		http.Redirect(w, r, fmt.Sprintf("http://%s%s", r.Host, r.URL.Path), http.StatusFound)
-		return nil, err
+		return false, nil, err
 	}
 	holmes.Debug("token: %+v", token)
 	
@@ -198,11 +201,11 @@ func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Requ
 	if err != nil {
 		io.WriteString(w, err.Error())
 		holmes.Error("get user info error: %v", err)
-		return nil, err
+		return false, nil, err
 	}
 	holmes.Debug("user info: %+v", userinfo)
 	
-	return userinfo, nil
+	return false, userinfo, nil
 }
 
 func (self *ReadingHandler) readingUnifiedOrderRequest(payMoney int64, openId, userIp, notifyUrl string) *mchpay.UnifiedOrderRequest {
