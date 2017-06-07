@@ -151,10 +151,13 @@ func (self *ReadingHandler) readingGoEnroll(rr *HandlerRequest, w http.ResponseW
 }
 
 func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	holmes.Debug("in reading pay")
 	userinfo, err := self.getOauthUserInfo(w, r)
 	if err != nil {
 		return
 	}
+	
+	holmes.Debug("userinfo: %+v", userinfo)
 	
 	readingUserInfo := &ReadingEnrollUserInfo{
 		NickName:  userinfo.Nickname,
