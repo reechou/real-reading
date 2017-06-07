@@ -189,6 +189,7 @@ func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Requ
 		http.Redirect(w, r, fmt.Sprintf("http://%s%s", r.Host, r.URL.Path), http.StatusFound)
 		return nil, err
 	}
+	holmes.Debug("token: %+v", token)
 	
 	userinfo, err := mpoauth2.GetUserInfo(token.AccessToken, token.OpenId, "", nil)
 	if err != nil {
