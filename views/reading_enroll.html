@@ -102,12 +102,14 @@
             type: 'POST',
             url: '/reading/goenroll',
             dataType: 'json',
-            data: {
-                mobile: mobile,
-                realname: name,
-                weixin: wechat,
-                openid: {{ .OpenId }}
-            },
+            data: JSON.stringify(
+                {
+                    mobile: mobile,
+                    realname: name,
+                    weixin: wechat,
+                    openid: {{ .OpenId }}
+                }
+            ),
             success: function(d){
                 if(d.code == 0){
                     // location.assign('/zb/enroll?_'+1496810924);
