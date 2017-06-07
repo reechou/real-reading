@@ -156,6 +156,7 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 	readingUserInfo := &ReadingEnrollUserInfo{
 		NickName:  userinfo.Nickname,
 		AvatarUrl: userinfo.HeadImageURL,
+		OpenId:    token.OpenId,
 	}
 	renderView(w, "./views/reading_enroll.html", readingUserInfo)
 }
