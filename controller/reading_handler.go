@@ -155,7 +155,7 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 	if err != nil {
 		io.WriteString(w, err.Error())
 		holmes.Error("url parse query error: %v", err)
-		return false, nil, err
+		return
 	}
 	openid := queryValues.Get("openid")
 	
