@@ -148,10 +148,16 @@ func (self *ReadingHandler) readingGoEnroll(rr *HandlerRequest, w http.ResponseW
 		return
 	}
 	holmes.Debug("reading go enroll: %+v %s", req, r.URL.String())
+	
+	readingUserInfo := &ReadingEnrollUserInfo{
+		NickName:  "xxxx",
+		AvatarUrl: "http://wx.qlogo.cn/mmopen/ibmyOaFEgYk09HCYrBXA7PHZSuFjHINfuNxBlIOyvPibrU0hD87gTrGI2YuBTtGibHrxdTyzFAMFvWIPO5ekuhibzQ/0",
+		OpenId:    req.OpenId,
+	}
+	renderView(w, "./views/reading_pay.html", readingUserInfo)
 }
 
 func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
-	holmes.Debug("in reading pay")
 	ifRedirect, userinfo, err := self.getOauthUserInfo(w, r)
 	if err != nil {
 		return
@@ -159,8 +165,6 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 	if ifRedirect {
 		return
 	}
-	
-	holmes.Debug("userinfo: %+v", userinfo)
 	
 	readingUserInfo := &ReadingEnrollUserInfo{
 		NickName:  userinfo.Nickname,
