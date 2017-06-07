@@ -148,28 +148,21 @@ func (self *ReadingHandler) readingGoEnroll(rr *HandlerRequest, w http.ResponseW
 		return
 	}
 	holmes.Debug("reading go enroll: %+v %s", req, r.URL.String())
-	
-	readingUserInfo := &ReadingEnrollUserInfo{
-		NickName:  "xxxx",
-		AvatarUrl: "http://wx.qlogo.cn/mmopen/ibmyOaFEgYk09HCYrBXA7PHZSuFjHINfuNxBlIOyvPibrU0hD87gTrGI2YuBTtGibHrxdTyzFAMFvWIPO5ekuhibzQ/0",
-		OpenId:    req.OpenId,
-	}
-	renderView(w, "./views/reading_pay.html", readingUserInfo)
 }
 
 func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
-	ifRedirect, userinfo, err := self.getOauthUserInfo(w, r)
+	queryValues, err := url.ParseQuery(r.URL.RawQuery)
 	if err != nil {
-		return
+		io.WriteString(w, err.Error())
+		holmes.Error("url parse query error: %v", err)
+		return false, nil, err
 	}
-	if ifRedirect {
-		return
-	}
+	openid := queryValues.Get("openid")
 	
 	readingUserInfo := &ReadingEnrollUserInfo{
-		NickName:  userinfo.Nickname,
-		AvatarUrl: userinfo.HeadImageURL,
-		OpenId:    userinfo.OpenId,
+		NickName:  "xxxxxx",
+		AvatarUrl: "http://wx.qlogo.cn/mmopen/ibmyOaFEgYk09HCYrBXA7PHZSuFjHINfuNxBlIOyvPibrU0hD87gTrGI2YuBTtGibHrxdTyzFAMFvWIPO5ekuhibzQ/0",
+		OpenId:    openid,
 	}
 	renderView(w, "./views/reading_pay.html", readingUserInfo)
 }
