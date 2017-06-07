@@ -86,34 +86,7 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case READING_URI_GO_ENROLL:
 		self.readingGoEnroll(rr, w, r)
 	case READING_URI_PAY:
-		queryValues, err := url.ParseQuery(r.URL.RawQuery)
-		if err != nil {
-			io.WriteString(w, err.Error())
-			holmes.Error("url parse query error: %v", err)
-			return
-		}
-
-		code := queryValues.Get("code")
-		if code == "" {
-			state := string(rand.NewHex())
-			redirectUrl := fmt.Sprintf("http://%s%s", r.Host, r.URL.String())
-			AuthCodeURL := mpoauth2.AuthCodeURL(self.l.cfg.ReadingOauth.ReadingWxAppId,
-				redirectUrl,
-				self.l.cfg.ReadingOauth.ReadingOauth2ScopeUser, state)
-			http.Redirect(w, r, AuthCodeURL, http.StatusFound)
-			return
-		}
-
-		token, err := self.oauth2Client.ExchangeToken(code)
-		if err != nil {
-			//holmes.Error("exchange token error: %v", err)
-			http.Redirect(w, r, fmt.Sprintf("http://%s%s", r.Host, r.URL.Path), http.StatusFound)
-			return
-		}
-		holmes.Debug("token: %+v", token)
-
-		renderView(w, "./views/reading_pay.html", nil)
-		return
+		self.readingPay(rr, w, r)
 	default:
 		http.ServeFile(w, r, self.l.cfg.ReadingOauth.MpVerifyDir+rr.Path)
 	}
@@ -175,6 +148,57 @@ func (self *ReadingHandler) readingGoEnroll(rr *HandlerRequest, w http.ResponseW
 		return
 	}
 	holmes.Debug("reading go enroll: %+v %s", req, r.URL.String())
+}
+
+func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	userinfo, err := self.getOauthUserInfo(w, r)
+	if err != nil {
+		return
+	}
+	
+	readingUserInfo := &ReadingEnrollUserInfo{
+		NickName:  userinfo.Nickname,
+		AvatarUrl: userinfo.HeadImageURL,
+		OpenId:    userinfo.OpenId,
+	}
+	renderView(w, "./views/reading_pay.html", readingUserInfo)
+}
+
+func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Request) (*mpoauth2.UserInfo, error) {
+	queryValues, err := url.ParseQuery(r.URL.RawQuery)
+	if err != nil {
+		io.WriteString(w, err.Error())
+		holmes.Error("url parse query error: %v", err)
+		return nil, err
+	}
+	
+	code := queryValues.Get("code")
+	if code == "" {
+		state := string(rand.NewHex())
+		redirectUrl := fmt.Sprintf("http://%s%s", r.Host, r.URL.String())
+		AuthCodeURL := mpoauth2.AuthCodeURL(self.l.cfg.ReadingOauth.ReadingWxAppId,
+			redirectUrl,
+			self.l.cfg.ReadingOauth.ReadingOauth2ScopeUser, state)
+		http.Redirect(w, r, AuthCodeURL, http.StatusFound)
+		return nil, err
+	}
+	
+	token, err := self.oauth2Client.ExchangeToken(code)
+	if err != nil {
+		//holmes.Error("exchange token error: %v", err)
+		http.Redirect(w, r, fmt.Sprintf("http://%s%s", r.Host, r.URL.Path), http.StatusFound)
+		return nil, err
+	}
+	
+	userinfo, err := mpoauth2.GetUserInfo(token.AccessToken, token.OpenId, "", nil)
+	if err != nil {
+		io.WriteString(w, err.Error())
+		holmes.Error("get user info error: %v", err)
+		return nil, err
+	}
+	holmes.Debug("user info: %+v", userinfo)
+	
+	return userinfo, nil
 }
 
 func (self *ReadingHandler) readingUnifiedOrderRequest(payMoney int64, openId, userIp, notifyUrl string) *mchpay.UnifiedOrderRequest {

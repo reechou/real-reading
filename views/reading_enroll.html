@@ -42,7 +42,7 @@
             </li>
         </ol>
         <ul class="enroll-infobox mt20">
-            <li class="eb-block eb-level0" :class="stepStatus==0 ? '' : 'hide'" >
+            <li class="eb-block eb-level0">
                 <ul class="eb-form">
                     <li class="eb-one">
                         <span class="ebv1-icon ebv1-name"></span>
@@ -112,8 +112,8 @@
             ),
             success: function(d){
                 if(d.code == 0){
-                    // location.assign('/zb/enroll?_'+1496810924);
-                    alert("go ok");
+                    location.assign('/reading/pay');
+                    // alert("go ok");
                 } else {
                     alert(d.msg);
                 }
