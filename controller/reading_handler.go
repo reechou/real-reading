@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"encoding/json"
 
 	"github.com/chanxuehong/rand"
 	"github.com/chanxuehong/session"
@@ -24,8 +25,9 @@ const (
 )
 
 const (
-	READING_URI_ENROLL = "enroll"
-	READING_URI_PAY    = "pay"
+	READING_URI_ENROLL    = "enroll"
+	READING_URI_GO_ENROLL = "goenroll"
+	READING_URI_PAY       = "pay"
 )
 
 type ShareTpl struct {
@@ -81,6 +83,8 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch rr.Path {
 	case READING_URI_ENROLL:
 		self.readingEnroll(rr, w, r)
+	case READING_URI_GO_ENROLL:
+		self.readingGoEnroll(rr, w, r)
 	case READING_URI_PAY:
 		queryValues, err := url.ParseQuery(r.URL.RawQuery)
 		if err != nil {
@@ -95,7 +99,7 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			redirectUrl := fmt.Sprintf("http://%s%s", r.Host, r.URL.String())
 			AuthCodeURL := mpoauth2.AuthCodeURL(self.l.cfg.ReadingOauth.ReadingWxAppId,
 				redirectUrl,
-				self.l.cfg.ReadingOauth.ReadingOauth2Scope, state)
+				self.l.cfg.ReadingOauth.ReadingOauth2ScopeUser, state)
 			http.Redirect(w, r, AuthCodeURL, http.StatusFound)
 			return
 		}
@@ -129,7 +133,7 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 		redirectUrl := fmt.Sprintf("http://%s%s", r.Host, r.URL.String())
 		AuthCodeURL := mpoauth2.AuthCodeURL(self.l.cfg.ReadingOauth.ReadingWxAppId,
 			redirectUrl,
-			self.l.cfg.ReadingOauth.ReadingOauth2Scope, state)
+			self.l.cfg.ReadingOauth.ReadingOauth2ScopeUser, state)
 		http.Redirect(w, r, AuthCodeURL, http.StatusFound)
 		return
 	}
@@ -154,6 +158,22 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 		AvatarUrl: userinfo.HeadImageURL,
 	}
 	renderView(w, "./views/reading_enroll.html", readingUserInfo)
+}
+
+func (self *ReadingHandler) readingGoEnroll(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &proto.ReadingEnrollReq{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	holmes.Debug("reading go enroll: %+v %s", req, r.URL.String())
 }
 
 func (self *ReadingHandler) readingUnifiedOrderRequest(payMoney int64, openId, userIp, notifyUrl string) *mchpay.UnifiedOrderRequest {

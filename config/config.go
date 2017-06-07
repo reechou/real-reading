@@ -34,8 +34,9 @@ type ReadingOauth struct {
 	ReadingWxAppId           string
 	ReadingWxAppSecret       string
 	ReadingOauth2RedirectURI string
-	ReadingOauth2Scope       string
-	MpVerifyDir            string
+	ReadingOauth2ScopeBase   string
+	ReadingOauth2ScopeUser   string
+	MpVerifyDir              string
 }
 
 type Config struct {

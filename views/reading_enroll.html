@@ -100,16 +100,18 @@
 
         $.ajax({
             type: 'POST',
-            url: '/api/user/enroll',
+            url: '/reading/goenroll',
             dataType: 'json',
             data: {
                 mobile: mobile,
                 realname: name,
-                weixin: wechat
+                weixin: wechat,
+                openid: {{ .OpenId }}
             },
             success: function(d){
                 if(d.code == 0){
-                    location.assign('/zb/enroll?_'+1496810924);
+                    // location.assign('/zb/enroll?_'+1496810924);
+                    alert("go ok");
                 } else {
                     alert(d.msg);
                 }
