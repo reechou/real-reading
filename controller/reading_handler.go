@@ -122,7 +122,7 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 		holmes.Error("url parse query error: %v", err)
 		return
 	}
-	
+
 	code := queryValues.Get("code")
 	if code == "" {
 		state := string(rand.NewHex())
@@ -133,14 +133,14 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 		http.Redirect(w, r, AuthCodeURL, http.StatusFound)
 		return
 	}
-	
+
 	token, err := self.oauth2Client.ExchangeToken(code)
 	if err != nil {
 		//holmes.Error("exchange token error: %v", err)
 		http.Redirect(w, r, fmt.Sprintf("http://%s%s", r.Host, r.URL.Path), http.StatusFound)
 		return
 	}
-	
+
 	userinfo, err := mpoauth2.GetUserInfo(token.AccessToken, token.OpenId, "", nil)
 	if err != nil {
 		io.WriteString(w, err.Error())
@@ -148,8 +148,12 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 		return
 	}
 	holmes.Debug("user info: %+v", userinfo)
-	
-	renderView(w, "./views/reading_enroll.html", nil)
+
+	readingUserInfo := &ReadingEnrollUserInfo{
+		NickName:  userinfo.Nickname,
+		AvatarUrl: userinfo.HeadImageURL,
+	}
+	renderView(w, "./views/reading_enroll.html", readingUserInfo)
 }
 
 func (self *ReadingHandler) readingUnifiedOrderRequest(payMoney int64, openId, userIp, notifyUrl string) *mchpay.UnifiedOrderRequest {
