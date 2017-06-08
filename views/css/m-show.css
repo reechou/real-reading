@@ -256,9 +256,12 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-code2{margin: 15px 0 15px; text-align: center;}
 .eb-code2 img{width: 151px; height: 171px; vertical-align: top;}
 
-.eb-step{padding: 10px 0 0 ; text-align: center;}
+.eb-step{padding: 10px 0 0; text-align: center;}
 .eb-step img{width: 62px; height: 50px; vertical-align: top;}
 .eb-step > h3{margin: 15px 0 0; font-size: 18px; line-height: 24px; color: #725151;}
+
+.eb-step2{padding: 10px 0 0; text-align: center;}
+.eb-step2 > h3{margin: 15px 0 0; font-size: 18px; line-height: 24px; color: #725151;}
 
 .enroll-swipe{margin: 20px 0 0; text-align: center;}
 .enroll-swipe li{display: inline-block; width: 5px; height: 5px; border-radius: 5px; margin: 0 3px; border: #52d2ff solid 1px;}
@@ -280,7 +283,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-mod04 span{color: #f76e6c;}
 .eb-showb{margin: 0 0 10px; width: 100%;}
 .eb-showb-nm{width: 100%;}
-.eb-showb-bu{width: 25px; height: 25px;}
+.eb-showb-bu{margin: 10px 0 10px; width: 25px; height: 25px;}
 
 .share-flist{margin: 20px 0 0; display: -webkit-box; display: box;}
 .share-fone{-webkit-box-flex: 1; box-flex: 1; text-align: center;}
