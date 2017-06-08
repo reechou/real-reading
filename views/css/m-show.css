@@ -289,7 +289,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-showb-bu{margin: 10px 0 10px; width: 25px; height: 25px;}
 .eb-showb-bu-tu1{margin: 10px 0 0; width: 255px; height: 234px;}
 .eb-showb-bu-tu2{margin: 10px 0 0; width: 255px; height: 203px;}
-.eb-showb-pay-suc{margin: 0 10px 0; width: 52px; height: 21px;}
+.eb-showb-pay-suc{width: 52px; height: 21px;}
 
 .share-flist{margin: 20px 0 0; display: -webkit-box; display: box;}
 .share-fone{-webkit-box-flex: 1; box-flex: 1; text-align: center;}
