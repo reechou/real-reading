@@ -236,7 +236,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 
 .eb-lv-info{margin: 20px 0 0; padding: 0 0 15px; border-bottom: #e6e6e6 solid 1px; line-height: 22px;}
 .eb-lv-info, .eb-lv-info02{border: none; padding: 0;}
-.eb-lv-info > h3, .eb-lv-info > p{margin: 15px 0 0;}
+.eb-lv-info > h3, .eb-lv-info > p{margin: 10px 0 0;}
 .eb-lv-info02 > p{margin: 6px 0 0;}
 .eb-count{font-size: 16px; color: #333;}
 .eb-count > span{font-size: 18px;}
