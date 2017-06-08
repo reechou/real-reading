@@ -232,7 +232,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .current .icon-begin{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/succeed_03.png');}
 
 .eb-line{-webkit-box-flex: 1; box-flex: 1;}
-.eb-line:after{content: 'gouzi'; display: block; height: 0; border-bottom: #e6e6e6 solid 1px; margin: 16px 0 0;}
+.eb-line:after{content: '√'; text-align: center; display: block; height: 0; border-bottom: #e6e6e6 solid 1px; margin: 16px 0 0;}
 
 .eb-lv-info{margin: 20px 0 0; padding: 0 0 15px; border-bottom: #e6e6e6 solid 1px; line-height: 22px;}
 .eb-lv-info, .eb-lv-info02{border: none; padding: 0;}
