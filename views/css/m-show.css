@@ -264,6 +264,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-step2 > h3{margin: 15px 0 0; font-size: 18px; line-height: 24px; color: #725151;}
 
 .eb-step-bu-xu{padding: 10px 0 0; text-align: center;}
+.eb-step-bu-xu img{width: 25px; height: 25px; vertical-align: top;}
 
 .enroll-swipe{margin: 20px 0 0; text-align: center;}
 .enroll-swipe li{display: inline-block; width: 5px; height: 5px; border-radius: 5px; margin: 0 3px; border: #52d2ff solid 1px;}
@@ -285,7 +286,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-mod04 span{color: #f76e6c;}
 .eb-showb{margin: 0 0 10px; width: 100%;}
 .eb-showb-nm{width: 100%;}
-.eb-showb-bu{margin: 10px 0 10px; width: 25px; height: 25px; vertical-align: top;}
+.eb-showb-bu{margin: 10px 0 10px; width: 25px; height: 25px;}
 .eb-showb-bu-tu1{width: 100%; margin: 10px 0 10px; width: 255px; height: 234px;}
 .eb-showb-bu-tu2{width: 100%; margin: 10px 0 10px; width: 255px; height: 203px;}
 
