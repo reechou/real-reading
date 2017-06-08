@@ -81,7 +81,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .offer-show{padding: 20px 0 30px; word-break: break-all;}
 .offer-text{margin: 30px 0 0;}
 .offer-dobox{text-align: center; padding: 30px 0;}
-.offer-btn{display: inline-block; background: #52d2ff; color: #fff; font-weight: bold; line-height: 20px; padding: 10px 70px; box-shadow: #ccc 2px 3px 4px; border-radius: 20px; text-space: 10px; letter-spacing: 5px;}
+.offer-btn{display: inline-block; background: #f76e6c; color: #fff; font-weight: bold; line-height: 20px; padding: 10px 70px; box-shadow: #ccc 2px 3px 4px; border-radius: 20px; text-space: 10px; letter-spacing: 5px;}
 
 
 .offer-replyone{border-bottom: #e6e6e6 solid 1px; padding: 10px 0 15px; word-break: break-all;}
@@ -186,7 +186,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .pay-text{line-height: 80px; color: #b6b6b6;}
 .pay-original{line-height: 30px; font-size: 18px; }
 .pay-original > span{text-decoration: line-through;}
-.pay-int{font-weight: bold; font-size: 50px; color: #52d2ff; height: 90px; line-height: 90px; font-weight: bold;}
+.pay-int{font-weight: bold; font-size: 50px; color: #f76e6c; height: 90px; line-height: 90px; font-weight: bold;}
 .payint02{font-size: 60px;}
 .pay-int i{font-style: normal; font-size: 32px; color: #eee;}
 .pay-int i, .pay-int span{vertical-align: top;}
@@ -235,7 +235,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-line{-webkit-box-flex: 1; box-flex: 1;}
 .eb-line:after{content: ''; display: block; height: 0; border-bottom: #e6e6e6 solid 1px; margin: 16px 0 0;}
 
-.eb-lv-info{margin: 30px 0 0; padding: 0 0 15px; border-bottom: #e6e6e6 solid 1px; line-height: 22px;}
+.eb-lv-info{margin: 20px 0 0; padding: 0 0 15px; border-bottom: #e6e6e6 solid 1px; line-height: 22px;}
 .eb-lv-info, .eb-lv-info02{border: none; padding: 0;}
 .eb-le-info > h3, .eb-lv-info > p{margin: 15px 0 0;}
 .eb-lv-info02 > p{margin: 6px 0 0;}
@@ -264,7 +264,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-mod00{margin: 20px 0 0; border-top: #e6e6e6 solid 1px; color: #999; line-height: 26px; padding: 16px 0 0;}
 .eb-mod00 span{color: #52d2ff;}
 .eb-mod01{margin: 20px 0 0; border-top: #e6e6e6 solid 1px; line-height: 26px; padding: 16px 0 0;}
-.eb-showb{margin: 0px; width: 100%;}
+.eb-showb{margin: 0 0 20px; width: 100%;}
 
 .share-flist{margin: 20px 0 0; display: -webkit-box; display: box;}
 .share-fone{-webkit-box-flex: 1; box-flex: 1; text-align: center;}
