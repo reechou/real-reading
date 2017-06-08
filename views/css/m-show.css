@@ -255,7 +255,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-step img{width: 56px; height: 50px; vertical-align: top;}
 .eb-step > h3{margin: 15px 0 0; font-size: 18px; line-height: 24px; color: #725151;}
 
-.eb-code2{margin: 10px 0 10px; text-align: center;}
+.eb-code2{margin: 15px 0 15px; text-align: center;}
 .eb-code2 img{width: 151px; height: 171px; vertical-align: top;}
 
 .enroll-swipe{margin: 20px 0 0; text-align: center;}
@@ -272,6 +272,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-mod00{margin: 20px 0 0; border-top: #e6e6e6 solid 1px; color: #999; line-height: 26px; padding: 16px 0 0;}
 .eb-mod00 span{color: #52d2ff;}
 .eb-mod01{margin: 20px 0 0; border-top: #e6e6e6 solid 1px; line-height: 26px; padding: 16px 0 0;}
+.eb-mod02{margin: 10px 0 0; font-size: 18px; line-height: 24px; color: #725151; padding: 16px 0 0;}
 .eb-showb{margin: 0 0 10px; width: 100%;}
 .eb-showb-nm{width: 100%;}
 
