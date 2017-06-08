@@ -249,11 +249,11 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-code{padding: 25px 0 0 ; text-align: center;}
 .eb-code img{width: 150px; height: 150px; vertical-align: top;}
 .eb-code > p{line-height: 24px;}
-.eb-code > h3{margin: 15px 0 0; font-size: 16px; line-height: 24px;}
+.eb-code > h3{margin: 15px 0 0; font-size: 18px; line-height: 24px;}
 
 .eb-step{padding: 10px 0 0 ; text-align: center;}
 .eb-step img{width: 56px; height: 50px; vertical-align: top;}
-.eb-step > h3{margin: 15px 0 0; font-size: 16px; line-height: 24px; color: #725151;}
+.eb-step > h3{margin: 15px 0 0; font-size: 18px; line-height: 24px; color: #725151;}
 
 .enroll-swipe{margin: 20px 0 0; text-align: center;}
 .enroll-swipe li{display: inline-block; width: 5px; height: 5px; border-radius: 5px; margin: 0 3px; border: #52d2ff solid 1px;}
