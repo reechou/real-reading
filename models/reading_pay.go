@@ -56,9 +56,6 @@ func GetReadingPay(info *ReadingPay) (bool, error) {
 
 func UpdateReadingPayUserInfo(info *ReadingPay) error {
 	info.UpdatedAt = time.Now().Unix()
-	affected, err := x.ID(info.ID).Cols("real_name", "phone", "wechat").Update(info)
-	if affected == 0 {
-		return fmt.Errorf("update reading pay user info affected == 0")
-	}
+	_, err := x.ID(info.ID).Cols("real_name", "phone", "wechat", "updated_at").Update(info)
 	return err
 }
