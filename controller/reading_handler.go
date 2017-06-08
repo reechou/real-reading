@@ -10,10 +10,12 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/chanxuehong/rand"
 	"github.com/chanxuehong/session"
 	mchpay "github.com/chanxuehong/wechat.v2/mch/pay"
+	mchcore "github.com/chanxuehong/wechat.v2/mch/core"
 	mpoauth2 "github.com/chanxuehong/wechat.v2/mp/oauth2"
 	"github.com/chanxuehong/wechat.v2/oauth2"
 	"github.com/reechou/holmes"
@@ -49,6 +51,7 @@ type ReadingHandler struct {
 	lefitSessionStorage *session.Storage
 	lefitOauth2Endpoint oauth2.Endpoint
 	oauth2Client        *oauth2.Client
+	mchClient           *mchcore.Client
 }
 
 func NewReadingHandler(l *Logic) *ReadingHandler {
@@ -61,6 +64,12 @@ func NewReadingHandler(l *Logic) *ReadingHandler {
 	lh.oauth2Client = &oauth2.Client{
 		Endpoint: lh.lefitOauth2Endpoint,
 	}
+	lh.mchClient = mchcore.NewClient(
+		lh.l.cfg.ReadingOauth.ReadingWxAppId,
+		lh.l.cfg.ReadingOauth.ReadingMchId,
+		lh.l.cfg.ReadingOauth.ReadingMchApiKey,
+		nil,
+	)
 
 	return lh
 }
@@ -153,17 +162,19 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 			return
 		}
 	}
-
-	readingUser = &models.ReadingPay{
-		OpenId:    token.OpenId,
-		AppId:     self.l.cfg.ReadingOauth.ReadingWxAppId,
-		Name:      userinfo.Nickname,
-		AvatarUrl: userinfo.HeadImageURL,
-	}
-	err = models.CreateReadingPay(readingUser)
-	if err != nil {
-		holmes.Error("create reading pay error: %v", err)
-		return
+	
+	if !has {
+		readingUser = &models.ReadingPay{
+			OpenId:    token.OpenId,
+			AppId:     self.l.cfg.ReadingOauth.ReadingWxAppId,
+			Name:      userinfo.Nickname,
+			AvatarUrl: userinfo.HeadImageURL,
+		}
+		err = models.CreateReadingPay(readingUser)
+		if err != nil {
+			holmes.Error("create reading pay error: %v", err)
+			return
+		}
 	}
 
 	readingUserInfo := &ReadingEnrollUserInfo{
@@ -298,12 +309,13 @@ func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Requ
 	return false, userinfo, nil
 }
 
-func (self *ReadingHandler) readingUnifiedOrderRequest(payMoney int64, openId, userIp, notifyUrl string) *mchpay.UnifiedOrderRequest {
+func (self *ReadingHandler) readingUnifiedOrderRequest(payId, payMoney int64, openId, userIp, notifyUrl string) *mchpay.UnifiedOrderRequest {
 	uor := &mchpay.UnifiedOrderRequest{
 		DeviceInfo:     "WEB",
 		Body:           "reading",
 		Detail:         "reading detail",
 		Attach:         "attach",
+		OutTradeNo:     fmt.Sprintf("%s-%d", time.Now().Format("2006-01-02"), payId),
 		TotalFee:       payMoney,
 		SpbillCreateIP: userIp,
 		NotifyURL:      notifyUrl,

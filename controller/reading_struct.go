@@ -2,7 +2,8 @@ package controller
 
 // about html tml struct
 type ReadingEnrollUserInfo struct {
-	NickName  string
-	AvatarUrl string
-	OpenId    string
+	NickName          string
+	AvatarUrl         string
+	OpenId            string
+	WxJsApiParameters string
 }

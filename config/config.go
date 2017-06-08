@@ -33,6 +33,8 @@ type Tuling struct {
 type ReadingOauth struct {
 	ReadingWxAppId           string
 	ReadingWxAppSecret       string
+	ReadingMchId             string
+	ReadingMchApiKey         string
 	ReadingOauth2RedirectURI string
 	ReadingOauth2ScopeBase   string
 	ReadingOauth2ScopeUser   string
