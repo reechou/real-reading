@@ -242,6 +242,9 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-count > span{font-size: 18px;}
 .eb-lv2-list{margin: 20px 0 0; padding: 0 0 10px; border-bottom: #e6e6e6 solid 1px; line-height: 26px;}
 
+.eb-lv-info2{margin: 20px 0 0; padding: 0 0 15px; border-bottom: #e6e6e6 solid 1px; line-height: 22px;}
+.eb-lv-info2{border: none; padding: 0;}
+
 .enroll-dobox{margin: 40px 0 0; text-align: center;}
 .eb-tip{padding: 20px 0; border: #e6e6e6 solid; border-width: 1px 0;}
 .eb-block02{overflow: hidden;}
