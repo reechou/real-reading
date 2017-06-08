@@ -14,4 +14,5 @@ type WxJsApiParams struct {
 	NonceStr  string `json:"nonceStr"`
 	Package   string `json:"package"`
 	SignType  string `json:"signType"`
+	PaySign   string `json:"paySign"`
 }

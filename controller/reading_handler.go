@@ -268,7 +268,7 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		Package:   fmt.Sprintf("prepay_id=%s", unifiedRsp.PrepayId),
 		SignType:  "MD5",
 	}
-	jsapiParams.SignType = mchcore.JsapiSign(
+	jsapiParams.PaySign = mchcore.JsapiSign(
 		jsapiParams.AppId,
 		jsapiParams.TimeStamp,
 		jsapiParams.NonceStr,
@@ -276,17 +276,18 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		jsapiParams.SignType,
 		self.mchClient.ApiKey(),
 	)
-	jsapiParamsJson, err := json.Marshal(jsapiParams)
-	if err != nil {
-		holmes.Error("json marshal error: %v", err)
-		return
-	}
-
+	jsapiParamsFormat := `{"appid":"%s","timeStamp":"%s","nonceStr":"%s","package":"%s","signType":"%s","paySign":"%s"}`
+	jsapiParamsJson := fmt.Sprintf(jsapiParamsFormat, jsapiParams.AppId,
+		jsapiParams.TimeStamp,
+		jsapiParams.NonceStr,
+		jsapiParams.Package,
+		jsapiParams.SignType,
+		jsapiParams.PaySign)
 	readingUserInfo := &ReadingEnrollUserInfo{
 		NickName:          readingUser.Name,
 		AvatarUrl:         readingUser.AvatarUrl,
 		OpenId:            openid,
-		WxJsApiParameters: string(jsapiParamsJson),
+		WxJsApiParameters: jsapiParamsJson,
 	}
 	renderView(w, "./views/reading_pay.html", readingUserInfo)
 }
