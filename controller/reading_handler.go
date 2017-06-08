@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"io"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
@@ -14,8 +15,8 @@ import (
 
 	"github.com/chanxuehong/rand"
 	"github.com/chanxuehong/session"
-	mchpay "github.com/chanxuehong/wechat.v2/mch/pay"
 	mchcore "github.com/chanxuehong/wechat.v2/mch/core"
+	mchpay "github.com/chanxuehong/wechat.v2/mch/pay"
 	mpoauth2 "github.com/chanxuehong/wechat.v2/mp/oauth2"
 	"github.com/chanxuehong/wechat.v2/oauth2"
 	"github.com/reechou/holmes"
@@ -28,10 +29,11 @@ const (
 )
 
 const (
-	READING_URI_ENROLL    = "enroll"
-	READING_URI_GO_ENROLL = "goenroll"
-	READING_URI_PAY       = "pay"
-	READING_URI_SUCCESS   = "success"
+	READING_URI_ENROLL     = "enroll"
+	READING_URI_GO_ENROLL  = "goenroll"
+	READING_URI_PAY        = "pay"
+	READING_URI_PAY_NOTIFY = "paynotify"
+	READING_URI_SUCCESS    = "success"
 )
 
 type ShareTpl struct {
@@ -102,6 +104,7 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		self.readingGoEnroll(rr, w, r)
 	case READING_URI_PAY:
 		self.readingPay(rr, w, r)
+	case READING_URI_PAY_NOTIFY:
 	case READING_URI_SUCCESS:
 		self.readingSuccess(rr, w, r)
 	default:
@@ -142,7 +145,7 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 		return
 	}
 	holmes.Debug("user info: %+v", userinfo)
-	
+
 	readingUser := &models.ReadingPay{
 		OpenId: token.OpenId,
 	}
@@ -162,7 +165,7 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 			return
 		}
 	}
-	
+
 	if !has {
 		readingUser = &models.ReadingPay{
 			OpenId:    token.OpenId,
@@ -198,7 +201,7 @@ func (self *ReadingHandler) readingGoEnroll(rr *HandlerRequest, w http.ResponseW
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
-	
+
 	readingUser := &models.ReadingPay{
 		OpenId: req.OpenId,
 	}
@@ -231,7 +234,7 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		return
 	}
 	openid := queryValues.Get("openid")
-	
+
 	readingUser := &models.ReadingPay{
 		OpenId: openid,
 	}
@@ -246,10 +249,44 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		return
 	}
 
+	unifiedRsp, err := self.readingUnifiedOrder(
+		readingUser.ID,
+		READING_COURSE_GD_MONEY,
+		readingUser.OpenId,
+		GetIPFromRequest(r),
+		fmt.Sprintf("%s%s/%s", r.Host, ReadingPrefix, READING_URI_PAY_NOTIFY),
+	)
+	if err != nil {
+		holmes.Error("reading unified order error: %v", err)
+		return
+	}
+
+	jsapiParams := &WxJsApiParams{
+		AppId:     unifiedRsp.AppId,
+		TimeStamp: fmt.Sprintf("%d", time.Now().Unix()),
+		NonceStr:  string(rand.NewHex()),
+		Package:   fmt.Sprintf("prepay_id=%s", unifiedRsp.PrepayId),
+		SignType:  "MD5",
+	}
+	jsapiParams.SignType = mchcore.JsapiSign(
+		jsapiParams.AppId,
+		jsapiParams.TimeStamp,
+		jsapiParams.NonceStr,
+		jsapiParams.Package,
+		jsapiParams.SignType,
+		self.mchClient.ApiKey(),
+	)
+	jsapiParamsJson, err := json.Marshal(jsapiParams)
+	if err != nil {
+		holmes.Error("json marshal error: %v", err)
+		return
+	}
+
 	readingUserInfo := &ReadingEnrollUserInfo{
-		NickName:  readingUser.Name,
-		AvatarUrl: readingUser.AvatarUrl,
-		OpenId:    openid,
+		NickName:          readingUser.Name,
+		AvatarUrl:         readingUser.AvatarUrl,
+		OpenId:            openid,
+		WxJsApiParameters: string(jsapiParamsJson),
 	}
 	renderView(w, "./views/reading_pay.html", readingUserInfo)
 }
@@ -309,7 +346,7 @@ func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Requ
 	return false, userinfo, nil
 }
 
-func (self *ReadingHandler) readingUnifiedOrderRequest(payId, payMoney int64, openId, userIp, notifyUrl string) *mchpay.UnifiedOrderRequest {
+func (self *ReadingHandler) readingUnifiedOrder(payId, payMoney int64, openId, userIp, notifyUrl string) (*mchpay.UnifiedOrderResponse, error) {
 	uor := &mchpay.UnifiedOrderRequest{
 		DeviceInfo:     "WEB",
 		Body:           "reading",
@@ -323,7 +360,13 @@ func (self *ReadingHandler) readingUnifiedOrderRequest(payId, payMoney int64, op
 		OpenId:         openId,
 	}
 
-	return uor
+	rsp, err := mchpay.UnifiedOrder2(self.mchClient, uor)
+	if err != nil {
+		holmes.Error("mch pay unified order error: %v", err)
+		return nil, err
+	}
+
+	return rsp, nil
 }
 
 func parseRequest(r *http.Request) (*HandlerRequest, error) {
@@ -361,4 +404,18 @@ func renderView(w http.ResponseWriter, tpl string, data interface{}) {
 		holmes.Error("execute tmp error: %v", err)
 		return
 	}
+}
+
+func GetIPFromRequest(r *http.Request) string {
+	ip, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		holmes.Error("userip: %q is not IP:port", r.RemoteAddr)
+		return ""
+	}
+	userIP := net.ParseIP(ip)
+	if userIP == nil {
+		holmes.Error("userip: %q is not IP:port", r.RemoteAddr)
+		return ""
+	}
+	return userIP.String()
 }

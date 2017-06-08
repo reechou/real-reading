@@ -7,3 +7,11 @@ type ReadingEnrollUserInfo struct {
 	OpenId            string
 	WxJsApiParameters string
 }
+
+type WxJsApiParams struct {
+	AppId     string `json:"appid"`
+	TimeStamp string `json:"timeStamp"`
+	NonceStr  string `json:"nonceStr"`
+	Package   string `json:"package"`
+	SignType  string `json:"signType"`
+}
