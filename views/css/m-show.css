@@ -255,7 +255,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-step img{width: 56px; height: 50px; vertical-align: top;}
 .eb-step > h3{margin: 15px 0 0; font-size: 18px; line-height: 24px; color: #725151;}
 
-.eb-code2{padding: 10px 0 10 ; text-align: center;}
+.eb-code2{margin: 10px 0 10px; text-align: center;}
 .eb-code2 img{width: 151px; height: 171px; vertical-align: top;}
 
 .enroll-swipe{margin: 20px 0 0; text-align: center;}
