@@ -231,7 +231,6 @@ body{color: #333; font-family: Microsoft Yahei;}
 .icon-begin{background-image: url('http://img.caizhu.com/jhsy/images/m/e-icon-begin.png');}
 .current .icon-begin{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/succeed_03.png');}
 
-
 .eb-line{-webkit-box-flex: 1; box-flex: 1;}
 .eb-line:after{content: ''; display: block; height: 0; border-bottom: #e6e6e6 solid 1px; margin: 16px 0 0;}
 
@@ -251,12 +250,12 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-code > p{line-height: 24px;}
 .eb-code > h3{margin: 15px 0 0; font-size: 18px; line-height: 24px;}
 
+.eb-code2{margin: 15px 0 15px; text-align: center;}
+.eb-code2 img{width: 151px; height: 171px; vertical-align: top;}
+
 .eb-step{padding: 10px 0 0 ; text-align: center;}
 .eb-step img{width: 56px; height: 50px; vertical-align: top;}
 .eb-step > h3{margin: 15px 0 0; font-size: 18px; line-height: 24px; color: #725151;}
-
-.eb-code2{margin: 15px 0 15px; text-align: center;}
-.eb-code2 img{width: 151px; height: 171px; vertical-align: top;}
 
 .enroll-swipe{margin: 20px 0 0; text-align: center;}
 .enroll-swipe li{display: inline-block; width: 5px; height: 5px; border-radius: 5px; margin: 0 3px; border: #52d2ff solid 1px;}
@@ -272,7 +271,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-mod00{margin: 20px 0 0; border-top: #e6e6e6 solid 1px; color: #999; line-height: 26px; padding: 16px 0 0;}
 .eb-mod00 span{color: #52d2ff;}
 .eb-mod01{margin: 20px 0 0; border-top: #e6e6e6 solid 1px; line-height: 26px; padding: 16px 0 0;}
-.eb-mod02{margin: 10px 0 0; font-size: 18px; line-height: 24px; color: #725151; padding: 16px 0 0;}
+.eb-mod02{font-size: 18px; line-height: 24px; color: #725151; padding: 16px 0 0;}
 .eb-showb{margin: 0 0 10px; width: 100%;}
 .eb-showb-nm{width: 100%;}
 
