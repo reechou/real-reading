@@ -26,7 +26,7 @@
 
     <section class="enroll-box">
         <ol class="enroll-status">
-            <li class="eb-tone eb-icon">
+            <li class="eb-tone eb-icon current">
                 <span class="icon-enroll"></span>
                 <p>报名</p>
             </li>
@@ -61,7 +61,7 @@
                         <!--</div>-->
                     </li>
                 </ul>
-                <div class="enroll-dobox enroll-dobox02"><span id="do-pay" class="offer-btn do-pay" onclick="dopay()">支付学费</span></div>
+                <div class="enroll-dobox enroll-dobox02"><span id="do-pay" class="offer-btn do-pay" onclick="doPay()">支付学费</span></div>
             </li>
         </ul>
     </section>
@@ -71,6 +71,12 @@
 
 <script src="https://jhsy.caizhu.com/static/js/zepto.min.js"></script>
 <script src="https://jhsy.caizhu.com/static/js/timecountdown.js?data"></script>
+
+<script>
+    function doPay() {
+        location.assign('/reading/success?openid={{ .OpenId }}');
+    }
+</script>
 
 </body>
 </html>

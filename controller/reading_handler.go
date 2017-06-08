@@ -28,6 +28,7 @@ const (
 	READING_URI_ENROLL    = "enroll"
 	READING_URI_GO_ENROLL = "goenroll"
 	READING_URI_PAY       = "pay"
+	READING_URI_SUCCESS   = "success"
 )
 
 type ShareTpl struct {
@@ -87,6 +88,8 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		self.readingGoEnroll(rr, w, r)
 	case READING_URI_PAY:
 		self.readingPay(rr, w, r)
+	case READING_URI_SUCCESS:
+		self.readingSuccess(rr, w, r)
 	default:
 		http.ServeFile(w, r, self.l.cfg.ReadingOauth.MpVerifyDir+rr.Path)
 	}
@@ -165,6 +168,23 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		OpenId:    openid,
 	}
 	renderView(w, "./views/reading_pay.html", readingUserInfo)
+}
+
+func (self *ReadingHandler) readingSuccess(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	queryValues, err := url.ParseQuery(r.URL.RawQuery)
+	if err != nil {
+		io.WriteString(w, err.Error())
+		holmes.Error("url parse query error: %v", err)
+		return
+	}
+	openid := queryValues.Get("openid")
+	
+	readingUserInfo := &ReadingEnrollUserInfo{
+		NickName:  "xxxxxx",
+		AvatarUrl: "http://wx.qlogo.cn/mmopen/ibmyOaFEgYk09HCYrBXA7PHZSuFjHINfuNxBlIOyvPibrU0hD87gTrGI2YuBTtGibHrxdTyzFAMFvWIPO5ekuhibzQ/0",
+		OpenId:    openid,
+	}
+	renderView(w, "./views/reading_sign_success.html", readingUserInfo)
 }
 
 func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Request) (bool, *mpoauth2.UserInfo, error) {
