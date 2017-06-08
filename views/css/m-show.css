@@ -280,6 +280,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .eb-mod04 span{color: #f76e6c;}
 .eb-showb{margin: 0 0 10px; width: 100%;}
 .eb-showb-nm{width: 100%;}
+.eb-showb-bu{width: 25px; height: 25px;}
 
 .share-flist{margin: 20px 0 0; display: -webkit-box; display: box;}
 .share-fone{-webkit-box-flex: 1; box-flex: 1; text-align: center;}
