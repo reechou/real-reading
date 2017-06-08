@@ -283,11 +283,12 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		jsapiParams.Package,
 		jsapiParams.SignType,
 		jsapiParams.PaySign)
+	holmes.Debugln(jsapiParamsJson)
 	readingUserInfo := &ReadingEnrollUserInfo{
 		NickName:          readingUser.Name,
 		AvatarUrl:         readingUser.AvatarUrl,
 		OpenId:            openid,
-		WxJsApiParameters: jsapiParamsJson,
+		WxJsApiParameters: "xxx",
 	}
 	renderView(w, "./views/reading_pay.html", readingUserInfo)
 }
