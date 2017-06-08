@@ -78,16 +78,19 @@
 		WeixinJSBridge.invoke(
 			'getBrandWCPayRequest',
 			{
-                "appId" : {{ .WxJsApiParams.AppId }},
-                "timeStamp" : {{ .WxJsApiParams.TimeStamp }},
-                "nonceStr" : {{ .WxJsApiParams.NonceStr }},
-                "package" : {{ .WxJsApiParams.Package }},
-                "signType" : {{ .WxJsApiParams.SignType }},
-                "paySign" : {{ .WxJsApiParams.PaySign }}
+                "appId": {{ .WxJsApiParams.AppId }},
+                "timeStamp": {{ .WxJsApiParams.TimeStamp }},
+                "nonceStr": {{ .WxJsApiParams.NonceStr }},
+                "package": {{ .WxJsApiParams.Package }},
+                "signType": {{ .WxJsApiParams.SignType }},
+                "paySign": {{ .WxJsApiParams.PaySign }}
             },
 			function(res) {
-				WeixinJSBridge.log(res.err_msg);
-				alert(res.err_code+res.err_desc+res.err_msg);
+			    if(res.err_msg == "get_brand_wcpay_request:ok") {
+			        location.assign('/reading/success?openid={{ .OpenId }}');
+			    }
+				// WeixinJSBridge.log(res.err_msg);
+				// alert(res.err_code+res.err_desc+res.err_msg);
 			}
 		);
 	}

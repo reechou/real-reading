@@ -12,9 +12,12 @@ import (
 	"net/url"
 	"strings"
 	"time"
+	"bytes"
 
 	"github.com/chanxuehong/rand"
 	"github.com/chanxuehong/session"
+	"github.com/chanxuehong/util"
+	"github.com/chanxuehong/util/security"
 	mchcore "github.com/chanxuehong/wechat.v2/mch/core"
 	mchpay "github.com/chanxuehong/wechat.v2/mch/pay"
 	mpoauth2 "github.com/chanxuehong/wechat.v2/mp/oauth2"
@@ -105,6 +108,7 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case READING_URI_PAY:
 		self.readingPay(rr, w, r)
 	case READING_URI_PAY_NOTIFY:
+		self.readingPayNotify(rr, w, r)
 	case READING_URI_SUCCESS:
 		self.readingSuccess(rr, w, r)
 	default:
@@ -282,6 +286,51 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		self.mchClient.ApiKey(),
 	)
 	renderView(w, "./views/reading_pay.html", readingUserInfo)
+}
+
+func (self *ReadingHandler) readingPayNotify(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	defer func() {
+		io.WriteString(w, "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>")
+	}()
+	
+	msg, err := util.DecodeXMLToMap(bytes.NewReader(rr.Val))
+	if err != nil {
+		holmes.Error("decode xml error: %v", err)
+		return
+	}
+	holmes.Debug("reading pay notify msg: %v", msg)
+	
+	returnCode, ok := msg["return_code"]
+	if returnCode == mchcore.ReturnCodeSuccess || !ok {
+		haveAppId := msg["appid"]
+		wantAppId := self.l.cfg.ReadingOauth.ReadingWxAppId
+		if haveAppId != "" && wantAppId != "" && !security.SecureCompareString(haveAppId, wantAppId) {
+			err = fmt.Errorf("appid mismatch, have: %s, want: %s", haveAppId, wantAppId)
+			holmes.Error("%v", err)
+			return
+		}
+		
+		haveMchId := msg["mch_id"]
+		wantMchId := self.l.cfg.ReadingOauth.ReadingMchId
+		if haveMchId != "" && wantMchId != "" && !security.SecureCompareString(haveMchId, wantMchId) {
+			err = fmt.Errorf("mch_id mismatch, have: %s, want: %s", haveMchId, wantMchId)
+			holmes.Error("%v", err)
+			return
+		}
+		
+		// 认证签名
+		haveSignature, ok := msg["sign"]
+		if !ok {
+			holmes.Error("msg sign not found")
+			return
+		}
+		wantSignature := mchcore.Sign(msg, self.mchClient.ApiKey(), nil)
+		if !security.SecureCompareString(haveSignature, wantSignature) {
+			err = fmt.Errorf("sign mismatch,\nhave: %s,\nwant: %s", haveSignature, wantSignature)
+			holmes.Error("%v", err)
+			return
+		}
+	}
 }
 
 func (self *ReadingHandler) readingSuccess(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
