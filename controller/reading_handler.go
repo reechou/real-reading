@@ -80,6 +80,10 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, self.l.cfg.ReadingOauth.MpVerifyDir+rr.Path)
 		return
 	}
+	if strings.HasSuffix(rr.Path, "css") {
+		http.ServeFile(w, r, "./views/css/"+rr.Path)
+		return
+	}
 
 	switch rr.Path {
 	case READING_URI_ENROLL:
