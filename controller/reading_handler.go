@@ -260,36 +260,27 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		holmes.Error("reading unified order error: %v", err)
 		return
 	}
-
-	jsapiParams := &WxJsApiParams{
+	
+	readingUserInfo := &ReadingEnrollUserInfo{
+		NickName:          readingUser.Name,
+		AvatarUrl:         readingUser.AvatarUrl,
+		OpenId:            openid,
+	}
+	readingUserInfo.WxJsApiParams = WxJsApiParams{
 		AppId:     unifiedRsp.AppId,
 		TimeStamp: fmt.Sprintf("%d", time.Now().Unix()),
 		NonceStr:  string(rand.NewHex()),
 		Package:   fmt.Sprintf("prepay_id=%s", unifiedRsp.PrepayId),
 		SignType:  "MD5",
 	}
-	jsapiParams.PaySign = mchcore.JsapiSign(
-		jsapiParams.AppId,
-		jsapiParams.TimeStamp,
-		jsapiParams.NonceStr,
-		jsapiParams.Package,
-		jsapiParams.SignType,
+	readingUserInfo.WxJsApiParams.PaySign = mchcore.JsapiSign(
+		readingUserInfo.WxJsApiParams.AppId,
+		readingUserInfo.WxJsApiParams.TimeStamp,
+		readingUserInfo.WxJsApiParams.NonceStr,
+		readingUserInfo.WxJsApiParams.Package,
+		readingUserInfo.WxJsApiParams.SignType,
 		self.mchClient.ApiKey(),
 	)
-	jsapiParamsFormat := `{"appid":"%s","timeStamp":"%s","nonceStr":"%s","package":"%s","signType":"%s","paySign":"%s"}`
-	jsapiParamsJson := fmt.Sprintf(jsapiParamsFormat, jsapiParams.AppId,
-		jsapiParams.TimeStamp,
-		jsapiParams.NonceStr,
-		jsapiParams.Package,
-		jsapiParams.SignType,
-		jsapiParams.PaySign)
-	holmes.Debugln(jsapiParamsJson)
-	readingUserInfo := &ReadingEnrollUserInfo{
-		NickName:          readingUser.Name,
-		AvatarUrl:         readingUser.AvatarUrl,
-		OpenId:            openid,
-		WxJsApiParameters: "xxx",
-	}
 	renderView(w, "./views/reading_pay.html", readingUserInfo)
 }
 
