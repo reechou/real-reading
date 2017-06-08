@@ -8,6 +8,7 @@ import (
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-reading/config"
 	"github.com/reechou/real-reading/ext"
+	"github.com/reechou/real-reading/models"
 )
 
 type Logic struct {
@@ -24,6 +25,8 @@ func NewLogic(cfg *config.Config) *Logic {
 	}
 	l.robotExt = ext.NewRobotExt(cfg)
 	l.init()
+	
+	models.InitDB(cfg)
 
 	return l
 }

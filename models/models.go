@@ -32,7 +32,7 @@ func InitDB(cfg *config.Config) {
 	}
 
 	// sync tables
-	if err = x.Sync2(); err != nil {
+	if err = x.Sync2(new(ReadingPay)); err != nil {
 		holmes.Fatal("Fail to sync database: %v", err)
 	}
 }
