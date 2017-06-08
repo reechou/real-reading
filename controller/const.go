@@ -1,0 +1,14 @@
+package controller
+
+const (
+	READING_COURSE_TYPE_GD = 1
+)
+
+const (
+	READING_COURSE_GD_MONEY = 199
+)
+
+const (
+	READING_COURSE_STATUS_START = iota
+	READING_COURSE_STATUS_PAIED
+)

@@ -9,10 +9,11 @@ import (
 
 type ReadingPay struct {
 	ID        int64  `xorm:"pk autoincr" json:"id"`
-	OpenId    string `xorm:"not null default '' varchar(128) unique" json:"openId"`
 	AppId     string `xorm:"not null default '' varchar(128)" json:"appId"`
+	OpenId    string `xorm:"not null default '' varchar(128) unique" json:"openId"`
 	Name      string `xorm:"not null default '' varchar(256)" json:"name"`
 	AvatarUrl string `xorm:"not null default '' varchar(256)" json:"avatarUrl"`
+	RealName  string `xorm:"not null default '' varchar(256)" json:"realName"`
 	Phone     string `xorm:"not null default '' varchar(64)" json:"phone"`
 	Wechat    string `xorm:"not null default '' varchar(64)" json:"tempUri"`
 	Course    int64  `xorm:"not null default 0 int" json:"course"`
@@ -51,4 +52,13 @@ func GetReadingPay(info *ReadingPay) (bool, error) {
 		return false, nil
 	}
 	return true, nil
+}
+
+func UpdateReadingPayUserInfo(info *ReadingPay) error {
+	info.UpdatedAt = time.Now().Unix()
+	affected, err := x.ID(info.ID).Cols("real_name", "phone", "wechat").Update(info)
+	if affected == 0 {
+		return fmt.Errorf("update reading pay user info affected == 0")
+	}
+	return err
 }

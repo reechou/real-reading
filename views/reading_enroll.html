@@ -85,7 +85,7 @@
         }
         var mobile = document.getElementById("enrollMobile").value;
         mobile = mobile.trim();
-        var reg = /^(?:13\d|15[89])-?\d{5}(\d{3}|\*{3})$/;
+        var reg = /[1-9]\d{10}/;
         if(!mobile) {
             alert('请输入手机号');
             return ;

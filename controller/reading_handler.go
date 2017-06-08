@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"html/template"
@@ -9,7 +10,6 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"encoding/json"
 
 	"github.com/chanxuehong/rand"
 	"github.com/chanxuehong/session"
@@ -17,6 +17,7 @@ import (
 	mpoauth2 "github.com/chanxuehong/wechat.v2/mp/oauth2"
 	"github.com/chanxuehong/wechat.v2/oauth2"
 	"github.com/reechou/holmes"
+	"github.com/reechou/real-reading/models"
 	"github.com/reechou/real-reading/proto"
 )
 
@@ -132,6 +133,38 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 		return
 	}
 	holmes.Debug("user info: %+v", userinfo)
+	
+	readingUser := &models.ReadingPay{
+		OpenId: token.OpenId,
+	}
+	has, err := models.GetReadingPay(readingUser)
+	if err != nil {
+		holmes.Error("get reading pay error: %v", err)
+		return
+	}
+	if has {
+		if readingUser.Status == READING_COURSE_STATUS_PAIED {
+			readingUserInfo := &ReadingEnrollUserInfo{
+				NickName:  userinfo.Nickname,
+				AvatarUrl: userinfo.HeadImageURL,
+				OpenId:    token.OpenId,
+			}
+			renderView(w, "./views/reading_sign_success.html", readingUserInfo)
+			return
+		}
+	}
+
+	readingUser = &models.ReadingPay{
+		OpenId:    token.OpenId,
+		AppId:     self.l.cfg.ReadingOauth.ReadingWxAppId,
+		Name:      userinfo.Nickname,
+		AvatarUrl: userinfo.HeadImageURL,
+	}
+	err = models.CreateReadingPay(readingUser)
+	if err != nil {
+		holmes.Error("create reading pay error: %v", err)
+		return
+	}
 
 	readingUserInfo := &ReadingEnrollUserInfo{
 		NickName:  userinfo.Nickname,
@@ -146,7 +179,7 @@ func (self *ReadingHandler) readingGoEnroll(rr *HandlerRequest, w http.ResponseW
 	defer func() {
 		writeRsp(w, rsp)
 	}()
-	
+
 	req := &proto.ReadingEnrollReq{}
 	err := json.Unmarshal(rr.Val, &req)
 	if err != nil {
@@ -154,7 +187,29 @@ func (self *ReadingHandler) readingGoEnroll(rr *HandlerRequest, w http.ResponseW
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
-	holmes.Debug("reading go enroll: %+v %s", req, r.URL.String())
+	
+	readingUser := &models.ReadingPay{
+		OpenId: req.OpenId,
+	}
+	has, err := models.GetReadingPay(readingUser)
+	if err != nil {
+		holmes.Error("get reading pay error: %v", err)
+		return
+	}
+	if !has {
+		holmes.Error("cannot found this openid")
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	readingUser.RealName = req.Realname
+	readingUser.Phone = req.Mobile
+	readingUser.Wechat = req.Weixin
+	err = models.UpdateReadingPayUserInfo(readingUser)
+	if err != nil {
+		holmes.Error("update reading pay userinfo error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
 }
 
 func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
@@ -166,9 +221,23 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 	}
 	openid := queryValues.Get("openid")
 	
+	readingUser := &models.ReadingPay{
+		OpenId: openid,
+	}
+	has, err := models.GetReadingPay(readingUser)
+	if err != nil {
+		io.WriteString(w, "未找到你哦,请刷新重新登录")
+		holmes.Error("get reading pay error: %v", err)
+		return
+	}
+	if !has {
+		io.WriteString(w, "未找到你哦,请刷新重新登录")
+		return
+	}
+
 	readingUserInfo := &ReadingEnrollUserInfo{
-		NickName:  "xxxxxx",
-		AvatarUrl: "http://wx.qlogo.cn/mmopen/ibmyOaFEgYk09HCYrBXA7PHZSuFjHINfuNxBlIOyvPibrU0hD87gTrGI2YuBTtGibHrxdTyzFAMFvWIPO5ekuhibzQ/0",
+		NickName:  readingUser.Name,
+		AvatarUrl: readingUser.AvatarUrl,
 		OpenId:    openid,
 	}
 	renderView(w, "./views/reading_pay.html", readingUserInfo)
@@ -182,7 +251,7 @@ func (self *ReadingHandler) readingSuccess(rr *HandlerRequest, w http.ResponseWr
 		return
 	}
 	openid := queryValues.Get("openid")
-	
+
 	readingUserInfo := &ReadingEnrollUserInfo{
 		NickName:  "xxxxxx",
 		AvatarUrl: "http://wx.qlogo.cn/mmopen/ibmyOaFEgYk09HCYrBXA7PHZSuFjHINfuNxBlIOyvPibrU0hD87gTrGI2YuBTtGibHrxdTyzFAMFvWIPO5ekuhibzQ/0",
@@ -198,7 +267,7 @@ func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Requ
 		holmes.Error("url parse query error: %v", err)
 		return false, nil, err
 	}
-	
+
 	code := queryValues.Get("code")
 	if code == "" {
 		state := string(rand.NewHex())
@@ -209,7 +278,7 @@ func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Requ
 		http.Redirect(w, r, AuthCodeURL, http.StatusFound)
 		return true, nil, nil
 	}
-	
+
 	token, err := self.oauth2Client.ExchangeToken(code)
 	if err != nil {
 		//holmes.Error("exchange token error: %v", err)
@@ -217,7 +286,7 @@ func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Requ
 		return false, nil, err
 	}
 	holmes.Debug("token: %+v", token)
-	
+
 	userinfo, err := mpoauth2.GetUserInfo(token.AccessToken, token.OpenId, "", nil)
 	if err != nil {
 		io.WriteString(w, err.Error())
@@ -225,7 +294,7 @@ func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Requ
 		return false, nil, err
 	}
 	holmes.Debug("user info: %+v", userinfo)
-	
+
 	return false, userinfo, nil
 }
 
