@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -10,9 +11,9 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
-	"bytes"
 
 	"github.com/chanxuehong/rand"
 	"github.com/chanxuehong/session"
@@ -159,6 +160,14 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 		return
 	}
 	if has {
+		if readingUser.Name != userinfo.Nickname || readingUser.AvatarUrl != userinfo.HeadImageURL {
+			readingUser.Name = userinfo.Nickname
+			readingUser.AvatarUrl = userinfo.HeadImageURL
+			err = models.UpdateReadingPayWxInfo(readingUser)
+			if err != nil {
+				holmes.Error("update reading wx info error: %v", err)
+			}
+		}
 		if readingUser.Status == READING_COURSE_STATUS_PAIED {
 			readingUserInfo := &ReadingEnrollUserInfo{
 				NickName:  userinfo.Nickname,
@@ -176,6 +185,7 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 			AppId:     self.l.cfg.ReadingOauth.ReadingWxAppId,
 			Name:      userinfo.Nickname,
 			AvatarUrl: userinfo.HeadImageURL,
+			Course:    READING_COURSE_TYPE_GD,
 		}
 		err = models.CreateReadingPay(readingUser)
 		if err != nil {
@@ -264,11 +274,11 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		holmes.Error("reading unified order error: %v", err)
 		return
 	}
-	
+
 	readingUserInfo := &ReadingEnrollUserInfo{
-		NickName:          readingUser.Name,
-		AvatarUrl:         readingUser.AvatarUrl,
-		OpenId:            openid,
+		NickName:  readingUser.Name,
+		AvatarUrl: readingUser.AvatarUrl,
+		OpenId:    openid,
 	}
 	readingUserInfo.WxJsApiParams = WxJsApiParams{
 		AppId:     unifiedRsp.AppId,
@@ -292,14 +302,14 @@ func (self *ReadingHandler) readingPayNotify(rr *HandlerRequest, w http.Response
 	defer func() {
 		io.WriteString(w, "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>")
 	}()
-	
+
 	msg, err := util.DecodeXMLToMap(bytes.NewReader(rr.Val))
 	if err != nil {
 		holmes.Error("decode xml error: %v", err)
 		return
 	}
 	holmes.Debug("reading pay notify msg: %v", msg)
-	
+
 	returnCode, ok := msg["return_code"]
 	if returnCode == mchcore.ReturnCodeSuccess || !ok {
 		haveAppId := msg["appid"]
@@ -309,7 +319,7 @@ func (self *ReadingHandler) readingPayNotify(rr *HandlerRequest, w http.Response
 			holmes.Error("%v", err)
 			return
 		}
-		
+
 		haveMchId := msg["mch_id"]
 		wantMchId := self.l.cfg.ReadingOauth.ReadingMchId
 		if haveMchId != "" && wantMchId != "" && !security.SecureCompareString(haveMchId, wantMchId) {
@@ -317,7 +327,7 @@ func (self *ReadingHandler) readingPayNotify(rr *HandlerRequest, w http.Response
 			holmes.Error("%v", err)
 			return
 		}
-		
+
 		// 认证签名
 		haveSignature, ok := msg["sign"]
 		if !ok {
@@ -330,6 +340,31 @@ func (self *ReadingHandler) readingPayNotify(rr *HandlerRequest, w http.Response
 			holmes.Error("%v", err)
 			return
 		}
+	}
+
+	openId, ok := msg["openid"]
+	if !ok {
+		holmes.Error("msg openid not found.")
+		return
+	}
+	totalFee, ok := msg["total_fee"]
+	if !ok {
+		holmes.Error("msg total_fee not found.")
+		return
+	}
+	money, err := strconv.Atoi(totalFee)
+	if err != nil {
+		holmes.Error("msg total_fee[%s] strconv error: %v", totalFee, err)
+		return
+	}
+	readingUser := &models.ReadingPay{
+		OpenId: openId,
+		Money:  int64(money),
+		Status: READING_COURSE_STATUS_PAIED,
+	}
+	err = models.UpdateReadingPayStatusFromOpenId(readingUser)
+	if err != nil {
+		holmes.Error("update reading pay status from openid error: %v", err)
 	}
 }
 

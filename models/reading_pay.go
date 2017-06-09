@@ -59,3 +59,15 @@ func UpdateReadingPayUserInfo(info *ReadingPay) error {
 	_, err := x.ID(info.ID).Cols("real_name", "phone", "wechat", "updated_at").Update(info)
 	return err
 }
+
+func UpdateReadingPayWxInfo(info *ReadingPay) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols("name", "avatar_url", "updated_at").Update(info)
+	return err
+}
+
+func UpdateReadingPayStatusFromOpenId(info *ReadingPay) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.Cols("money", "status", "updated_at").Where("open_id = ?", info.OpenId).Update(info)
+	return err
+}

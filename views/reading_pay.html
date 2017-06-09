@@ -86,8 +86,10 @@
                 "paySign": {{ .WxJsApiParams.PaySign }}
             },
 			function(res) {
-			    if(res.err_msg == "get_brand_wcpay_request:ok") {
+			    if (res.err_msg == "get_brand_wcpay_request:ok") {
 			        location.assign('/reading/success?openid={{ .OpenId }}');
+			    } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+			        alert("支付失败, 请重新支付");
 			    }
 				// WeixinJSBridge.log(res.err_msg);
 				// alert(res.err_code+res.err_desc+res.err_msg);
