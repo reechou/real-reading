@@ -33,6 +33,7 @@ const (
 )
 
 const (
+	READING_URI_SIGN_UP    = "signup"
 	READING_URI_ENROLL     = "enroll"
 	READING_URI_GO_ENROLL  = "goenroll"
 	READING_URI_PAY        = "pay"
@@ -102,6 +103,8 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	switch rr.Path {
+	case READING_URI_SIGN_UP:
+		
 	case READING_URI_ENROLL:
 		self.readingEnroll(rr, w, r)
 	case READING_URI_GO_ENROLL:
@@ -115,6 +118,10 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	default:
 		http.ServeFile(w, r, self.l.cfg.ReadingOauth.MpVerifyDir+rr.Path)
 	}
+}
+
+func (self *ReadingHandler) readingSignup(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	renderView(w, "./views/reading_sign.html", nil)
 }
 
 func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
