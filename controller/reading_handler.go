@@ -272,6 +272,21 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 	)
 	if err != nil {
 		holmes.Error("reading unified order error: %v", err)
+		if strings.Contains(err.Error(), "ORDERPAID") {
+			// 订单已支付, 但未更新状态
+			readingUser.Status = READING_COURSE_STATUS_PAIED
+			err = models.UpdateReadingPayStatusFromOpenId(readingUser)
+			if err != nil {
+				holmes.Error("update reading pay status error: %v", err)
+			}
+			readingUserInfo := &ReadingEnrollUserInfo{
+				NickName:  readingUser.Name,
+				AvatarUrl: readingUser.AvatarUrl,
+				OpenId:    readingUser.OpenId,
+			}
+			renderView(w, "./views/reading_sign_success.html", readingUserInfo)
+			return
+		}
 		return
 	}
 
@@ -376,10 +391,24 @@ func (self *ReadingHandler) readingSuccess(rr *HandlerRequest, w http.ResponseWr
 		return
 	}
 	openid := queryValues.Get("openid")
+	
+	readingUser := &models.ReadingPay{
+		OpenId: openid,
+	}
+	has, err := models.GetReadingPay(readingUser)
+	if err != nil {
+		io.WriteString(w, "未找到你哦,请刷新重新登录")
+		holmes.Error("get reading pay error: %v", err)
+		return
+	}
+	if !has {
+		io.WriteString(w, "未找到你哦,请刷新重新登录")
+		return
+	}
 
 	readingUserInfo := &ReadingEnrollUserInfo{
-		NickName:  "xxxxxx",
-		AvatarUrl: "http://wx.qlogo.cn/mmopen/ibmyOaFEgYk09HCYrBXA7PHZSuFjHINfuNxBlIOyvPibrU0hD87gTrGI2YuBTtGibHrxdTyzFAMFvWIPO5ekuhibzQ/0",
+		NickName:  readingUser.Name,
+		AvatarUrl: readingUser.AvatarUrl,
 		OpenId:    openid,
 	}
 	renderView(w, "./views/reading_sign_success.html", readingUserInfo)
