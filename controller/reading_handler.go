@@ -104,7 +104,7 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	switch rr.Path {
 	case READING_URI_SIGN_UP:
-		
+		self.readingSignup(rr, w, r)
 	case READING_URI_ENROLL:
 		self.readingEnroll(rr, w, r)
 	case READING_URI_GO_ENROLL:
