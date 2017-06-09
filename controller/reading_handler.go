@@ -462,8 +462,8 @@ func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Requ
 func (self *ReadingHandler) readingUnifiedOrder(payId, payMoney int64, openId, userIp, notifyUrl string) (*mchpay.UnifiedOrderResponse, error) {
 	uor := &mchpay.UnifiedOrderRequest{
 		DeviceInfo:     "WEB",
-		Body:           "reading",
-		Detail:         "reading detail",
+		Body:           "共读计划",
+		Detail:         "「小鹿微课」共读计划",
 		Attach:         "attach",
 		OutTradeNo:     fmt.Sprintf("%s-%d", time.Now().Format("2006-01-02"), payId),
 		TotalFee:       payMoney,
