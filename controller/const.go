@@ -5,7 +5,7 @@ const (
 )
 
 const (
-	READING_COURSE_GD_MONEY = 199
+	READING_COURSE_GD_MONEY = 19900
 )
 
 const (
