@@ -465,7 +465,7 @@ func (self *ReadingHandler) readingUnifiedOrder(payId, payMoney int64, openId, u
 		Body:           "共读计划",
 		Detail:         "「小鹿微课」共读计划",
 		Attach:         "attach",
-		OutTradeNo:     fmt.Sprintf("%s-%d", time.Now().Format("2006-01-02-15:04:05"), payId),
+		OutTradeNo:     fmt.Sprintf("%s-%d", time.Now().Format("2006-01-02_15-04-05"), payId),
 		TotalFee:       payMoney,
 		SpbillCreateIP: userIp,
 		NotifyURL:      notifyUrl,
