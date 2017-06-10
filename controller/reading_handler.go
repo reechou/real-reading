@@ -41,6 +41,11 @@ const (
 	READING_URI_SUCCESS    = "success"
 )
 
+// manager uri
+const (
+	READING_URI_TODAY_ORDER = "today_order"
+)
+
 type ShareTpl struct {
 	Title string
 	Img   string
@@ -115,6 +120,8 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		self.readingPayNotify(rr, w, r)
 	case READING_URI_SUCCESS:
 		self.readingSuccess(rr, w, r)
+	case READING_URI_TODAY_ORDER:
+		self.readingPayToday(rr, w, r)
 	default:
 		http.ServeFile(w, r, self.l.cfg.ReadingOauth.MpVerifyDir+rr.Path)
 	}

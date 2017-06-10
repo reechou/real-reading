@@ -7,3 +7,9 @@ type ReadingEnrollReq struct {
 	Weixin   string `json:"weixin"`
 	OpenId   string `json:"openid"`
 }
+
+// about response
+type ReadingPayToday struct {
+	OrderNum int64 `json:"orderNum"`
+	AllMoney int64 `json:"allMoney"`
+}
