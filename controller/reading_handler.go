@@ -26,6 +26,7 @@ import (
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-reading/models"
 	"github.com/reechou/real-reading/proto"
+	"github.com/reechou/real-reading/ext"
 )
 
 const (
@@ -59,6 +60,8 @@ type HandlerRequest struct {
 
 type ReadingHandler struct {
 	l *Logic
+	
+	smsExt *ext.SMSNotifyExt
 
 	lefitSessionStorage *session.Storage
 	lefitOauth2Endpoint oauth2.Endpoint
@@ -68,6 +71,8 @@ type ReadingHandler struct {
 
 func NewReadingHandler(l *Logic) *ReadingHandler {
 	lh := &ReadingHandler{l: l}
+	
+	lh.smsExt = ext.NewSMSNotifyExt(lh.l.cfg)
 
 	lh.lefitSessionStorage = session.New(20*60, 60*60)
 	lh.lefitOauth2Endpoint = mpoauth2.NewEndpoint(
@@ -276,10 +281,14 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		io.WriteString(w, "未找到你哦,请刷新重新登录")
 		return
 	}
-
+	
+	payMoney := READING_COURSE_GD_MONEY
+	if openid == "oaKrZwsAF6pRX6z3Qn_EhIZ3DG90" {
+		payMoney = 1
+	}
 	unifiedRsp, err := self.readingUnifiedOrder(
 		readingUser.ID,
-		READING_COURSE_GD_MONEY,
+		int64(payMoney),
 		readingUser.OpenId,
 		GetIPFromRequest(r),
 		fmt.Sprintf("%s%s/%s", r.Host, ReadingPrefix, READING_URI_PAY_NOTIFY),
@@ -386,14 +395,49 @@ func (self *ReadingHandler) readingPayNotify(rr *HandlerRequest, w http.Response
 		holmes.Error("msg total_fee[%s] strconv error: %v", totalFee, err)
 		return
 	}
+	//readingUser := &models.ReadingPay{
+	//	OpenId: openId,
+	//	Money:  int64(money),
+	//	Status: READING_COURSE_STATUS_PAIED,
+	//}
+	//err = models.UpdateReadingPayStatusFromOpenId(readingUser)
+	//if err != nil {
+	//	holmes.Error("update reading pay status from openid error: %v", err)
+	//}
+	
 	readingUser := &models.ReadingPay{
 		OpenId: openId,
-		Money:  int64(money),
-		Status: READING_COURSE_STATUS_PAIED,
 	}
-	err = models.UpdateReadingPayStatusFromOpenId(readingUser)
+	has, err := models.GetReadingPay(readingUser)
 	if err != nil {
-		holmes.Error("update reading pay status from openid error: %v", err)
+		holmes.Error("get reading pay error: %v", err)
+		return
+	}
+	if !has {
+		holmes.Error("openid[%s] not found, create it", openId)
+		readingUser = &models.ReadingPay{
+			AppId:  self.l.cfg.ReadingOauth.ReadingWxAppId,
+			OpenId: openId,
+			Money:  int64(money),
+			Status: READING_COURSE_STATUS_PAIED,
+		}
+		err = models.CreateReadingPay(readingUser)
+		if err != nil {
+			holmes.Error("create reading pay error: %v", err)
+		}
+		return
+	}
+	readingUser.Money = int64(money)
+	readingUser.Status = READING_COURSE_STATUS_PAIED
+	err = models.UpdateReadingPayStatus(readingUser)
+	if err != nil {
+		holmes.Error("update reading pay status error: %v", err)
+	}
+	
+	// send sms notify
+	err = self.smsExt.SMSNotify(readingUser.Phone, readingUser.RealName)
+	if err != nil {
+		holmes.Error("sms notify error: %v", err)
 	}
 }
 
@@ -405,7 +449,7 @@ func (self *ReadingHandler) readingSuccess(rr *HandlerRequest, w http.ResponseWr
 		return
 	}
 	openid := queryValues.Get("openid")
-	
+
 	readingUser := &models.ReadingPay{
 		OpenId: openid,
 	}

@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 	"time"
-	
+
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-reading/models"
 	"github.com/reechou/real-reading/proto"
@@ -14,7 +14,7 @@ func (self *ReadingHandler) readingPayToday(rr *HandlerRequest, w http.ResponseW
 	defer func() {
 		writeRsp(w, rsp)
 	}()
-	
+
 	now := time.Now().Unix()
 	todayZero := now - (now % 86400) - 28800
 	list, err := models.GetReadingPayFromTime(todayZero)

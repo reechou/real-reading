@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 	"time"
-	
+
 	"github.com/reechou/holmes"
 )
 
@@ -27,18 +27,18 @@ func CreateReadingPay(info *ReadingPay) error {
 	if info.OpenId == "" {
 		return fmt.Errorf("reading pay openid[%s] cannot be nil.", info.OpenId)
 	}
-	
+
 	now := time.Now().Unix()
 	info.CreatedAt = now
 	info.UpdatedAt = now
-	
+
 	_, err := x.Insert(info)
 	if err != nil {
 		holmes.Error("create reading pay error: %v", err)
 		return err
 	}
 	holmes.Info("create reading pay[%v] success.", info)
-	
+
 	return nil
 }
 
@@ -63,6 +63,12 @@ func UpdateReadingPayUserInfo(info *ReadingPay) error {
 func UpdateReadingPayWxInfo(info *ReadingPay) error {
 	info.UpdatedAt = time.Now().Unix()
 	_, err := x.ID(info.ID).Cols("name", "avatar_url", "updated_at").Update(info)
+	return err
+}
+
+func UpdateReadingPayStatus(info *ReadingPay) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols("money", "status", "updated_at").Update(info)
 	return err
 }
 

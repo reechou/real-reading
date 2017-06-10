@@ -41,6 +41,12 @@ type ReadingOauth struct {
 	MpVerifyDir              string
 }
 
+type SMSNotify struct {
+	Host       string
+	TemplateId string
+	Key        string
+}
+
 type Config struct {
 	Debug     bool
 	Path      string
@@ -54,7 +60,8 @@ type Config struct {
 	RobotControllerHost
 	DBInfo
 	Tuling
-	
+	SMSNotify
+
 	ReadingOauth
 }
 
