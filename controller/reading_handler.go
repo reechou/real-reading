@@ -182,9 +182,9 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 		NickName:     userinfo.Nickname,
 		AvatarUrl:    userinfo.HeadImageURL,
 		OpenId:       token.OpenId,
-		EnrollName:   DEFAULT_ENROLL_NAME,
-		EnrollMobile: DEFAULT_ENROLL_MOBILE,
-		EnrollWechat: DEFAULT_ENROLL_WECHAT,
+		//EnrollName:   DEFAULT_ENROLL_NAME,
+		//EnrollMobile: DEFAULT_ENROLL_MOBILE,
+		//EnrollWechat: DEFAULT_ENROLL_WECHAT,
 	}
 	if has {
 		if readingUser.Name != userinfo.Nickname || readingUser.AvatarUrl != userinfo.HeadImageURL {
