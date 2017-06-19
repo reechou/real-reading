@@ -29,7 +29,7 @@ func (self *SMSNotifyExt) SMSNotify(mobile, realName string) error {
 	if mobile == "" {
 		return fmt.Errorf("not found mobile")
 	}
-	
+
 	requestUrl := self.cfg.SMSNotify.Host
 	parseRequestUrl, _ := url.Parse(requestUrl)
 
@@ -69,7 +69,7 @@ func (self *SMSNotifyExt) SMSNotify(mobile, realName string) error {
 		holmes.Error("sms notify error: %s", response.Reason)
 		return fmt.Errorf("sms notify error: %s", response.Reason)
 	}
-	
+
 	holmes.Info("sms send notify to mobile[%s] realname[%s] success", mobile, realName)
 
 	return nil

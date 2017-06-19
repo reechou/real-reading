@@ -2,8 +2,8 @@ package controller
 
 import (
 	"net/http"
-	"time"
 
+	"github.com/jinzhu/now"
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-reading/models"
 	"github.com/reechou/real-reading/proto"
@@ -15,8 +15,9 @@ func (self *ReadingHandler) readingPayToday(rr *HandlerRequest, w http.ResponseW
 		writeRsp(w, rsp)
 	}()
 
-	now := time.Now().Unix()
-	todayZero := now - (now % 86400) - 28800
+	//now := time.Now().Unix()
+	//todayZero := now - (now % 86400) - 28800
+	todayZero := now.BeginningOfDay().Unix()
 	list, err := models.GetReadingPayFromTime(todayZero)
 	if err != nil {
 		holmes.Error("get reading pay from time error: %v", err)

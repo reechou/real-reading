@@ -54,6 +54,8 @@ type Config struct {
 	Version   string
 	IfShowSql bool
 
+	NowCourseNumber int64
+
 	DefaultRobotHost string
 
 	RobotHost

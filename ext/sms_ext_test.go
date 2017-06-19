@@ -1,9 +1,9 @@
 package ext
 
 import (
+	"fmt"
 	"github.com/reechou/real-reading/config"
 	"testing"
-	"fmt"
 )
 
 func TestNewSMSNotifyExt(t *testing.T) {

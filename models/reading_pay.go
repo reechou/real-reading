@@ -17,6 +17,7 @@ type ReadingPay struct {
 	Phone     string `xorm:"not null default '' varchar(64)" json:"phone"`
 	Wechat    string `xorm:"not null default '' varchar(64)" json:"tempUri"`
 	Course    int64  `xorm:"not null default 0 int" json:"course"`
+	Number    int64  `xorm:"not null default 0 int index" json:"number"`
 	Money     int64  `xorm:"not null default 0 int" json:"money"`
 	Status    int64  `xorm:"not null default 0 int index" json:"status"`
 	CreatedAt int64  `xorm:"not null default 0 int" json:"createAt"`
@@ -68,13 +69,13 @@ func UpdateReadingPayWxInfo(info *ReadingPay) error {
 
 func UpdateReadingPayStatus(info *ReadingPay) error {
 	info.UpdatedAt = time.Now().Unix()
-	_, err := x.ID(info.ID).Cols("money", "status", "updated_at").Update(info)
+	_, err := x.ID(info.ID).Cols("money", "number", "status", "updated_at").Update(info)
 	return err
 }
 
 func UpdateReadingPayStatusFromOpenId(info *ReadingPay) error {
 	info.UpdatedAt = time.Now().Unix()
-	_, err := x.Cols("money", "status", "updated_at").Where("open_id = ?", info.OpenId).Update(info)
+	_, err := x.Cols("money", "number", "status", "updated_at").Where("open_id = ?", info.OpenId).Update(info)
 	return err
 }
 

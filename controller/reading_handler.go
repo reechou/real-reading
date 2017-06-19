@@ -24,9 +24,9 @@ import (
 	mpoauth2 "github.com/chanxuehong/wechat.v2/mp/oauth2"
 	"github.com/chanxuehong/wechat.v2/oauth2"
 	"github.com/reechou/holmes"
+	"github.com/reechou/real-reading/ext"
 	"github.com/reechou/real-reading/models"
 	"github.com/reechou/real-reading/proto"
-	"github.com/reechou/real-reading/ext"
 )
 
 const (
@@ -60,7 +60,7 @@ type HandlerRequest struct {
 
 type ReadingHandler struct {
 	l *Logic
-	
+
 	smsExt *ext.SMSNotifyExt
 
 	lefitSessionStorage *session.Storage
@@ -71,7 +71,7 @@ type ReadingHandler struct {
 
 func NewReadingHandler(l *Logic) *ReadingHandler {
 	lh := &ReadingHandler{l: l}
-	
+
 	lh.smsExt = ext.NewSMSNotifyExt(lh.l.cfg)
 
 	lh.lefitSessionStorage = session.New(20*60, 60*60)
@@ -178,6 +178,14 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 		holmes.Error("get reading pay error: %v", err)
 		return
 	}
+	readingUserInfo := &ReadingEnrollUserInfo{
+		NickName:     userinfo.Nickname,
+		AvatarUrl:    userinfo.HeadImageURL,
+		OpenId:       token.OpenId,
+		EnrollName:   DEFAULT_ENROLL_NAME,
+		EnrollMobile: DEFAULT_ENROLL_MOBILE,
+		EnrollWechat: DEFAULT_ENROLL_WECHAT,
+	}
 	if has {
 		if readingUser.Name != userinfo.Nickname || readingUser.AvatarUrl != userinfo.HeadImageURL {
 			readingUser.Name = userinfo.Nickname
@@ -188,13 +196,17 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 			}
 		}
 		if readingUser.Status == READING_COURSE_STATUS_PAIED {
-			readingUserInfo := &ReadingEnrollUserInfo{
-				NickName:  userinfo.Nickname,
-				AvatarUrl: userinfo.HeadImageURL,
-				OpenId:    token.OpenId,
-			}
 			renderView(w, "./views/reading_sign_success.html", readingUserInfo)
 			return
+		}
+		if readingUser.RealName != "" {
+			readingUserInfo.EnrollName = readingUser.RealName
+		}
+		if readingUser.Phone != "" {
+			readingUserInfo.EnrollMobile = readingUser.Phone
+		}
+		if readingUser.Wechat != "" {
+			readingUserInfo.EnrollWechat = readingUser.Wechat
 		}
 	}
 
@@ -213,11 +225,6 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 		}
 	}
 
-	readingUserInfo := &ReadingEnrollUserInfo{
-		NickName:  userinfo.Nickname,
-		AvatarUrl: userinfo.HeadImageURL,
-		OpenId:    token.OpenId,
-	}
 	renderView(w, "./views/reading_enroll.html", readingUserInfo)
 }
 
@@ -281,7 +288,7 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		io.WriteString(w, "未找到你哦,请刷新重新登录")
 		return
 	}
-	
+
 	payMoney := READING_COURSE_GD_MONEY
 	if openid == "oaKrZwsAF6pRX6z3Qn_EhIZ3DG90" {
 		payMoney = 1
@@ -298,6 +305,7 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		if strings.Contains(err.Error(), "ORDERPAID") {
 			// 订单已支付, 但未更新状态
 			readingUser.Status = READING_COURSE_STATUS_PAIED
+			readingUser.Number = self.l.cfg.NowCourseNumber
 			err = models.UpdateReadingPayStatusFromOpenId(readingUser)
 			if err != nil {
 				holmes.Error("update reading pay status error: %v", err)
@@ -404,7 +412,7 @@ func (self *ReadingHandler) readingPayNotify(rr *HandlerRequest, w http.Response
 	//if err != nil {
 	//	holmes.Error("update reading pay status from openid error: %v", err)
 	//}
-	
+
 	readingUser := &models.ReadingPay{
 		OpenId: openId,
 	}
@@ -429,11 +437,12 @@ func (self *ReadingHandler) readingPayNotify(rr *HandlerRequest, w http.Response
 	}
 	readingUser.Money = int64(money)
 	readingUser.Status = READING_COURSE_STATUS_PAIED
+	readingUser.Number = self.l.cfg.NowCourseNumber
 	err = models.UpdateReadingPayStatus(readingUser)
 	if err != nil {
 		holmes.Error("update reading pay status error: %v", err)
 	}
-	
+
 	// send sms notify
 	err = self.smsExt.SMSNotify(readingUser.Phone, readingUser.RealName)
 	if err != nil {
