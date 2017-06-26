@@ -1,0 +1,408 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <title>课程计划</title>
+    <meta charset="utf-8" >
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="keywords" content="" >
+    <meta name="description" content="" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" >
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <!--<link rel="stylesheet" href="https://jhsy.caizhu.com/static/css/m-main.css?data=0512" >-->
+    <!--<link rel="stylesheet" href="https://jhsy.caizhu.com/static/css/m-show.css?data=0512" >-->
+    <!--<link rel="stylesheet" href="https://jhsy.caizhu.com/static/css/m-sy.css?data=0512" >-->
+    <link rel="stylesheet" href="/reading/m-main.css?v=0622" >
+    <link rel="stylesheet" href="/reading/m-show-1.css?v=0622" >
+    <link rel="stylesheet" href="/reading/m-sy.css?v=0622" >
+</head>
+<body>
+
+<!-- <div id="init-pageshow"><div class="init-pageshow" :class="{hide: pageshowflag}"></div></div> -->
+
+<style>
+@media(max-width:380px){
+.plan-mlist > li{margin: 16px 0 0;}
+}
+
+@media(max-width:320px){
+    .plan-mlist > li{margin: 12px 0 0;}
+}
+
+.planv2-do{display: -webkit-box; display: box; padding: 10px 20px 0;}
+.planv2-done{-webkit-box-flex: 1; box-flex: 1; text-align: center; color: #666;}
+.planv2-icon{display: block; vertical-align: top; background: center center no-repeat; background-size: 35px auto; height: 54px;}
+.iconv2-list{background-image: url('http://img.caizhu.com/jhsy/images/m/icon-iconv2-list.png');}
+.iconv2-help{background-image: url('http://img.caizhu.com/jhsy/images/m/icon-iconv2-help.png');}
+.iconv2-read{background-image: url('http://img.caizhu.com/jhsy/images/m/icon-iconv2-read.png');}
+.iconv2-note{background-image: url('http://img.caizhu.com/jhsy/images/m/icon-iconv2-note.png');}
+.iconv2-description{background-image: url('http://img.caizhu.com/jhsy/images/m/icon-iconv2-description.png');}
+.iconv2-shop{background-image: url('http://img.caizhu.com/jhsy/images/m/icon-iconv2-shop.png');}
+
+.attendance-show{border-bottom: #333 solid 1px; padding: 0 20px 5px; }
+.minfo-box{margin: 30px 0 0; padding: 10px 0; background: #f0f0f0; border-radius: 5px;}
+.plan-box{padding: 0 15px 70px;}
+
+
+</style>
+
+<section id="app00">
+
+    <div class="show-sybox sybox-pb20">
+        {{ $lenToday := len .TodayCatalogs }}
+        {{ if eq $lenToday 0 }}
+            <div class="today-title clearfix">
+                <strong>公告</strong>
+            </div>
+            <div id="tswipe-box" class="pt">
+                <ul class="tswipe-list tswipe-listv1">
+                    <li class="tswipe-one" onclick="gotoDetailLink(one.NoticeID,one.Content)">
+                        <div class="tonev1-box">
+                            <span v-if="one.Type==1" class="tonev1-type">通知</span>
+                            <span v-else class="tonev2-type">通知</span>
+                            <p class="tonev1-title">关于「小鹿微课」</p>
+                            <p class="show-color">点击查看详情</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        {{ else }}
+            <div class="today-title clearfix mt20">
+                <strong>今日任务</strong>
+            </div>
+            {{ range .TodayCatalogs }}
+            <div class="task-info p-rela" onclick="gotoDetail(one.TaskID)">
+                <span v-if="one.Status==1" class="task-statusv1"></span>
+                <!--<span v-else class="task-statusn2"></span>-->
+
+                <div class="task-coverv1">
+                    <img class="" src="{{ .Book.Cover }}">
+                    <div class="task-btitv1" class="fs-999">{{ .Book.BookName }}</div>
+                </div>
+                <div class="task-infodet">
+                    <div class="task-titlev1">
+                        {{ .MonthCourseCatalog.Title }}
+                    </div>
+                    <p class="task-des fs-12">
+                        {{ .Book.Abstract }}
+                    </p>
+                    <div class="task-seeboxv1 mt">
+                        <span class="task-seev1">查看任务</span>
+                    </div>
+                </div>
+            </div>
+            {{ end }}
+        {{ end }}
+    </div>
+
+    <div class="plan-box">
+        <ul class="plan-list">
+            {{ range $i, $v := .MonthCourses }}
+            <div id="anchor-m{{$i}}" class="minfo-box" >
+                <div class="attendance-showbox">
+                    <div class="attendance-show">
+                        <span class="attendance-month">{{ $v.MonthCourse.MonthEn }}</span>
+                        <span class="attendance-minor"><span>{{ $v.MonthCourse.Month }}月</span><br><span class="fc-999">{{ $v.MonthCourse.Year }}</span></span>
+                    </div>
+                </div>
+                <div></div>
+                <div class="plan-p00">
+                    <h1>{{ $v.MonthCourse.Title }}</h1>
+                    <p>{{ $v.MonthCourse.Introduction }}</p>
+                </div>
+            </div>
+
+                {{ range $v.Books }}
+                {{ if eq .Status 1 }}
+                <li class="plan-listone" onclick="">
+                {{ else }}
+                <li class="plan-listone disabled" onclick="">
+                {{ end }}
+                    <div class="plan-info">
+                        <img class="task-cover" src="{{ .CourseBookDetail.Book.Cover }}">
+                        <div class="task-infodet">
+                            <div class="task-book clearfix">
+                                <span>《{{ .CourseBookDetail.Book.BookName }}》</span>
+                                <!--<span class="task-status fr"></span>-->
+                            </div>
+                            <p class="task-name">{{ .CourseBookDetail.Book.Author }}</p>
+                            <p class="task-des">{{ .CourseBookDetail.Book.Abstract }}</p>
+                        </div>
+                    </div>
+                </li>
+                {{ end }}
+            {{ end }}
+        </ul>
+    </div>
+
+    <ul class="plan-mlist">
+        <li>月份</li>
+        {{ range $i, $v := .MonthCourses }}
+        <li onclick="changeMonth({{ $i }})">
+            {{ if eq $i 0 }}
+            <span id="slide-month{{$i}}" class="current">{{ $v.MonthCourse.Month }}</span>
+            {{ else }}
+            <span id="slide-month{{$i}}">{{ $v.MonthCourse.Month }}</span>
+            {{ end }}
+        </li>
+        {{ end }}
+    </ul>
+
+    <section class="sy-footerbox">
+        <ul class="sy-footer">
+            <li class="sy-footerone current">
+                <span class="sy-ficon sy-f-clock"></span>
+                <p>课程</p>
+            </li>
+            <li class="sy-footerone" @click="ftGoto('/sy/home')">
+                <span class="sy-ficon sy-f-bl"></span>
+                <p>推荐</p>
+            </li>
+            <li class="sy-footerone" @click="ftGoto('/sy/home')">
+                <span class="sy-ficon sy-f-own"></span>
+                <p>我的</p>
+            </li>
+        </ul>
+    </section>
+
+</section>
+
+<div id="defined-prompt"><defined-prompt :flag="flag" :tipStr="tipstr" :cancelstr="cancelstr" :okStr="okstr" :cancelFlag="cancelflag" :callback="callback"></defined-prompt></div>
+
+<script src="http://oe3slowqt.bkt.clouddn.com/zepto.min.js"></script>
+<script src="https://jhsy.caizhu.com/static/js/h5-common.js?030620"></script>
+
+<script>
+
+var scrollFlag = true,      // scroll + anchor
+    scrollTimeId,
+
+    $scrollOne,      // scroll - action
+    onePosArr = [];
+
+var showFlag = 0;
+
+function changeMonth(index) {
+    document.getElementById("slide-month"+showFlag).removeAttribute("class");
+    showFlag = index;
+    document.getElementById("slide-month"+showFlag).setAttribute("class", "current");
+    scrollFlag = false;
+    scrollTimeId = setTimeout(function(){
+        scrollFlag = true;
+    }, 600);
+    goMAnchor(index);
+}
+
+function goAnchor(index){
+    location.hash = '#anchor-' + index*4;
+}
+
+function goMAnchor(index){
+    location.hash = '#anchor-m' + index;
+}
+
+/****** scroll - S ******/
+
+//if(app00.articleType) initOnePos();      // 全文类型
+
+
+function initOnePos(){
+    onePosArr.length = 0;
+    $scrollOne = $('.minfo-box');
+    $scrollOne.each(function(){
+        var $self = $(this),
+                n;
+        n = distanceTop($self[0]);
+        onePosArr.push(n);
+    });
+    }
+
+var scrollProcessor = {
+    timeId: '',
+    process: function(){
+
+        var vH,      // 视口高度
+                pY;      // 页面向上滚动过的距离
+        wH = window.innerHeight - 80;      // 60, 底部导航
+        pY = window.pageYOffset;
+
+        handleShowIndex(pY, wH);
+    },
+    run: function(){
+        var self = this;
+        clearTimeout(this.timeId);
+        self.timeId = setTimeout(function(){
+            self.process();
+        }, 66);
+    }
+}
+
+function handleShowIndex(n, wH){      // n ,页面线上滚动距离
+    if(!n){
+        app00.showFlag = 0;
+        return;
+    }
+
+    var flag = false;
+    //n += 10;
+    var index = 0,
+            eH = n + wH;
+    for(var len=onePosArr.length,i=len-1,a; i>=0; i--){
+        a = onePosArr[i];
+        //console.log(n+' : '+a+' : '+eH);
+        if(n <= a && a <= eH){
+            flag = true;
+            index = i;
+        }
+    }
+
+    if(flag){app00.showFlag = index;}
+    else{
+        for(var x, y,j=0; j<len; j++){
+            x = onePosArr[j];
+            y = onePosArr[j+1] || 0;
+            if(x < n && n < y){
+                index = j;
+            }
+
+        }
+        if(n > onePosArr[len-1]){
+            index = len-1;
+        }
+        app00.showFlag = index;
+    }
+    return index;
+}
+
+function indexToMonth(n){   // 书的列表对应成月份
+    if(!n) {return 0;}
+    var a, b = 4;
+    a = parseInt(n / 4);
+    return a;
+
+}
+
+window.addEventListener('scroll', function(e){
+    if(!scrollFlag) return ;
+    scrollProcessor.run();
+}, false);
+
+function distanceTop(elem){
+    var n = 0;
+    while(elem !=window.document.body && elem != null){
+        n += elem.offsetTop;
+        elem = elem.offsetParent;
+    }
+    return n;
+}
+/****** scroll - E ******/
+
+</script>
+
+
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+<script>
+
+var shareOpts = {
+    tit: '我正在小鹿微课，快来和我一起进行6个月读书计划吧',
+    des: '【小鹿微课】携手同学们为期6个月一起读书计划，为大家设计科学的学习体系与经典书单，在6个月里，每天坚持20分钟在线阅读，每周读完一本书，课程结束后大家一起吸收24本书的精华内容，并且能从各个同学的不同思维引发更多的思考与学习，完善自己的思维能力及知识体系，做更好的自己',
+    link: '' || location.href,
+    pic: 'http://img.caizhu.com/FuL4m1fwEx-J-Pq7yIgBkI0wutRE'
+
+};
+
+(function(){
+
+if(window.shareOpts) initShareConfig(shareOpts);
+
+function initShareConfig(opts){
+
+    wx.config({
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: '', // 必填，公众号的唯一标识
+        timestamp: '', // 必填，生成签名的时间戳
+        nonceStr: '', // 必填，生成签名的随机串
+        signature: '',// 必填，签名，见附录1
+        jsApiList: ['hideAllNonBaseMenuItem', 'closeWindow', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'showMenuItems', 'hideMenuItems'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+
+    wx.ready(function(){
+
+        // 报名页面使用
+        if(window.GLOBALDOPAYELEMENT){
+            app00.abledDoPayFlag = true;
+        }
+
+        // 今日首页 - 等待开班 - 等待开学
+        if(window.$wxCloseBtn){
+            $wxCloseBtn[0].onclick = function(){
+                wx.closeWindow();
+            }
+        }
+
+        // 朋友圈
+        wx.onMenuShareTimeline({
+            title: opts.tit, // 分享标题
+            link: opts.link, // 分享链接
+            imgUrl: opts.pic, // 分享图标
+            success: function () {
+
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+        // 朋友
+        wx.onMenuShareAppMessage({
+            title: opts.tit, // 分享标题
+            desc: opts.des, // 分享描述
+            link: opts.link, // 分享链接
+            imgUrl: opts.pic, // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+        //wx.hideAllNonBaseMenuItem();      // 隐藏所有非基础按钮接口
+
+        wx.showMenuItems({
+            menuList: [
+                'menuItem:share:appMessage',
+                'menuItem:share:timeline'
+            ] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        });
+
+        wx.hideMenuItems({
+            menuList: ['menuItem:share:qq',
+                'menuItem:share:weiboApp',
+                'menuItem:favorite',
+                'menuItem:share:facebook',
+                'menuItem:share:QZone',
+
+                'menuItem:copyUrl',
+                'menuItem:openWithQQBrowser',
+                'menuItem:openWithSafari'
+            ] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        });
+
+    });
+
+}
+
+})();
+
+
+</script>
+
+</body>
+</html>

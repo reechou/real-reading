@@ -14,6 +14,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"path/filepath"
 
 	"github.com/chanxuehong/rand"
 	"github.com/chanxuehong/session"
@@ -56,6 +57,7 @@ type HandlerRequest struct {
 	Method string
 	Path   string
 	Val    []byte
+	Params []string
 }
 
 type ReadingHandler struct {
@@ -109,6 +111,10 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	if strings.HasSuffix(rr.Path, "css") {
 		http.ServeFile(w, r, "./views/css/"+rr.Path)
+		return
+	}
+	if strings.HasPrefix(rr.Path, READING_COURSE_URI_PREFIX) {
+		self.courseHandle(rr, w, r)
 		return
 	}
 
@@ -179,9 +185,9 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 		return
 	}
 	readingUserInfo := &ReadingEnrollUserInfo{
-		NickName:     userinfo.Nickname,
-		AvatarUrl:    userinfo.HeadImageURL,
-		OpenId:       token.OpenId,
+		NickName:  userinfo.Nickname,
+		AvatarUrl: userinfo.HeadImageURL,
+		OpenId:    token.OpenId,
 		//EnrollName:   DEFAULT_ENROLL_NAME,
 		//EnrollMobile: DEFAULT_ENROLL_MOBILE,
 		//EnrollWechat: DEFAULT_ENROLL_WECHAT,
@@ -327,7 +333,7 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		OpenId:    openid,
 	}
 	readingUserInfo.WxJsApiParams = WxJsApiParams{
-		AppId:     unifiedRsp.AppId,
+		AppId:     self.l.cfg.ReadingOauth.ReadingWxAppId,
 		TimeStamp: fmt.Sprintf("%d", time.Now().Unix()),
 		NonceStr:  string(rand.NewHex()),
 		Package:   fmt.Sprintf("prepay_id=%s", unifiedRsp.PrepayId),
@@ -567,17 +573,21 @@ func writeRsp(w http.ResponseWriter, rsp *proto.Response) {
 }
 
 func renderView(w http.ResponseWriter, tpl string, data interface{}) {
-	t, err := template.ParseFiles(tpl)
+	t := template.New(filepath.Base(tpl))
+	t = t.Funcs(template.FuncMap{"unescaped": unescaped})
+	t, err := t.ParseFiles(tpl)
 	if err != nil {
 		holmes.Error("parse file error: %v", err)
 		return
 	}
-	err = t.Execute(w, data)
+	err = t.ExecuteTemplate(w, filepath.Base(tpl), data)
 	if err != nil {
 		holmes.Error("execute tmp error: %v", err)
 		return
 	}
 }
+
+func unescaped(x string) interface{} { return template.HTML(x) }
 
 func GetIPFromRequest(r *http.Request) string {
 	ip, _, err := net.SplitHostPort(r.RemoteAddr)

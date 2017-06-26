@@ -7,6 +7,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .show-tit02{margin: 0 15px;}
 .show-box{margin-left: 25px; margin-right: 25px; border-bottom: #e6e6e6 solid 1px;}
 .show-sybox{margin-left: 25px; margin-right: 25px; padding-bottom: 20px;}
+.sybox-pb20{padding-bottom: 20px;}
 .sybox-pb50{padding-bottom: 50px;}
 .sybox-pb60{padding-bottom: 60px;}
 .sybox-pb80{padding-bottom: 80px;}
@@ -14,12 +15,12 @@ body{color: #333; font-family: Microsoft Yahei;}
 .show-over{overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
 .show-dobox{margin: 40px 0 0; text-align: center;}
-.show-do{display: inline-block; background: #52d2ff; color: #fff; font-weight: bold; line-height: 20px; padding: 10px 60px; box-shadow: #ccc 2px 3px 4px; border-radius: 20px; letter-spacing: 4px;}
+.show-do{display: inline-block; background: #f76e6c; color: #fff; font-weight: bold; line-height: 20px; padding: 10px 60px; box-shadow: #ccc 2px 3px 4px; border-radius: 20px; letter-spacing: 4px;}
 .show-do.disabled{background: #ccc;}
 
 .show-select{user-select: text; -webkit-user-select: text;}
 
-.show-color{color: #52d2ff;}
+.show-color{color: #f76e6c;}
 
 .show-bd{border-bottom: #e6e6e6 solid 1px;}
 .show-bdt{border-top: #e6e6e6 solid 1px;}
@@ -133,12 +134,12 @@ body{color: #333; font-family: Microsoft Yahei;}
 
 .task-progress{margin: 10px 0 0; line-height: 24px; font-size: 13px;}
 .task-progress span{display: inline-block; width: 60px; text-align: center;}
-.task-progress > dt > span{background: #52d2ff; border-radius: 3px; color: #fff;}
+.task-progress > dt > span{background: #f76e6c; border-radius: 3px; color: #fff;}
 .task-progress > dd{color: #999;}
 .task-name{color: #999; font-size: 12px; line-height: 20px;}
 .task-book{font-family: arial;}
 .task-status{color: #52d2ff; font-size: 12px; border: solid 1px; border-radius: 2px; padding: 0 3px; line-height: 20px;}
-.task-text{margin: 20px 0 0; }
+.task-text{margin: 20px 0 20px; }
 .task-starbox{font-size: 12px; color: #999;}
 .task-des{margin: 6px 0 0; line-height: 20px; color: #999; max-height: 60px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; display: box; -webkit-box-orient: vertical; box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3;}
 

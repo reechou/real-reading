@@ -1,0 +1,238 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <title>我的小鹿微课</title>
+    <meta charset="utf-8" >
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="keywords" content="" >
+    <meta name="description" content="" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" >
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="/static/css/m-main.css?data=0512" >
+    <link rel="stylesheet" href="/static/css/m-show.css?data=0512" >
+    <link rel="stylesheet" href="/static/css/m-sy.css?data=0512" >
+</head>
+<body>
+
+<style>
+    .prompt-p{word-break: break-all;}
+</style>
+
+<!--<div id="init-pageshow"><div class="init-pageshow" :class="{hide: pageshowflag}"></div></div>-->
+
+<section id="app00">
+
+    <div class="show-sybox sybox-pb60">
+
+        <div class="pb-info pt20 clearfix">
+            <span class="show-over" id="info-name">{{ .Name }}</span>
+            <img src="{{ .AvatarUrl }}">
+        </div>
+
+        <ul class="home-list">
+            <li class="home-one home-lclass" onclick="doGo('/sy/class-info')">我的课程</li>
+            <!--<li class="home-one home-lclass" @click="doGo('/sy/class-info')">班级</li>-->
+            <!--<li class="home-one home-lleave" @click="doGo('/sy/leave-record')">请假</li>-->
+            <!--<li class="home-one home-linvite" @click="doGo('/zb/share')">邀请好友</li>-->
+            <!--<li class="home-one home-lwallet" @click="doGo('/sy/wallet')">钱包</li>-->
+            <li class="home-one home-lremind" onclick="doGo('/sy/reading-remind')">阅读提醒设置</li>
+            <li class="home-one home-lhelp hide" onclick="doGo('xx')">帮助</li>
+        </ul>
+
+    </div>
+
+    <section class="sy-footerbox">
+        <ul class="sy-footer">
+            <li class="sy-footerone" onclick="ftGoto('')">
+                <span class="sy-ficon sy-f-clock"></span>
+                <p>课程</p>
+            </li>
+            <li class="sy-footerone" onclick="ftGoto('/sy/home')">
+                <span class="sy-ficon sy-f-bl"></span>
+                <p>推荐</p>
+            </li>
+            <li class="sy-footerone current">
+                <span class="sy-ficon sy-f-own"></span>
+                <p>我的</p>
+            </li>
+        </ul>
+    </section>
+
+</section>
+
+<div id="defined-prompt"><defined-prompt :flag="flag" :tipStr="tipstr" :cancelstr="cancelstr" :okStr="okstr" :cancelFlag="cancelflag" :callback="callback"></defined-prompt></div>
+
+<script src="/static/js/zepto.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/h5-common.js?0323"></script>
+
+<script src="/static/plugins/m-emoji/emoji.js"></script>
+
+<script>
+
+var app00 = new Vue({
+    el: '#app00',
+    data: {
+        name: '',
+        avatar: 'http://wx.qlogo.cn/mmopen/iaI59KUL9O42ScmjErftwplc0XmppqTMvwBuibAHEUVgCayFywFiavxJiaqfscRhhAWzfS9U85nH6dVRSJ3aGicegRQ/0'
+    },
+    methods: {
+        doGo: function(a){
+            if(!a) return ;
+            location.assign(a);
+        },
+        ftGoto: function(a){
+            if(!a) return ;
+            location.assign(a);
+        }
+    },
+    mounted: function(){
+        $('#info-name').emoji();
+    }
+});
+
+</script>
+
+
+<script>
+
+(function(){
+    new Vue({
+        el: '#init-pageshow',
+        data: {
+            pageshowflag: false
+        },
+        created: function(){
+            this.pageshowflag = true;
+        }
+    });
+})();
+
+</script>
+
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+<script>
+
+var shareOpts = {
+    tit: 'ÎÒÕýÔÚ¾²ºÃÊéÔº£¬¿ìÀ´ºÍÎÒÒ»Æð½øÐÐ6¸öÔÂ¶ÁÊé¼Æ»®°É',
+    des: '¡¾¾²ºÃÊéÔº¡¿Ð¯ÊÖÍ¬Ñ§ÃÇÎªÆÚ6¸öÔÂÒ»Æð¶ÁÊé¼Æ»®£¬Îª´ó¼ÒÉè¼Æ¿ÆÑ§µÄÑ§Ï°ÌåÏµÓë¾­µäÊéµ¥£¬ÔÚ6¸öÔÂÀï£¬Ã¿Ìì¼á³Ö20·ÖÖÓÔÚÏßÔÄ¶Á£¬Ã¿ÖÜ¶ÁÍêÒ»±¾Êé£¬¿Î³Ì½áÊøºó´ó¼ÒÒ»ÆðÎüÊÕ24±¾ÊéµÄ¾«»ªÄÚÈÝ£¬²¢ÇÒÄÜ´Ó¸÷¸öÍ¬Ñ§µÄ²»Í¬Ë¼Î¬Òý·¢¸ü¶àµÄË¼¿¼ÓëÑ§Ï°£¬ÍêÉÆ×Ô¼ºµÄË¼Î¬ÄÜÁ¦¼°ÖªÊ¶ÌåÏµ£¬×ö¸üºÃµÄ×Ô¼º',
+    link: '' || location.href,
+    pic: 'http://img.caizhu.com/FuL4m1fwEx-J-Pq7yIgBkI0wutRE'
+
+};
+
+(function(){
+
+    var WC,
+            appId, timestamp1, nonceStr, signature;
+
+    timestamp1 = 0;
+    appId = nonceStr = signature = '';
+
+
+if(window.shareOpts) initShareConfig(shareOpts);
+
+function initShareConfig(opts){
+
+    wx.config({
+        debug: false, // ¿ªÆôµ÷ÊÔÄ£Ê½,µ÷ÓÃµÄËùÓÐapiµÄ·µ»ØÖµ»áÔÚ¿Í»§¶Ëalert³öÀ´£¬ÈôÒª²é¿´´«ÈëµÄ²ÎÊý£¬¿ÉÒÔÔÚpc¶Ë´ò¿ª£¬²ÎÊýÐÅÏ¢»áÍ¨¹ýlog´ò³ö£¬½öÔÚpc¶ËÊ±²Å»á´òÓ¡¡£
+        appId: '', // ±ØÌî£¬¹«ÖÚºÅµÄÎ¨Ò»±êÊ¶
+        timestamp: '', // ±ØÌî£¬Éú³ÉÇ©ÃûµÄÊ±¼ä´Á
+        nonceStr: '', // ±ØÌî£¬Éú³ÉÇ©ÃûµÄËæ»ú´®
+        signature: '',// ±ØÌî£¬Ç©Ãû£¬¼û¸½Â¼1
+        jsApiList: ['hideAllNonBaseMenuItem', 'closeWindow', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'showMenuItems', 'hideMenuItems'] // ±ØÌî£¬ÐèÒªÊ¹ÓÃµÄJS½Ó¿ÚÁÐ±í£¬ËùÓÐJS½Ó¿ÚÁÐ±í¼û¸½Â¼2
+    });
+
+    wx.ready(function(){
+
+        // ±¨ÃûÒ³ÃæÊ¹ÓÃ
+        if(window.GLOBALDOPAYELEMENT){
+            app00.abledDoPayFlag = true;
+        }
+
+        // ½ñÈÕÊ×Ò³ - µÈ´ý¿ª°à - µÈ´ý¿ªÑ§
+        if(window.$wxCloseBtn){
+            $wxCloseBtn[0].onclick = function(){
+                wx.closeWindow();
+            }
+        }
+
+        // ÅóÓÑÈ¦
+        wx.onMenuShareTimeline({
+            title: opts.tit, // ·ÖÏí±êÌâ
+            link: opts.link, // ·ÖÏíÁ´½Ó
+            imgUrl: opts.pic, // ·ÖÏíÍ¼±ê
+            success: function () {
+
+            },
+            cancel: function () {
+                // ÓÃ»§È¡Ïû·ÖÏíºóÖ´ÐÐµÄ»Øµ÷º¯Êý
+            }
+        });
+
+        // ÅóÓÑ
+        wx.onMenuShareAppMessage({
+            title: opts.tit, // ·ÖÏí±êÌâ
+            desc: opts.des, // ·ÖÏíÃèÊö
+            link: opts.link, // ·ÖÏíÁ´½Ó
+            imgUrl: opts.pic, // ·ÖÏíÍ¼±ê
+            type: '', // ·ÖÏíÀàÐÍ,music¡¢video»òlink£¬²»ÌîÄ¬ÈÏÎªlink
+            dataUrl: '', // Èç¹ûtypeÊÇmusic»òvideo£¬ÔòÒªÌá¹©Êý¾ÝÁ´½Ó£¬Ä¬ÈÏÎª¿Õ
+            success: function () {
+                // ÓÃ»§È·ÈÏ·ÖÏíºóÖ´ÐÐµÄ»Øµ÷º¯Êý
+            },
+            cancel: function () {
+                // ÓÃ»§È¡Ïû·ÖÏíºóÖ´ÐÐµÄ»Øµ÷º¯Êý
+            }
+        });
+
+        //wx.hideAllNonBaseMenuItem();      // Òþ²ØËùÓÐ·Ç»ù´¡°´Å¥½Ó¿Ú
+
+        wx.showMenuItems({
+            menuList: [
+                'menuItem:share:appMessage',
+                'menuItem:share:timeline'
+            ] // ÒªÒþ²ØµÄ²Ëµ¥Ïî£¬Ö»ÄÜÒþ²Ø¡°´«²¥Àà¡±ºÍ¡°±£»¤Àà¡±°´Å¥£¬ËùÓÐmenuÏî¼û¸½Â¼3
+        });
+
+        wx.hideMenuItems({
+            menuList: ['menuItem:share:qq',
+                'menuItem:share:weiboApp',
+                'menuItem:favorite',
+                'menuItem:share:facebook',
+                'menuItem:share:QZone',
+
+                'menuItem:copyUrl',
+                'menuItem:openWithQQBrowser',
+                'menuItem:openWithSafari'
+            ] // ÒªÒþ²ØµÄ²Ëµ¥Ïî£¬Ö»ÄÜÒþ²Ø¡°´«²¥Àà¡±ºÍ¡°±£»¤Àà¡±°´Å¥£¬ËùÓÐmenuÏî¼û¸½Â¼3
+        });
+
+    });
+
+}
+
+})();
+
+
+</script>
+
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?764c0deab35b5c47b79e77ac7fa74eaa";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261333177'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1261333177' type='text/javascript'%3E%3C/script%3E"));</script>
+
+</body>
+</html>

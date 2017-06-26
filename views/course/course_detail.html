@@ -1,0 +1,362 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <title>小鹿微课</title>
+    <meta charset="utf-8" >
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="keywords" content="" >
+    <meta name="description" content="" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" >
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="/reading/m-main.css" >
+    <link rel="stylesheet" href="/reading/m-show-1.css" >
+    <link rel="stylesheet" href="/reading/m-sy.css" >
+
+    <link rel="stylesheet" href="https://h5.xiaoeknow.com/css/common.css?v2017622213437v">
+    <link rel="stylesheet" href="/reading/audio-detail.css">
+
+    <script>
+        var htmlDom = document.documentElement;
+        var windowWidth = htmlDom.clientWidth;
+        var evt = "onorientationchange" in window ? "orientationchange" : "resize";
+        htmlDom.style.fontSize = windowWidth / 7.5 + 'px';
+        (function () {
+            document.addEventListener('DOMContentLoaded', function () {
+                if(!htmlDom.style.fontSize){
+                    var htmlDomProtect = document.documentElement;
+                    var windowWidth = htmlDomProtect.clientWidth;
+                    htmlDomProtect.style.fontSize = windowWidth / 7.5+ 'px';
+                }
+            }, false);
+        })();
+
+        window.addEventListener(evt, function() {
+            setTimeout(function () {
+                var htmlDomProtect = document.documentElement;
+                var windowWidth = htmlDomProtect.clientWidth;
+                htmlDomProtect.style.fontSize = windowWidth / 7.5 + 'px';
+            },200);
+        }, false);
+    </script>
+</head>
+<body>
+
+<style>
+.read-desbox{font-size: 16px; line-height: 26px; word-break: break-all;}
+.show-sybox.current{margin-right: 65px;}
+
+@media (max-width: 380px) {
+    .show-sybox.current{margin-right: 55px;}
+    .read-desbox{font-size: 15px; line-height: 24px;}
+}
+
+@media (max-width: 320px) {
+    .show-sybox.current{margin-right: 45px;}
+    .read-desbox{font-size: 15px; line-height: 22px;}
+}
+
+.m-prompt-box{background: rgba(0,0,0,.9);}
+
+.readv2-135tit{text-align: center; line-height: 30px; font-size: 18px; vertical-align: baseline; color: #737373;}
+.readv2-135index{display: inline-block; font-size: 40px; color: #c6c6c6; position: relative; font-family: Helvetica; padding: 0 15px 0 0; }
+.readv2-135index > i{position: absolute; right: 10px; bottom: -15px; width: 8px; height: 50px; border-left: 1px solid rgb(198,198,199); background-color: rgb(254,254,254); box-sizing: border-box; -webkit-transform: rotate(35deg); transform: rotate(35deg);}
+
+.read-checkinboxv1{padding: 20px 0 15px;}
+.readv1-shai{text-align: center; }
+.readv1-shai a{color: #52d2ff; text-decoration: underline;}
+
+.scroll-one img{max-width: 100%;}
+
+</style>
+
+<section id="app00">
+    <input id="audioId" class="resourceId" style="display: none" type="hidden" value="a_59450d394f94a_WdE8qssf">
+    <input id="audioResourceServer" style="display: none" type="hidden" value="https://resource.h5.xiaoe-tech.com/get_copy_audio_url_new">
+    <input id="availableInfo" style="display: none" type="hidden" value="1">
+
+    <div class="custom_modal custom_modal_hide c0_white t3">循环模式</div>
+    <div class="content_wrapper">
+        <div class="audioPlayer">
+            <div class="audioProgress clearfix">
+                <div class="audioTime runTime t4">00:00</div>
+                <div class="progressBg">
+                    <div class="progressWrapper" style="width: 100%">
+                        <div class="progressBar">
+                            <div class="timeLine"></div>
+                            <div class="timeBall">
+                                <div class="timeBallColor"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progressLineBg"></div>
+                </div>
+
+                <div class="audioTime endTime t4">04:19</div>
+            </div>
+
+            <div class="controlMenu clearfix">
+                <div data-href="" class="prevWrapper prev hrefClick">
+                    <div class="pauseBackground" style="display: none"></div>
+                    <div class="otherAudio controlButton prevGreyBackground"></div>
+                </div>
+                <div data-href="" class="nextWrapper next hrefClick">
+                    <div class="otherAudio controlButton nextGreyBackground"></div>
+                </div>
+                <div id="playButton" class="play controlButton playBackground loadingBackground"></div>
+
+                <audio title="普通话技巧一 提颧肌"
+                       id="audioInfo"
+                       style="display: none"
+                       src="http://wechatapppro-1252524126.file.myqcloud.com/app4wLz27Ug4870/audio/18884f258d9038840a4e1b2bbc29874a/18884f258d9038840a4e1b2bbc29874apress.mp3"
+                       data-type="0"
+                       data-m3u8=""
+                       data-mp3="http://wechatapppro-1252524126.file.myqcloud.com/app4wLz27Ug4870/audio/18884f258d9038840a4e1b2bbc29874a/18884f258d9038840a4e1b2bbc29874apress.mp3"
+                       data-orginmp3="http://wechatapppro-1252524126.file.myqcloud.com/app4wLz27Ug4870/audio/18884f258d9038840a4e1b2bbc29874a.mp3"
+                       autoplay
+                ></audio>
+
+                <a href="javascript:;" class="audioModeWrapper">
+                    <div id="audio_mode" class="onlyOneBackground"></div>
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="show-sybox">
+
+        <!--<ul class="bookv2-mlist">-->
+            <!--<li>章节</li>-->
+            <!--{{ range .ChapterDetailList }}-->
+            <!--<li onclick="toAnchor(index)" ><span class="current">{{ .MonthCourseCatalogChapter.IndexId }}</span></li>-->
+            <!--{{ end }}-->
+            <!--&lt;!&ndash;<li><span class="current">11</span></li>-->
+            <!--<li><span>22</span></li>&ndash;&gt;-->
+        <!--</ul>-->
+
+        <ul class="read-titbox">
+            <li @click="gotoBook(1)" class="read-titone readone01" :class="{current:prevFlag}"></li>
+            <li class="read-titone readone02">
+                <span>{{ .TaskTime }}</span>
+            </li>
+            <li @click="gotoBook(2)" class="read-titone readone03" :class="{current:nextFlag}"></li>
+        </ul>
+
+        <section id="read-box" class="read-desbox">
+            {{ range $i, $v := .ChapterDetailList }}
+                <section class="scroll-one mt20" id="{{ $v.MonthCourseCatalogChapter.IndexId }}">
+                    <div class="read-des">
+                        <h3 class="readv2-135tit">
+                            <span class="readv2-135index">{{ $v.MonthCourseCatalogChapter.IndexId }}<i></i></span>
+                            <span>{{ $v.Chapter.Title }}</span>
+                        </h3>
+                        {{ if $v.Chapter.Cover }}
+                        <div class="readv2-cover"><img src="{{ $v.Chapter.Cover }}"></div>
+                        {{ end }}
+                        <div class="mt20">
+                            {{ $v.Chapter.Content | unescaped }}
+                        </div>
+                    </div>
+                </section>
+            {{ end }}
+        </section>
+
+    </div>
+
+    <div class="read-checkinbox">
+        <h2>您已阅读今日任务，打卡吧</h2>
+        <div class="mt20">
+            <span class="show-do" @click="doSign">打卡</span>
+        </div>
+    </div>
+    <template v-if="!checkedFlag">
+        <div class="read-checkinbox read-checkinboxv1">
+            <h2 class="">打卡成功，获得2个学分</h2>
+            <div class="mt20">
+                <span class="show-do" @click="goto('/sy/signin-share')">分享给朋友</span>
+            </div>
+            <div class="readv1-shai mt">
+                <a href="/bl">晒读书心得</a>
+            </div>
+        </div>
+    </template>
+
+</section>
+
+<section id="ajax-loadingbox" :class="{hide:!flag}"><ajax-loading></ajax-loading></section>
+
+<script src="http://oe3slowqt.bkt.clouddn.com/zepto.min.js"></script>
+<script src="https://jhsy.caizhu.com/static/js/read-swipe.js"></script>
+
+<script>
+    //前端全局获取appid
+    window.APPID="appe0MEs6qX8480";
+    //跳转接口（放这里，全局通用）
+    eJump = function (cmd, isReplace) {
+        var url = "";
+        //取url类型(-1代表新的url)
+        var urlType = window.location.hostname.indexOf(".h5.");
+        if (cmd == null || cmd == undefined || cmd == ""){
+            //异常cmd，直接跳首页
+            if (urlType === -1){
+                //新的url首页，斜杠后面带appid
+                url = window.location.protocol + "//" + window.location.hostname + "/" + window.APPID;
+            }else {
+                //旧的url首页
+                url = window.location.protocol + "//" + window.location.hostname;
+            }
+        }else {
+            //正常cmd，过滤掉前面的斜杠
+            if (cmd !== '/' && cmd.indexOf("/") === 0) {
+                cmd = cmd.substr(1);
+            }
+            //取非问号参数的部分（排除后面参数干扰，用来做url识别）
+            var normalUrl = cmd.split("?")[0];
+
+            if (normalUrl.indexOf("http") === 0) {
+                //cmd已经是全路径
+                url = cmd;
+            }else {
+                //如果不是全路径的url，则根据类型来补全url（如果是新链接，取到的url必定是带了appid的）。
+                if (urlType === -1){
+                    //新的url首页，斜杠后面带appid
+                    url = window.location.protocol + "//" + window.location.hostname + "/" + window.APPID + "/" + cmd;
+                }else {
+                    //旧的url首页
+                    url = window.location.protocol + "//" + window.location.hostname + "/" + cmd;
+                }
+            }
+
+            //如果是跳转content_page页，确保没有appid
+            if (normalUrl.indexOf("content_page") >= 0) {
+                //如果是跳到内容页，确保去掉了appid
+                url = url.replace(window.APPID + "/", "");
+            }
+
+            //如果是跳转javascript:,不修改
+            if (normalUrl == "javascript:") {
+                //如果是跳到内容页，确保去掉了appid
+                url = cmd;
+            }
+        }
+
+        //根据是否强制访问作区分处理
+        if (isReplace) {
+            window.location.replace(url);
+        } else {
+            window.location.href = url;
+        }
+    };
+</script>
+
+<script src="https://h5.xiaoeknow.com/js/concat.js?v2017622213437v"></script>
+<script src="https://h5.xiaoeknow.com/js/utils.js?v2017622213437v"></script>
+<script src="https://h5.xiaoeknow.com/js/emojis.js?v2017622213437v"></script>
+<script src="https://h5.xiaoeknow.com/js/audio_detail.js?v2017622213437v"></script>
+
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+<script>
+
+var shareOpts = {
+    tit: '我正在小鹿微课，快来和我一起进行6个月读书计划吧',
+    des: '【小鹿微课】携手同学们为期6个月一起读书计划，为大家设计科学的学习体系与经典书单，在6个月里，每天坚持20分钟在线阅读，每周读完一本书，课程结束后大家一起吸收24本书的精华内容，并且能从各个同学的不同思维引发更多的思考与学习，完善自己的思维能力及知识体系，做更好的自己',
+    link: '' || location.href,
+    pic: 'http://img.caizhu.com/FuL4m1fwEx-J-Pq7yIgBkI0wutRE'
+
+};
+
+(function(){
+
+if(window.shareOpts) initShareConfig(shareOpts);
+
+function initShareConfig(opts){
+
+    wx.config({
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: '', // 必填，公众号的唯一标识
+        timestamp: '', // 必填，生成签名的时间戳
+        nonceStr: '', // 必填，生成签名的随机串
+        signature: '',// 必填，签名，见附录1
+        jsApiList: ['hideAllNonBaseMenuItem', 'closeWindow', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'showMenuItems', 'hideMenuItems'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+
+    wx.ready(function(){
+
+        // 报名页面使用
+        if(window.GLOBALDOPAYELEMENT){
+            app00.abledDoPayFlag = true;
+        }
+
+        // 今日首页 - 等待开班 - 等待开学
+        if(window.$wxCloseBtn){
+            $wxCloseBtn[0].onclick = function(){
+                wx.closeWindow();
+            }
+        }
+
+        // 朋友圈
+        wx.onMenuShareTimeline({
+            title: opts.tit, // 分享标题
+            link: opts.link, // 分享链接
+            imgUrl: opts.pic, // 分享图标
+            success: function () {
+
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+        // 朋友
+        wx.onMenuShareAppMessage({
+            title: opts.tit, // 分享标题
+            desc: opts.des, // 分享描述
+            link: opts.link, // 分享链接
+            imgUrl: opts.pic, // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+        //wx.hideAllNonBaseMenuItem();      // 隐藏所有非基础按钮接口
+
+        wx.showMenuItems({
+            menuList: [
+                'menuItem:share:appMessage',
+                'menuItem:share:timeline'
+            ] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        });
+
+        wx.hideMenuItems({
+            menuList: ['menuItem:share:qq',
+                'menuItem:share:weiboApp',
+                'menuItem:favorite',
+                'menuItem:share:facebook',
+                'menuItem:share:QZone',
+
+                'menuItem:copyUrl',
+                'menuItem:openWithQQBrowser',
+                'menuItem:openWithSafari'
+            ] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        });
+
+    });
+
+}
+
+})();
+
+</script>
+
+</body>
+</html>

@@ -92,12 +92,12 @@
 .task-coverv1{width: 75px; vertical-align: top; margin: 2px 15px 0 0;}
 .task-coverv1 img{width: 75px; height: 100px; box-shadow: #ccc 2px -2px 2px;}
 .task-btitv1{position: relative; margin: 5px 0 0; padding: 0 12px; height: 30px; line-height: 30px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #999;}
-.task-btitv1:before{content: '銆�'; position: absolute; left: -4px; top: 0;}
-.task-btitv1:after{content: '銆�'; position: absolute; right: -4px; top: 0;}
-.tonev1-box{height: 110px; margin: 3px; box-shadow: #e1f8ff 0 0 6px 2px; box-sizing: border-box; padding: 15px 8px; text-align: center; position: relative; overflow: hidden;}
+.task-btitv1:before{content: '《'; position: absolute; left: -4px; top: 0;}
+.task-btitv1:after{content: '》'; position: absolute; right: -4px; top: 0;}
+.tonev1-box{height: 110px; margin: 3px; box-shadow: #f76e6c 0 0 6px 2px; box-sizing: border-box; padding: 15px 8px; text-align: center; position: relative; overflow: hidden;}
 .tonev1-type, .tonev2-type{position: absolute; left: -38px; top: 10px; height: 20px; line-height: 20px; color: #fff; -webkit-transform: rotate(-45deg); transform: rotate(-45deg); width: 120px; font-size: 12px; background: #8adeff; }
 .tonev2-type{background: #fda8b1;}
-.task-titlev1{color: #52d2ff; font-weight: bold; line-height: 32px; height: 32px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.task-titlev1{color: #f76e6c; font-weight: bold; line-height: 32px; height: 32px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .task-titlev1 > span{font-weight: 100;}
 .task-titlev1  i{font-style: normal; color: #999; font-size: 12px;}
 .task-seeboxv1{line-height: 26px;}
@@ -106,7 +106,7 @@
 .task-statusn2{background-image: url('http://img.caizhu.com/jhsy/images/mv1/score-s-on.png');}
 .task-statusn3{position: absolute; top: -30px; right: 0; width: 60px; padding: 0 0 15px; line-height: 20px; background: url('http://img.caizhu.com/jhsy/images/mv1/score-bg.png') no-repeat left bottom; background-size: 100% auto; text-align: center;}
 .task-statusn3 > img{vertical-align: top; height: 16px;margin: 0 1px;}
-.task-seev1{display: inline-block; padding: 0 6px; color: #fff; background: #52d2ff; font-size: 12px; border-radius: 3px; margin: 0 0 0 20%;}
+.task-seev1{display: inline-block; padding: 0 6px; color: #fff; background: #f76e6c; font-size: 12px; border-radius: 3px; margin: 0 0 0 20%;}
 .tonev1-title{margin: 20px 0 0; height: 30px; line-height: 30px; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .today-timeone{-webkit-box-flex: 1; box-flex: 1; line-height: 24px; text-align: center;}
 .tswipe-listv1{height: 116px; overflow: hidden;}
@@ -123,21 +123,22 @@
 
 .tn-notip{line-height: 20px; padding: 10px 0;}
 
-.sy-footerbox{position: fixed; bottom: 0; width: 100%; height: 55px; box-shadow: #dbf1ff 0 -2px 4px 0px; background: #fff;}
+.sy-footerbox{position: fixed; bottom: 0; width: 100%; height: 55px; box-shadow: #f76e6c 0 -2px 4px 0px; background: #fff;}
 .sy-footer{display: -webkit-box; display: box; }
 .sy-footerone{-webkit-box-flex: 1; box-flex: 1; text-align: center; padding: 6px 0 0;}
 .sy-ficon{font-size: 20px; display: inline-block; width: 22px; height: 22px; vertical-align: top; background: no-repeat center center; background-size: 20px auto; }
-.sy-f-now{background-image: url('http://img.caizhu.com/jhsy/images/m/today-now.png');}
-.sy-footerone.current .sy-f-now{background-image: url('http://img.caizhu.com/jhsy/images/m/today-now-on.png');}
+.sy-f-now{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/today-now-org.png');}
+.sy-footerone.current .sy-f-now{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/today-now.png');}
 /*.sy-f-clock{background-image: url('http://img.caizhu.com/jhsy/images/m/today-clock.png');}
 .sy-footerone.current .sy-f-clock{background-image: url('http://img.caizhu.com/jhsy/images/m/today-clock-on.png');}*/
-.sy-f-clock{background-image: url('http://img.caizhu.com/jhsy/images/m/today-office.png');}
-.sy-footerone.current .sy-f-clock{background-image: url('http://img.caizhu.com/jhsy/images/m/today-office-on.png');}
-.sy-f-own{background-image: url('http://img.caizhu.com/jhsy/images/m/today-own.png');}
-.sy-footerone.current .sy-f-own{background-image: url('http://img.caizhu.com/jhsy/images/m/today-own-on.png');}
-.sy-f-bl{background-image: url('http://img.caizhu.com/jhsy/images/m/icon-ft-bl.png'); background-size: 20px 16px;}
+.sy-f-clock{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/today-office-org.png');}
+.sy-footerone.current .sy-f-clock{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/today-office.png');}
+.sy-f-own{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/today-own-org.png');}
+.sy-footerone.current .sy-f-own{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/today-own.png');}
+.sy-f-bl{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/icon-ft-bl-org.png'); background-size: 20px 16px;}
+.sy-footerone.current .sy-f-bl{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/icon-ft-bl.png');}
 .sy-footerone > p{color: #999; font-size: 12px; line-height: 20px;}
-.sy-footerone.current > p{color: #52d2ff;}
+.sy-footerone.current > p{color: #f76e6c;}
 
 .tswipe-list img{width: 100%;}
 .tswipe-one{box-sizing: border-box; position: relative;}
@@ -190,7 +191,7 @@
 .remind-do.current{border: #52d2ff solid 1px; background: #52d2ff;}
 .remind-do.current:after{left: 25px;}
 
-.read-checkinbox{text-align: center; color: #474747; padding: 20px 0 25px; background: #fff; margin: 0 0 10px; box-shadow: #aeeaff 0 0 4px 2px; width: 100%;}
+.read-checkinbox{text-align: center; color: #474747; padding: 20px 0 25px; background: #fff; margin: 0 0 10px; box-shadow: #f76e6c 0 0 4px 2px; width: 100%;}
 .read-destit{text-align: center; line-height: 22px; font-size: 12px; font-weight: 100;}
 .read-destit > span{display: inline-block; padding: 0 10px; background: #484848; color: #fff;}
 
@@ -263,9 +264,9 @@
 .plan-p00 > h1{color: #474747; font-size: 15px;}
 .plan-p00 > p{color: #999; font-size: 13px; padding: 0 30px;}
 
-.plan-mlist{position: fixed; z-index: 10; top: 24%; right: 10px;}
+.plan-mlist{position: fixed; z-index: 10; top: 35%; right: 10px;}
 .plan-mlist > li{width: 40px; text-align: center; margin: 20px 0 0;}
-.plan-mlist span.current{display: inline-block; width: 20px; height: 20px; text-align: center; background: #52d2ff; color: #fff; border-radius: 20px;}
+.plan-mlist span.current{display: inline-block; width: 20px; height: 20px; text-align: center; background: #f76e6c; color: #fff; border-radius: 20px;}
 
 .do-haimibox{position: fixed; bottom: 80px; right: 5px; width: 60px; height: 60px; cursor: pointer;}
 .do-haimibox span{display: block; border-radius: 60px;}
@@ -368,9 +369,9 @@
 .bookv2-cover{width: 100%; min-height: 120px; max-height: 160px;}
 .bookv2-text{display: -webkit-box; display: box; -webkit-box-orient: vertical; box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; line-height: 26px; height: 78px; overflow: hidden;}
 
-.bookv2-mlist{position: fixed; z-index: 10; top: 10%; right: 6px;}
+.bookv2-mlist{position: fixed; z-index: 10; top: 24%; right: 6px;}
 .bookv2-mlist > li{width: 40px; text-align: center; margin: 20px 0 0;}
-.bookv2-mlist span.current{display: inline-block; width: 20px; height: 20px; text-align: center; background: #52d2ff; color: #fff; border-radius: 20px;}
+.bookv2-mlist span.current{display: inline-block; width: 20px; height: 20px; text-align: center; background: #f76e6c; color: #fff; border-radius: 20px;}
 
 .readv2-tit{text-align: center;}
 .readv2-tit > span{display: inline-block; line-height: 22px; padding: 0 4px; color: #fff; background: #484848;}

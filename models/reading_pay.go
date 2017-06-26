@@ -20,7 +20,7 @@ type ReadingPay struct {
 	Number    int64  `xorm:"not null default 0 int index" json:"number"`
 	Money     int64  `xorm:"not null default 0 int" json:"money"`
 	Status    int64  `xorm:"not null default 0 int index" json:"status"`
-	CreatedAt int64  `xorm:"not null default 0 int" json:"createAt"`
+	CreatedAt int64  `xorm:"not null default 0 int" json:"createdAt"`
 	UpdatedAt int64  `xorm:"not null default 0 int index" json:"-"`
 }
 
