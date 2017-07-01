@@ -238,8 +238,8 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 			if v.Course.CourseType == READING_COURSE_TYPE_GD {
 				readingUserInfo.CourseType = v.Course.CourseType
 				readingUserInfo.CourseNum = v.Course.CourseNum
-				readingUserInfo.StartTime = time.Unix(v.Course.StartTime, 0).Format("2006-01-02")
-				readingUserInfo.EndTime = time.Unix(v.Course.EndTime, 0).Format("2006-01-02")
+				readingUserInfo.StartTime = time.Unix(v.Course.StartTime, 0).Format("2006.01.02")
+				readingUserInfo.EndTime = time.Unix(v.Course.EndTime, 0).Format("2006.01.02")
 				renderView(w, "./views/reading_sign_success.html", readingUserInfo)
 				return
 			}
