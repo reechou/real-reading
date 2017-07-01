@@ -31,3 +31,12 @@ func CreateUserCourse(info *UserCourse) error {
 
 	return nil
 }
+
+func GetUserCourseFromTime(fromTime int64) ([]UserCourse, error) {
+	var list []UserCourse
+	err := x.Where("pay_time >= ?", fromTime).Find(&list)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}

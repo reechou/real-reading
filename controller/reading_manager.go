@@ -18,7 +18,7 @@ func (self *ReadingHandler) readingPayToday(rr *HandlerRequest, w http.ResponseW
 	//now := time.Now().Unix()
 	//todayZero := now - (now % 86400) - 28800
 	todayZero := now.BeginningOfDay().Unix()
-	list, err := models.GetReadingPayFromTime(todayZero)
+	list, err := models.GetUserCourseFromTime(todayZero)
 	if err != nil {
 		holmes.Error("get reading pay from time error: %v", err)
 		rsp.Code = proto.RESPONSE_ERR
