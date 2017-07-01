@@ -713,7 +713,6 @@ func (self *ReadingHandler) readingPayNotify(rr *HandlerRequest, w http.Response
 	if err != nil {
 		holmes.Error("create user course error: %v", err)
 	}
-	return
 	// --- end ---
 
 	//readingUser := &models.ReadingPay{
