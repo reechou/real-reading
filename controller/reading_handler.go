@@ -480,7 +480,7 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 	}
 
 	payMoney := course.Money
-	if openid == "oaKrZwsAF6pRX6z3Qn_EhIZ3DG90" {
+	if openid == "oaKrZwsAF6pRX6z3Qn_EhIZ3DG90" || openid == "oaKrZwotcenPmZyLKtMyoHZSTlaQ" {
 		payMoney = 1
 	}
 	unifiedRsp, err := self.readingUnifiedOrder(
