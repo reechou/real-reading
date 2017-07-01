@@ -106,10 +106,13 @@
 .task-statusn2{background-image: url('http://img.caizhu.com/jhsy/images/mv1/score-s-on.png');}
 .task-statusn3{position: absolute; top: -30px; right: 0; width: 60px; padding: 0 0 15px; line-height: 20px; background: url('http://img.caizhu.com/jhsy/images/mv1/score-bg.png') no-repeat left bottom; background-size: 100% auto; text-align: center;}
 .task-statusn3 > img{vertical-align: top; height: 16px;margin: 0 1px;}
-.task-seev1{display: inline-block; padding: 0 6px; color: #fff; background: #f76e6c; font-size: 12px; border-radius: 3px; margin: 0 0 0 20%;}
+.task-seev1{display: inline-block; padding: 0 6px; color: #fff; background: #f76e6c; font-size: 12px; border-radius: 3px; margin: 0 0 0 60%;}
 .tonev1-title{margin: 20px 0 0; height: 30px; line-height: 30px; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .today-timeone{-webkit-box-flex: 1; box-flex: 1; line-height: 24px; text-align: center;}
 .tswipe-listv1{height: 116px; overflow: hidden;}
+
+.task-cover-course{width: 75px; vertical-align: top; margin: 2px 15px 0 0;}
+.task-cover-course img{width: 75px; height: 75px; box-shadow: #ccc 2px -2px 2px;}
 
 .today-noticebox{padding: 0 0 20px; border-bottom: #e6e6e6 solid 1px; overflow: hidden;}
 .today-title{font-size: 16px; line-height: 30px;}

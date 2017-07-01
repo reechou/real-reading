@@ -137,7 +137,9 @@
 
 <section id="app00">
     <div class="b-topbox p-rela">
-        <img class="show-figure100" src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/banner_02.png">
+        <img class="show-figure100" src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/banner_01.png">
+        <span style="position: absolute; top: 0; left: 0; padding: 93px 0px 0px 178px; color: #fff; font-size: 15px;">{{.CourseNum}}</span>
+        <span style="position: absolute; top: 0; left: 0; padding: 111px 0px 0px 110px; color: #fff; font-size: 16px;">{{.IndexStartTime}}</span>
     </div>
 
     <div id="jhsy-ftbox22" class="jhsy-ftbox22 show-center">
@@ -236,7 +238,7 @@
         <section class="show-box">
             <div class="ag-title b-bd">
                 <span class="ag-info00 icon-bell"></span>
-                <div class="ag-info01">课程周期：2017.7 - 2017.12</div>
+                <div class="ag-info01">课程周期：{{.StartTime}} - {{.EndTime}}</div>
             </div>
             <ul class="ag-list">
                 <li v-for="one in bookList" class="ag-one">
@@ -301,7 +303,7 @@
                     <div class="fb-one">
                         <img class="fb-avatar" src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/t_05.png">
                         <div class="fb-info">
-                            <div class="fb-d00">平常心<span>[20170506期学员]</span></div>
+                            <div class="fb-d00">平常心<span>[20170606期学员]</span></div>
                         </div>
                     </div>
                     <p class="fb-p">

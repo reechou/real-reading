@@ -27,6 +27,7 @@ func InitDB(cfg *config.Config) {
 	x.SetMapper(core.GonicMapper{})
 	x.TZLocation, _ = time.LoadLocation("Asia/Shanghai")
 	// if need show raw sql in log
+	//x.ShowSQL(true)
 	if cfg.IfShowSql {
 		x.ShowSQL(true)
 	}
@@ -42,7 +43,8 @@ func InitDB(cfg *config.Config) {
 		new(MonthCourseCatalogChapter),
 		new(MonthCourseCatalogAudio),
 		new(User),
-		new(UserCourse)); err != nil {
+		new(UserCourse),
+		new(UserCourseCheckin)); err != nil {
 		holmes.Fatal("Fail to sync database: %v", err)
 	}
 }

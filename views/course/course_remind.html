@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
-    <title>书籍简介</title>
+    <title>课程提醒</title>
     <meta charset="utf-8" >
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
@@ -12,69 +12,46 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
     <link rel="stylesheet" href="/reading/m-main.css?v=0622" >
     <link rel="stylesheet" href="/reading/m-show-1.css?v=0622" >
     <link rel="stylesheet" href="/reading/m-sy.css?v=0622" >
 </head>
 <body>
 
-<style>
-    .prompt-p{word-break: break-all;}
-</style>
-
 <section id="app00">
 
-    <div class="show-sybox">
-        <div class="show-box">
-            <section class="task-info">
-                <img class="task-cover" src="{{ .Book.Cover }}">
-                <div class="task-infodet">
-                    <div class="task-book clearfix">
-                        <span>《{{ .Book.BookName }}》</span>
-                    </div>
-                    <p class="task-name">{{ .Book.Author }}</p>
-                    <div class="task-starbox">
-                        <span class="show-star"><span style="width: 50%;"></span></span>
-                    </div>
-                    <dl class="task-progress pt">
-                        <dt><span class="ml20">累计课程</span></dt>
-                        <dd><span class="ml20">{{ len .CatalogList | print }}个</span></dd>
-                    </dl>
+    <div class="show-sybox pt20">
+        <ul class="leave-list">
+            <li class="leave-one">
+                <span class="leave-name">开启阅读提醒</span>
+                <div class="leave-textbox">
+                    <span class="remind-do" @click="doWake" placeholder="00:00" :class="{current: wakeFlag}"></span>
                 </div>
-            </section>
-            <div class="task-text">简介：{{ .Book.Abstract }}</div>
-        </div>
-
-        {{ $userId := .UserId }}
-        {{ $courseId := .CourseId }}
-        {{ $bookId := .BookId }}
-
-        <h1 class="chapter-tit pt20">课程目录</h1>
-        {{ range .CatalogList }}
-        <ul class="exchange-list mt">
-            {{ if eq .Status 0 }}
-            <li class="exchange-one lock" onclick="">
-            {{ else }}
-            <li class="exchange-one" onclick="location.assign('/reading/course/bookdetail/{{$userId}}/{{$courseId}}/{{$bookId}}/{{.MonthCourseCatalog.ID}}');">
-            {{ end }}
-                <p>No{{ .MonthCourseCatalog.IndexId }} {{ .MonthCourseCatalog.Title }}</p>
-                <p>{{ .TaskTime }}</p>
+            </li>
+            <li class="leave-one leave-one01">
+                <span class="leave-name">提醒时间</span>
+                <div class="leave-textbox">
+                    <select>
+                        <option value ="volvo">学生</option>
+                        <option value ="saab">教师</option>
+                        <option value="opel">上班族</option>
+                        <option value="audi">老板</option>
+                        <option value ="volvo">公务员</option>
+                        <option value ="saab">自由职业</option>
+                        <option value="opel">退休</option>
+                        <option value="audi">其他</option>
+                    </select>
+                </div>
             </li>
         </ul>
-        {{ end }}
-
+        <span>职业</span>
     </div>
 
 </section>
 
-<div id="defined-prompt"><defined-prompt :flag="flag" :tipStr="tipstr" :cancelstr="cancelstr" :okStr="okstr" :cancelFlag="cancelflag" :callback="callback"></defined-prompt></div>
-
-<script src="http://oe3slowqt.bkt.clouddn.com/zepto.min.js"></script>
-
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-
 <script>
-
 var shareOpts = {
     tit: '我正在小鹿微课，快来和我一起进行6个月读书计划吧',
     des: '【小鹿微课】携手同学们为期6个月一起读书计划，为大家设计科学的学习体系与经典书单，在6个月里，每天坚持20分钟在线阅读，每周读完一本书，课程结束后大家一起吸收24本书的精华内容，并且能从各个同学的不同思维引发更多的思考与学习，完善自己的思维能力及知识体系，做更好的自己',
@@ -84,13 +61,6 @@ var shareOpts = {
 };
 
 (function(){
-
-    var WC,
-            appId, timestamp1, nonceStr, signature;
-
-    timestamp1 = 0;
-    appId = nonceStr = signature = '';
-
 
 if(window.shareOpts) initShareConfig(shareOpts);
 
@@ -175,7 +145,6 @@ function initShareConfig(opts){
 }
 
 })();
-
 </script>
 
 </body>

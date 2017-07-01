@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
-    <title>书籍简介</title>
+    <title>课程考勤详情</title>
     <meta charset="utf-8" >
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
@@ -12,67 +12,88 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
     <link rel="stylesheet" href="/reading/m-main.css?v=0622" >
     <link rel="stylesheet" href="/reading/m-show-1.css?v=0622" >
     <link rel="stylesheet" href="/reading/m-sy.css?v=0622" >
+
+    <link rel="stylesheet" href="/reading/calendar.css" >
+
+    <style>
+        .calendar-item0 {
+			background: #85D64D;
+		}
+		.calendar-item1 {
+			background: #abcdef;
+		}
+		.calendar-item2 {
+			background: #FF8877
+		}
+        .check-able {
+			background: #f76e6c;
+		}
+    </style>
 </head>
 <body>
 
-<style>
-    .prompt-p{word-break: break-all;}
-</style>
-
 <section id="app00">
 
-    <div class="show-sybox">
-        <div class="show-box">
-            <section class="task-info">
-                <img class="task-cover" src="{{ .Book.Cover }}">
-                <div class="task-infodet">
-                    <div class="task-book clearfix">
-                        <span>《{{ .Book.BookName }}》</span>
-                    </div>
-                    <p class="task-name">{{ .Book.Author }}</p>
-                    <div class="task-starbox">
-                        <span class="show-star"><span style="width: 50%;"></span></span>
-                    </div>
-                    <dl class="task-progress pt">
-                        <dt><span class="ml20">累计课程</span></dt>
-                        <dd><span class="ml20">{{ len .CatalogList | print }}个</span></dd>
-                    </dl>
-                </div>
-            </section>
-            <div class="task-text">简介：{{ .Book.Abstract }}</div>
-        </div>
-
-        {{ $userId := .UserId }}
-        {{ $courseId := .CourseId }}
-        {{ $bookId := .BookId }}
-
-        <h1 class="chapter-tit pt20">课程目录</h1>
-        {{ range .CatalogList }}
-        <ul class="exchange-list mt">
-            {{ if eq .Status 0 }}
-            <li class="exchange-one lock" onclick="">
-            {{ else }}
-            <li class="exchange-one" onclick="location.assign('/reading/course/bookdetail/{{$userId}}/{{$courseId}}/{{$bookId}}/{{.MonthCourseCatalog.ID}}');">
-            {{ end }}
-                <p>No{{ .MonthCourseCatalog.IndexId }} {{ .MonthCourseCatalog.Title }}</p>
-                <p>{{ .TaskTime }}</p>
+    <div class="show-sybox-attendance">
+        {{ if gt .Course.ID 0 }}
+        <ul class="attendance-info">
+            <li class="attendance-infoone">
+                <p>课程开始时间</p>
+                <p>{{.StartYear}}年{{.StartMonth}}月{{.StartDay}}日</p>
+            </li>
+            <li class="attendance-infoone">
+                <p>课程结束时间</p>
+                <p>{{.EndYear}}年{{.EndMonth}}月{{.EndDay}}日</p>
             </li>
         </ul>
-        {{ end }}
-
+        <div id="container" class="pt"></div>
+        {{end}}
     </div>
 
 </section>
 
-<div id="defined-prompt"><defined-prompt :flag="flag" :tipStr="tipstr" :cancelstr="cancelstr" :okStr="okstr" :cancelFlag="cancelflag" :callback="callback"></defined-prompt></div>
-
-<script src="http://oe3slowqt.bkt.clouddn.com/zepto.min.js"></script>
+<script src="/reading/calendar.js"></script>
+<script>
+	new Calendar({
+		container: 'container',
+		angle: 14,
+		isMask: false, // 是否需要弹层
+		beginTime: [{{.StartYear}}, {{.StartMonth}}, {{.StartDay}}],//如空数组默认设置成1970年1月1日开始,数组的每一位分别是年月日。
+		endTime: [{{.EndYear}}, {{.EndMonth}}, {{.EndDay}}],//如空数组默认设置成次年12月31日,数组的每一位分别是年月日。
+		recentTime: [{{.NowYear}}, {{.NowMonth}}, {{.NowDay}}],//如空数组默认设置成当月1日,数组的每一位分别是年月日。
+		isSundayFirst: true, // 周日是否要放在第一列
+		isShowNeighbor: true, // 是否展示相邻月份的月尾和月头
+		isToggleBtn: true, // 是否展示左右切换按钮
+		isChinese: true, // 是否是中文
+		monthType: 0, // 0:1月, 1:一月, 2:Jan, 3: April
+		canViewDisabled: true, // 是否可以阅读不在范围内的月份
+		beforeRenderArr: [
+		    {{ range .AttendanceDetailList }}
+		    {
+		       stamp: {{ .MonthCourseCatalog.TaskTime }},
+		       className: 'check-able',
+		    },
+		    {{end}}
+		],
+		success: function (item, arr) {
+		    console.log(item, arr);
+		},
+		switchRender: function (year, month, cal) {
+			console.log('计算机识别的 - 年份: ' + year + ' 月份: ' + month);
+			var data = [{
+				'stamp': 1507737600000,
+				'className': 'check-able',
+			}];
+			cal.renderCallbackArr(data);
+		}
+	});
+</script>
 
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-
 <script>
 
 var shareOpts = {
@@ -84,13 +105,6 @@ var shareOpts = {
 };
 
 (function(){
-
-    var WC,
-            appId, timestamp1, nonceStr, signature;
-
-    timestamp1 = 0;
-    appId = nonceStr = signature = '';
-
 
 if(window.shareOpts) initShareConfig(shareOpts);
 

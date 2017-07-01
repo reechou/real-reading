@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
-    <title>课程计划</title>
+    <title>我的课程</title>
     <meta charset="utf-8" >
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
@@ -19,134 +19,79 @@
 </head>
 <body>
 
-<style>
-@media(max-width:380px){
-.plan-mlist > li{margin: 16px 0 0;}
-}
-
-@media(max-width:320px){
-    .plan-mlist > li{margin: 12px 0 0;}
-}
-
-.planv2-do{display: -webkit-box; display: box; padding: 10px 20px 0;}
-.planv2-done{-webkit-box-flex: 1; box-flex: 1; text-align: center; color: #666;}
-.planv2-icon{display: block; vertical-align: top; background: center center no-repeat; background-size: 35px auto; height: 54px;}
-.iconv2-list{background-image: url('http://img.caizhu.com/jhsy/images/m/icon-iconv2-list.png');}
-.iconv2-help{background-image: url('http://img.caizhu.com/jhsy/images/m/icon-iconv2-help.png');}
-.iconv2-read{background-image: url('http://img.caizhu.com/jhsy/images/m/icon-iconv2-read.png');}
-.iconv2-note{background-image: url('http://img.caizhu.com/jhsy/images/m/icon-iconv2-note.png');}
-.iconv2-description{background-image: url('http://img.caizhu.com/jhsy/images/m/icon-iconv2-description.png');}
-.iconv2-shop{background-image: url('http://img.caizhu.com/jhsy/images/m/icon-iconv2-shop.png');}
-
-.attendance-show{border-bottom: #333 solid 1px; padding: 0 20px 5px; }
-.minfo-box{margin: 30px 0 0; padding: 10px 0; background: #f0f0f0; border-radius: 5px;}
-.plan-box{padding: 0 15px 70px;}
-</style>
-
 <section id="app00">
 
     <div class="show-sybox sybox-pb20">
         {{ $lenToday := len .TodayCatalogs }}
         {{ if eq $lenToday 0 }}
-            <div class="today-title clearfix">
-                <strong>公告</strong>
-            </div>
-            <div id="tswipe-box" class="pt">
-                <ul class="tswipe-list tswipe-listv1">
-                    <li class="tswipe-one" onclick="gotoDetailLink(one.NoticeID,one.Content)">
-                        <div class="tonev1-box">
-                            <span v-if="one.Type==1" class="tonev1-type">通知</span>
-                            <span v-else class="tonev2-type">通知</span>
-                            <p class="tonev1-title">关于「小鹿微课」</p>
-                            <p class="show-color">点击查看详情</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        {{ else }}
-            <div class="today-title clearfix mt20">
-                <strong>今日任务</strong>
-            </div>
-            {{ range .TodayCatalogs }}
-            <div class="task-info p-rela" onclick="gotoDetail(one.TaskID)">
-                <span v-if="one.Status==1" class="task-statusv1"></span>
-                <!--<span v-else class="task-statusn2"></span>-->
-
-                <div class="task-coverv1">
-                    <img class="" src="{{ .Book.Cover }}">
-                    <div class="task-btitv1 fs-999">{{ .Book.BookName }}</div>
-                </div>
-                <div class="task-infodet">
-                    <div class="task-titlev1">
-                        {{ .MonthCourseCatalog.Title }}
-                    </div>
-                    <p class="task-des fs-12">
-                        {{ .Book.Abstract }}
-                    </p>
-                    <div class="task-seeboxv1 mt">
-                        <span class="task-seev1">查看任务</span>
-                    </div>
-                </div>
-            </div>
-            {{ end }}
-        {{ end }}
-    </div>
-
-    {{ $userId := .UserId }}
-    {{ $courseId := .CourseId }}
-
-    <div class="plan-box">
-        <ul class="plan-list">
-            {{ range $i, $v := .MonthCourses }}
-            <div id="anchor-m{{$i}}" class="minfo-box" >
-                <div class="attendance-showbox">
-                    <div class="attendance-show">
-                        <span class="attendance-month">{{ $v.MonthCourse.MonthEn }}</span>
-                        <span class="attendance-minor"><span>{{ $v.MonthCourse.Month }}月</span><br><span class="fc-999">{{ $v.MonthCourse.Year }}</span></span>
-                    </div>
-                </div>
-                <div></div>
-                <div class="plan-p00">
-                    <h1>{{ $v.MonthCourse.Title }}</h1>
-                    <p>{{ $v.MonthCourse.Introduction }}</p>
-                </div>
-            </div>
-
-                {{ range $v.Books }}
-                {{ if eq .Status 1 }}
-                <li class="plan-listone" onclick="location.assign('/reading/course/bookcatalog/{{$userId}}/{{$courseId}}/{{.CourseBookDetail.Book.ID}}');">
-                {{ else }}
-                <li class="plan-listone disabled" onclick="">
-                {{ end }}
-                    <div class="plan-info">
-                        <img class="task-cover" src="{{ .CourseBookDetail.Book.Cover }}">
-                        <div class="task-infodet">
-                            <div class="task-book clearfix">
-                                <span>《{{ .CourseBookDetail.Book.BookName }}》</span>
-                                <!--<span class="task-status fr"></span>-->
-                            </div>
-                            <p class="task-name">{{ .CourseBookDetail.Book.Author }}</p>
-                            <p class="task-des">{{ .CourseBookDetail.Book.Abstract }}</p>
-                        </div>
+        <div class="today-title clearfix">
+            <strong>公告</strong>
+        </div>
+        <div id="tswipe-box" class="pt">
+            <ul class="tswipe-list tswipe-listv1">
+                <li class="tswipe-one" onclick="gotoDetailLink(one.NoticeID,one.Content)">
+                    <div class="tonev1-box">
+                        <span v-if="one.Type==1" class="tonev1-type">通知</span>
+                        <span v-else class="tonev2-type">通知</span>
+                        <p class="tonev1-title">关于「小鹿微课」</p>
+                        <p class="show-color">点击查看详情</p>
                     </div>
                 </li>
-                {{ end }}
-            {{ end }}
-        </ul>
-    </div>
+            </ul>
+        </div>
+        {{ else }}
+        <div class="today-title clearfix mt20">
+            <strong>今日任务</strong>
+        </div>
+        {{ range .TodayCatalogs }}
+        <div class="task-info p-rela" onclick="gotoDetail(one.TaskID)">
+            <span v-if="one.Status==1" class="task-statusv1"></span>
+            <!--<span v-else class="task-statusn2"></span>-->
 
-    <ul class="plan-mlist">
-        <li>月份</li>
-        {{ range $i, $v := .MonthCourses }}
-        <li onclick="changeMonth({{$i}})">
-            {{ if eq $i 0 }}
-            <span id="slide-month{{$i}}" class="current">{{ $v.MonthCourse.Month }}</span>
-            {{ else }}
-            <span id="slide-month{{$i}}">{{ $v.MonthCourse.Month }}</span>
-            {{ end }}
-        </li>
+            <div class="task-coverv1">
+                <img class="" src="{{ .Book.Cover }}">
+                <div class="task-btitv1" class="fs-999">{{ .Book.BookName }}</div>
+            </div>
+            <div class="task-infodet">
+                <div class="task-titlev1">
+                    {{ .MonthCourseCatalog.Title }}
+                </div>
+                <p class="task-des fs-12">
+                    {{ .Book.Abstract }}
+                </p>
+                <div class="task-seeboxv1 mt">
+                    <span class="task-seev1">查看任务</span>
+                </div>
+            </div>
+        </div>
         {{ end }}
-    </ul>
+        {{ end }}
+
+        {{ $lenToday := len .UserCourseList }}
+        {{ if gt $lenToday 0 }}
+        <div class="today-title clearfix mt20">
+            <strong>我的课程</strong>
+        </div>
+        {{ range .UserCourseList }}
+        <div class="task-info p-rela" onclick="location.assign('/reading/course/index/{{.UserId}}/{{.Course.ID}}');">
+            <div class="task-cover-course">
+                <img class="" src="{{ .Course.Cover }}">
+            </div>
+            <div class="task-infodet">
+                <div class="task-titlev1">
+                    {{ .Course.Name }} [第{{ .Course.CourseNum }}期]
+                </div>
+                <p class="task-des fs-12">
+                    {{ .Course.Introduction }}
+                </p>
+                <div class="task-seeboxv1 mt">
+                    <span class="task-seev1">查看课程</span>
+                </div>
+            </div>
+        </div>
+        {{ end }}
+        {{ end }}
+    </div>
 
     <section class="sy-footerbox">
         <ul class="sy-footer">
@@ -154,7 +99,7 @@
                 <span class="sy-ficon sy-f-clock"></span>
                 <p>课程</p>
             </li>
-            <li class="sy-footerone" onclick="ftGoto('/sy/home')">
+            <li class="sy-footerone" @click="ftGoto('/sy/home')">
                 <span class="sy-ficon sy-f-bl"></span>
                 <p>推荐</p>
             </li>

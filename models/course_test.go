@@ -4,9 +4,20 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/reechou/real-reading/config"
 	"github.com/jinzhu/now"
+	"github.com/reechou/real-reading/config"
 )
+
+func initRealeaseDb() {
+	InitDB(&config.Config{
+		DBInfo: config.DBInfo{
+			User:   "fenxiao",
+			Pass:   "c^ljPgOGafAlo%pd",
+			Host:   "shanzhuan.mysql.rds.aliyuncs.com:3306",
+			DBName: "real-reading",
+		},
+	})
+}
 
 func initDb() {
 	InitDB(&config.Config{
@@ -17,6 +28,40 @@ func initDb() {
 			DBName: "real_reading",
 		},
 	})
+}
+
+func TestInit(t *testing.T) {
+	initRealeaseDb()
+	course := &Course{
+		CourseType:   1,
+		CourseNum:    15,
+		Name:         "共读计划",
+		Introduction: "一起共读计划",
+		StartTime:    1499616000,
+		EndTime:      1515513600,
+		Money:        19900,
+	}
+	CreateCourse(course)
+	course = &Course{
+		CourseType:   1,
+		CourseNum:    16,
+		Name:         "共读计划",
+		Introduction: "一起共读计划",
+		StartTime:    1501516800,
+		EndTime:      1517414400,
+		Money:        19900,
+	}
+	CreateCourse(course)
+}
+
+func TestQuery(t *testing.T) {
+	initDb()
+
+	course := &Course{
+		CourseType: 1,
+	}
+	GetCourseMaxNum(course)
+	fmt.Println(course)
 }
 
 func TestCreateBook(t *testing.T) {
@@ -47,13 +92,33 @@ func TestCreateBook(t *testing.T) {
 	}
 }
 
+func TestCreateUserCourse(t *testing.T) {
+	initDb()
+
+	user := &User{
+		AppId:     "wxb86df8e64a5ed4cd",
+		OpenId:    "oaKrZwsAF6pRX6z3Qn_EhIZ3DG90",
+		Name:      "Mr.REE",
+		AvatarUrl: "http://wx.qlogo.cn/mmopen/ibmyOaFEgYk09HCYrBXA7PHZSuFjHINfuNxBlIOyvPibrU0hD87gTrGI2YuBTtGibHrxdTyzFAMFvWIPO5ekuhibzQ/0",
+		RealName:  "周林栋",
+		Phone:     "15994798218",
+	}
+	CreateUser(user)
+	CreateUserCourse(&UserCourse{
+		UserId:   user.ID,
+		CourseId: 2,
+		Money:    19900,
+		Status:   1,
+	})
+}
+
 func TestCreateCourseDetail(t *testing.T) {
 	initDb()
-	
-	var courseNum int64 = 15
-	
+
+	var courseId int64 = 2
+
 	monthCourse := &MonthCourse{
-		CourseNum:    courseNum,
+		CourseId:     courseId,
 		Year:         2017,
 		Month:        8,
 		MonthEn:      "Aug",
@@ -65,9 +130,9 @@ func TestCreateCourseDetail(t *testing.T) {
 		fmt.Printf("create month course error: %v\n", err)
 		return
 	}
-	
+
 	monthCourseBook := &MonthCourseBook{
-		CourseNum:     courseNum,
+		CourseId:      courseId,
 		MonthCourseId: monthCourse.ID,
 		BookId:        3,
 	}
@@ -76,9 +141,9 @@ func TestCreateCourseDetail(t *testing.T) {
 		fmt.Printf("create month course book error: %v\n", err)
 		return
 	}
-	
+
 	monthCourseCatalog := &MonthCourseCatalog{
-		CourseNum:     courseNum,
+		CourseId:      courseId,
 		MonthCourseId: monthCourse.ID,
 		BookId:        3,
 		Title:         "职场的陷阱",
@@ -89,7 +154,7 @@ func TestCreateCourseDetail(t *testing.T) {
 		fmt.Printf("create month course catalog error: %v\n", err)
 		return
 	}
-	
+
 	monthCourseCatalogChapter := &MonthCourseCatalogChapter{
 		MonthCourseCatalogId: monthCourseCatalog.ID,
 		BookId:               3,
@@ -116,7 +181,7 @@ func TestCreateCourse(t *testing.T) {
 	}
 
 	monthCourse := &MonthCourse{
-		CourseNum:    course.CourseNum,
+		CourseId:     course.ID,
 		Year:         2017,
 		Month:        7,
 		MonthEn:      "Jul",
@@ -130,7 +195,7 @@ func TestCreateCourse(t *testing.T) {
 	}
 
 	monthCourseBook := &MonthCourseBook{
-		CourseNum:     course.CourseNum,
+		CourseId:      course.ID,
 		MonthCourseId: monthCourse.ID,
 		BookId:        2,
 	}
@@ -141,7 +206,7 @@ func TestCreateCourse(t *testing.T) {
 	}
 
 	monthCourseCatalog := &MonthCourseCatalog{
-		CourseNum:     course.CourseNum,
+		CourseId:      course.ID,
 		MonthCourseId: monthCourse.ID,
 		BookId:        2,
 		Title:         "一次只做一件事",
@@ -167,35 +232,38 @@ func TestCreateCourse(t *testing.T) {
 
 func TestQueryCourse(t *testing.T) {
 	initDb()
-	
-	courses, err := GetMonthCourseList(15)
+
+	courses, err := GetMonthCourseList(2)
 	if err != nil {
 		fmt.Printf("get course books error: %v\n", err)
 		return
 	}
 	fmt.Println(courses)
-	
-	unlockBooks, _ := GetMonthCourseBookUnlock(15)
+
+	unlockBooks, _ := GetMonthCourseBookUnlock(2)
 	fmt.Println(unlockBooks)
-	
-	monthBookList, err := GetCourseBooks(15)
+
+	monthBookList, err := GetCourseBooks(2)
 	if err != nil {
 		fmt.Printf("get course books error: %v\n", err)
 		return
 	}
 	fmt.Println(monthBookList)
-	
-	bookDetail, err := GetCourseBookDetail(15)
+
+	bookDetail, err := GetCourseBookDetail(2)
 	if err != nil {
 		fmt.Printf("get course books detail error: %v\n", err)
 		return
 	}
 	fmt.Println(bookDetail)
-	
-	todayCourse, err := GetCourseBookFromTime(15, now.BeginningOfDay().Unix())
+
+	todayCourse, err := GetCourseBookFromTime(2, now.BeginningOfDay().Unix())
 	if err != nil {
 		fmt.Printf("get course book from time: %v\n", err)
 		return
 	}
 	fmt.Println(todayCourse)
+
+	userCourse, err := GetUserCourse("oaKrZwsAF6pRX6z3Qn_EhIZ3DG90")
+	fmt.Println(userCourse)
 }

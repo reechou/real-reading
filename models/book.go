@@ -2,7 +2,7 @@ package models
 
 import (
 	"time"
-	
+
 	"github.com/reechou/holmes"
 )
 
@@ -31,14 +31,14 @@ func CreateBook(info *Book) error {
 	now := time.Now().Unix()
 	info.CreatedAt = now
 	info.UpdatedAt = now
-	
+
 	_, err := x.Insert(info)
 	if err != nil {
 		holmes.Error("create book error: %v", err)
 		return err
 	}
 	holmes.Info("create book[%v] success.", info)
-	
+
 	return nil
 }
 
@@ -46,14 +46,14 @@ func CreateChapter(info *Chapter) error {
 	now := time.Now().Unix()
 	info.CreatedAt = now
 	info.UpdatedAt = now
-	
+
 	_, err := x.Insert(info)
 	if err != nil {
 		holmes.Error("create Chapter error: %v", err)
 		return err
 	}
 	holmes.Info("create Chapter[%d %s] success.", info.BookId, info.Title)
-	
+
 	return nil
 }
 

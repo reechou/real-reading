@@ -55,15 +55,20 @@ type Config struct {
 	IfShowSql bool
 
 	NowCourseNumber int64
+	NowCourseStart  string
+	NowCourseEnd    string
+
+	RemindWorkerNum int
+	TplWorkerNum    int
 
 	DefaultRobotHost string
-
 	RobotHost
 	RobotControllerHost
+
 	DBInfo
 	Tuling
-	SMSNotify
 
+	SMSNotify
 	ReadingOauth
 }
 

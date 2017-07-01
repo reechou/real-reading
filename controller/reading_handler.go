@@ -11,10 +11,10 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
-	"path/filepath"
 
 	"github.com/chanxuehong/rand"
 	"github.com/chanxuehong/session"
@@ -113,6 +113,10 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./views/css/"+rr.Path)
 		return
 	}
+	if strings.HasSuffix(rr.Path, "js") {
+		http.ServeFile(w, r, "./views/js/"+rr.Path)
+		return
+	}
 	if strings.HasPrefix(rr.Path, READING_COURSE_URI_PREFIX) {
 		self.courseHandle(rr, w, r)
 		return
@@ -139,7 +143,30 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (self *ReadingHandler) readingSignup(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
-	renderView(w, "./views/reading_sign.html", nil)
+	course := &models.Course{
+		CourseType: READING_COURSE_TYPE_GD,
+	}
+	has, err := models.GetCourseMaxNum(course)
+	if err != nil {
+		holmes.Error("get course max num error: %v", err)
+		io.WriteString(w, MSG_ERROR_SYSTEM)
+		return
+	}
+	if !has {
+		holmes.Error("get course max num has none")
+		io.WriteString(w, MSG_ERROR_COURSE_NOT_FOUND)
+		return
+	}
+
+	readingUserInfo := &ReadingEnrollUserInfo{
+		CourseType:     course.CourseType,
+		CourseNum:      course.CourseNum,
+		IndexStartTime: time.Unix(course.StartTime, 0).Format("2006年01月02日"),
+		StartTime:      time.Unix(course.StartTime, 0).Format("2006.01"),
+		EndTime:        time.Unix(course.EndTime, 0).Format("2006.01"),
+	}
+
+	renderView(w, "./views/reading_sign.html", readingUserInfo)
 }
 
 func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
@@ -170,68 +197,184 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 
 	userinfo, err := mpoauth2.GetUserInfo(token.AccessToken, token.OpenId, "", nil)
 	if err != nil {
-		io.WriteString(w, err.Error())
+		io.WriteString(w, MSG_ERROR_SYSTEM)
 		holmes.Error("get user info error: %v", err)
 		return
 	}
 	holmes.Debug("user info: %+v", userinfo)
 
-	readingUser := &models.ReadingPay{
-		OpenId: token.OpenId,
-	}
-	has, err := models.GetReadingPay(readingUser)
-	if err != nil {
-		holmes.Error("get reading pay error: %v", err)
-		return
-	}
 	readingUserInfo := &ReadingEnrollUserInfo{
 		NickName:  userinfo.Nickname,
 		AvatarUrl: userinfo.HeadImageURL,
 		OpenId:    token.OpenId,
-		//EnrollName:   DEFAULT_ENROLL_NAME,
-		//EnrollMobile: DEFAULT_ENROLL_MOBILE,
-		//EnrollWechat: DEFAULT_ENROLL_WECHAT,
+	}
+
+	// --- new logic ---
+	user := &models.User{
+		OpenId: token.OpenId,
+	}
+	has, err := models.GetUserFromOpenid(user)
+	if err != nil {
+		holmes.Error("get user from openid error: %v", err)
+		io.WriteString(w, MSG_ERROR_SYSTEM)
+		return
 	}
 	if has {
-		if readingUser.Name != userinfo.Nickname || readingUser.AvatarUrl != userinfo.HeadImageURL {
-			readingUser.Name = userinfo.Nickname
-			readingUser.AvatarUrl = userinfo.HeadImageURL
-			err = models.UpdateReadingPayWxInfo(readingUser)
+		if user.Name != userinfo.Nickname || user.AvatarUrl != userinfo.HeadImageURL {
+			user.Name = userinfo.Nickname
+			user.AvatarUrl = userinfo.HeadImageURL
+			err = models.UpdateUserWxInfo(user)
 			if err != nil {
-				holmes.Error("update reading wx info error: %v", err)
+				holmes.Error("update user wxinfo error: %v", err)
 			}
 		}
-		if readingUser.Status == READING_COURSE_STATUS_PAIED {
-			renderView(w, "./views/reading_sign_success.html", readingUserInfo)
+		courseList, err := models.GetUserCourseList(user.ID)
+		if err != nil {
+			holmes.Error("get user course list error: %v", err)
+			io.WriteString(w, MSG_ERROR_SYSTEM)
 			return
 		}
-		if readingUser.RealName != "" {
-			readingUserInfo.EnrollName = readingUser.RealName
-		}
-		if readingUser.Phone != "" {
-			readingUserInfo.EnrollMobile = readingUser.Phone
-		}
-		if readingUser.Wechat != "" {
-			readingUserInfo.EnrollWechat = readingUser.Wechat
+		for _, v := range courseList {
+			if v.Course.CourseType == READING_COURSE_TYPE_GD {
+				readingUserInfo.CourseType = v.Course.CourseType
+				readingUserInfo.CourseNum = v.Course.CourseNum
+				readingUserInfo.StartTime = time.Unix(v.Course.StartTime, 0).Format("2006-01-02")
+				readingUserInfo.EndTime = time.Unix(v.Course.EndTime, 0).Format("2006-01-02")
+				renderView(w, "./views/reading_sign_success.html", readingUserInfo)
+				return
+			}
 		}
 	}
 
 	if !has {
-		readingUser = &models.ReadingPay{
-			OpenId:    token.OpenId,
-			AppId:     self.l.cfg.ReadingOauth.ReadingWxAppId,
-			Name:      userinfo.Nickname,
-			AvatarUrl: userinfo.HeadImageURL,
-			Course:    READING_COURSE_TYPE_GD,
-		}
-		err = models.CreateReadingPay(readingUser)
+		user.AppId = self.l.cfg.ReadingOauth.ReadingWxAppId
+		user.Name = userinfo.Nickname
+		user.AvatarUrl = userinfo.HeadImageURL
+		err = models.CreateUser(user)
 		if err != nil {
-			holmes.Error("create reading pay error: %v", err)
+			holmes.Error("create user error: %v", err)
 			return
 		}
 	}
 
+	// check older version
+	readingUser := &models.ReadingPay{
+		OpenId: token.OpenId,
+	}
+	has, err = models.GetReadingPayWithStatus(readingUser)
+	if err != nil {
+		holmes.Error("get reading pay error: %v", err)
+		io.WriteString(w, MSG_ERROR_SYSTEM)
+		return
+	}
+	if has {
+		course := &models.Course{
+			CourseType: readingUser.Course,
+			CourseNum:  readingUser.Number,
+		}
+		has, err = models.GetCourseFromCourse(course)
+		if err != nil {
+			holmes.Error("get course from course error: %v", err)
+			return
+		}
+		userCourse := &models.UserCourse{
+			UserId:   user.ID,
+			CourseId: course.ID,
+			Money:    readingUser.Money,
+			Status:   readingUser.Status,
+			PayTime:  readingUser.UpdatedAt,
+		}
+		err = models.CreateUserCourse(userCourse)
+		if err != nil {
+			holmes.Error("create user course error: %v", err)
+			return
+		}
+		readingUserInfo.CourseType = course.CourseType
+		readingUserInfo.CourseNum = course.CourseNum
+		readingUserInfo.StartTime = time.Unix(course.StartTime, 0).Format("2006.01.02")
+		readingUserInfo.EndTime = time.Unix(course.EndTime, 0).Format("2006.01.02")
+		renderView(w, "./views/reading_sign_success.html", readingUserInfo)
+		return
+	}
+
+	course := &models.Course{
+		CourseType: READING_COURSE_TYPE_GD,
+	}
+	has, err = models.GetCourseMaxNum(course)
+	if err != nil {
+		holmes.Error("get course max num error: %v", err)
+		io.WriteString(w, MSG_ERROR_SYSTEM)
+		return
+	}
+	if !has {
+		holmes.Error("get course max num has none")
+		io.WriteString(w, MSG_ERROR_COURSE_NOT_FOUND)
+		return
+	}
+	if user.RealName != "" {
+		readingUserInfo.EnrollName = user.RealName
+	}
+	if user.Phone != "" {
+		readingUserInfo.EnrollMobile = user.Phone
+	}
+	if user.Wechat != "" {
+		readingUserInfo.EnrollWechat = user.Wechat
+	}
+	readingUserInfo.CourseType = course.CourseType
+	readingUserInfo.CourseNum = course.CourseNum
+	readingUserInfo.StartTime = time.Unix(course.StartTime, 0).Format("2006-01-02")
+	readingUserInfo.EndTime = time.Unix(course.EndTime, 0).Format("2006-01-02")
 	renderView(w, "./views/reading_enroll.html", readingUserInfo)
+	// --- end ---
+
+	//readingUser := &models.ReadingPay{
+	//	OpenId: token.OpenId,
+	//}
+	//has, err = models.GetReadingPay(readingUser)
+	//if err != nil {
+	//	holmes.Error("get reading pay error: %v", err)
+	//	return
+	//}
+	//if has {
+	//	if readingUser.Name != userinfo.Nickname || readingUser.AvatarUrl != userinfo.HeadImageURL {
+	//		readingUser.Name = userinfo.Nickname
+	//		readingUser.AvatarUrl = userinfo.HeadImageURL
+	//		err = models.UpdateReadingPayWxInfo(readingUser)
+	//		if err != nil {
+	//			holmes.Error("update reading wx info error: %v", err)
+	//		}
+	//	}
+	//	if readingUser.Status == READING_COURSE_STATUS_PAIED {
+	//		renderView(w, "./views/reading_sign_success.html", readingUserInfo)
+	//		return
+	//	}
+	//	if readingUser.RealName != "" {
+	//		readingUserInfo.EnrollName = readingUser.RealName
+	//	}
+	//	if readingUser.Phone != "" {
+	//		readingUserInfo.EnrollMobile = readingUser.Phone
+	//	}
+	//	if readingUser.Wechat != "" {
+	//		readingUserInfo.EnrollWechat = readingUser.Wechat
+	//	}
+	//}
+	//
+	//if !has {
+	//	readingUser = &models.ReadingPay{
+	//		OpenId:    token.OpenId,
+	//		AppId:     self.l.cfg.ReadingOauth.ReadingWxAppId,
+	//		Name:      userinfo.Nickname,
+	//		AvatarUrl: userinfo.HeadImageURL,
+	//		Course:    READING_COURSE_TYPE_GD,
+	//	}
+	//	err = models.CreateReadingPay(readingUser)
+	//	if err != nil {
+	//		holmes.Error("create reading pay error: %v", err)
+	//		return
+	//	}
+	//}
+	//
+	//renderView(w, "./views/reading_enroll.html", readingUserInfo)
 }
 
 func (self *ReadingHandler) readingGoEnroll(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
@@ -248,12 +391,14 @@ func (self *ReadingHandler) readingGoEnroll(rr *HandlerRequest, w http.ResponseW
 		return
 	}
 
-	readingUser := &models.ReadingPay{
+	// --- new logic ---
+	user := &models.User{
 		OpenId: req.OpenId,
 	}
-	has, err := models.GetReadingPay(readingUser)
+	has, err := models.GetUserFromOpenid(user)
 	if err != nil {
-		holmes.Error("get reading pay error: %v", err)
+		holmes.Error("get user from open error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
 	if !has {
@@ -261,15 +406,39 @@ func (self *ReadingHandler) readingGoEnroll(rr *HandlerRequest, w http.ResponseW
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
-	readingUser.RealName = req.Realname
-	readingUser.Phone = req.Mobile
-	readingUser.Wechat = req.Weixin
-	err = models.UpdateReadingPayUserInfo(readingUser)
+	user.RealName = req.Realname
+	user.Phone = req.Mobile
+	user.Wechat = req.Weixin
+	err = models.UpdateUserInfo(user)
 	if err != nil {
-		holmes.Error("update reading pay userinfo error: %v", err)
+		holmes.Error("update user info error: %v", err)
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
+	// --- end ---
+
+	//readingUser := &models.ReadingPay{
+	//	OpenId: req.OpenId,
+	//}
+	//has, err := models.GetReadingPay(readingUser)
+	//if err != nil {
+	//	holmes.Error("get reading pay error: %v", err)
+	//	return
+	//}
+	//if !has {
+	//	holmes.Error("cannot found this openid")
+	//	rsp.Code = proto.RESPONSE_ERR
+	//	return
+	//}
+	//readingUser.RealName = req.Realname
+	//readingUser.Phone = req.Mobile
+	//readingUser.Wechat = req.Weixin
+	//err = models.UpdateReadingPayUserInfo(readingUser)
+	//if err != nil {
+	//	holmes.Error("update reading pay userinfo error: %v", err)
+	//	rsp.Code = proto.RESPONSE_ERR
+	//	return
+	//}
 }
 
 func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
@@ -281,28 +450,43 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 	}
 	openid := queryValues.Get("openid")
 
-	readingUser := &models.ReadingPay{
+	// --- new logic ---
+	user := &models.User{
 		OpenId: openid,
 	}
-	has, err := models.GetReadingPay(readingUser)
+	has, err := models.GetUserFromOpenid(user)
 	if err != nil {
-		io.WriteString(w, "未找到你哦,请刷新重新登录")
-		holmes.Error("get reading pay error: %v", err)
+		holmes.Error("get user from openid error: %v", err)
+		io.WriteString(w, MSG_ERROR_SYSTEM)
 		return
 	}
 	if !has {
-		io.WriteString(w, "未找到你哦,请刷新重新登录")
+		io.WriteString(w, MSG_ERROR_USER_NOT_FOUND)
+		return
+	}
+	course := &models.Course{
+		CourseType: READING_COURSE_TYPE_GD,
+	}
+	has, err = models.GetCourseMaxNum(course)
+	if err != nil {
+		holmes.Error("get course max num error: %v", err)
+		io.WriteString(w, MSG_ERROR_SYSTEM)
+		return
+	}
+	if !has {
+		holmes.Error("get course max num has none")
+		io.WriteString(w, MSG_ERROR_COURSE_NOT_FOUND)
 		return
 	}
 
-	payMoney := READING_COURSE_GD_MONEY
+	payMoney := course.Money
 	if openid == "oaKrZwsAF6pRX6z3Qn_EhIZ3DG90" {
 		payMoney = 1
 	}
 	unifiedRsp, err := self.readingUnifiedOrder(
-		readingUser.ID,
-		int64(payMoney),
-		readingUser.OpenId,
+		user.ID,
+		payMoney,
+		user.OpenId,
 		GetIPFromRequest(r),
 		fmt.Sprintf("%s%s/%s", r.Host, ReadingPrefix, READING_URI_PAY_NOTIFY),
 	)
@@ -310,16 +494,25 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		holmes.Error("reading unified order error: %v", err)
 		if strings.Contains(err.Error(), "ORDERPAID") {
 			// 订单已支付, 但未更新状态
-			readingUser.Status = READING_COURSE_STATUS_PAIED
-			readingUser.Number = self.l.cfg.NowCourseNumber
-			err = models.UpdateReadingPayStatusFromOpenId(readingUser)
+			userCourse := &models.UserCourse{
+				UserId:   user.ID,
+				CourseId: course.ID,
+				Money:    payMoney,
+				Status:   READING_COURSE_STATUS_PAIED,
+				PayTime:  time.Now().Unix(),
+			}
+			err = models.CreateUserCourse(userCourse)
 			if err != nil {
-				holmes.Error("update reading pay status error: %v", err)
+				holmes.Error("create user course error: %v", err)
 			}
 			readingUserInfo := &ReadingEnrollUserInfo{
-				NickName:  readingUser.Name,
-				AvatarUrl: readingUser.AvatarUrl,
-				OpenId:    readingUser.OpenId,
+				NickName:   user.Name,
+				AvatarUrl:  user.AvatarUrl,
+				OpenId:     user.OpenId,
+				CourseType: course.CourseType,
+				CourseNum:  course.CourseNum,
+				StartTime:  time.Unix(course.StartTime, 0).Format("2006.01.02"),
+				EndTime:    time.Unix(course.EndTime, 0).Format("2006.01.02"),
 			}
 			renderView(w, "./views/reading_sign_success.html", readingUserInfo)
 			return
@@ -328,8 +521,8 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 	}
 
 	readingUserInfo := &ReadingEnrollUserInfo{
-		NickName:  readingUser.Name,
-		AvatarUrl: readingUser.AvatarUrl,
+		NickName:  user.Name,
+		AvatarUrl: user.AvatarUrl,
 		OpenId:    openid,
 	}
 	readingUserInfo.WxJsApiParams = WxJsApiParams{
@@ -348,6 +541,75 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		self.mchClient.ApiKey(),
 	)
 	renderView(w, "./views/reading_pay.html", readingUserInfo)
+	// --- end ---
+
+	//readingUser := &models.ReadingPay{
+	//	OpenId: openid,
+	//}
+	//has, err := models.GetReadingPay(readingUser)
+	//if err != nil {
+	//	io.WriteString(w, "未找到你哦,请刷新重新登录")
+	//	holmes.Error("get reading pay error: %v", err)
+	//	return
+	//}
+	//if !has {
+	//	io.WriteString(w, "未找到你哦,请刷新重新登录")
+	//	return
+	//}
+	//
+	//payMoney := READING_COURSE_GD_MONEY
+	//if openid == "oaKrZwsAF6pRX6z3Qn_EhIZ3DG90" {
+	//	payMoney = 1
+	//}
+	//unifiedRsp, err := self.readingUnifiedOrder(
+	//	readingUser.ID,
+	//	int64(payMoney),
+	//	readingUser.OpenId,
+	//	GetIPFromRequest(r),
+	//	fmt.Sprintf("%s%s/%s", r.Host, ReadingPrefix, READING_URI_PAY_NOTIFY),
+	//)
+	//if err != nil {
+	//	holmes.Error("reading unified order error: %v", err)
+	//	if strings.Contains(err.Error(), "ORDERPAID") {
+	//		// 订单已支付, 但未更新状态
+	//		readingUser.Status = READING_COURSE_STATUS_PAIED
+	//		readingUser.Number = self.l.cfg.NowCourseNumber
+	//		err = models.UpdateReadingPayStatusFromOpenId(readingUser)
+	//		if err != nil {
+	//			holmes.Error("update reading pay status error: %v", err)
+	//		}
+	//		readingUserInfo := &ReadingEnrollUserInfo{
+	//			NickName:  readingUser.Name,
+	//			AvatarUrl: readingUser.AvatarUrl,
+	//			OpenId:    readingUser.OpenId,
+	//		}
+	//		renderView(w, "./views/reading_sign_success.html", readingUserInfo)
+	//		return
+	//	}
+	//	return
+	//}
+	//
+	//readingUserInfo := &ReadingEnrollUserInfo{
+	//	NickName:  readingUser.Name,
+	//	AvatarUrl: readingUser.AvatarUrl,
+	//	OpenId:    openid,
+	//}
+	//readingUserInfo.WxJsApiParams = WxJsApiParams{
+	//	AppId:     self.l.cfg.ReadingOauth.ReadingWxAppId,
+	//	TimeStamp: fmt.Sprintf("%d", time.Now().Unix()),
+	//	NonceStr:  string(rand.NewHex()),
+	//	Package:   fmt.Sprintf("prepay_id=%s", unifiedRsp.PrepayId),
+	//	SignType:  "MD5",
+	//}
+	//readingUserInfo.WxJsApiParams.PaySign = mchcore.JsapiSign(
+	//	readingUserInfo.WxJsApiParams.AppId,
+	//	readingUserInfo.WxJsApiParams.TimeStamp,
+	//	readingUserInfo.WxJsApiParams.NonceStr,
+	//	readingUserInfo.WxJsApiParams.Package,
+	//	readingUserInfo.WxJsApiParams.SignType,
+	//	self.mchClient.ApiKey(),
+	//)
+	//renderView(w, "./views/reading_pay.html", readingUserInfo)
 }
 
 func (self *ReadingHandler) readingPayNotify(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
@@ -409,48 +671,83 @@ func (self *ReadingHandler) readingPayNotify(rr *HandlerRequest, w http.Response
 		holmes.Error("msg total_fee[%s] strconv error: %v", totalFee, err)
 		return
 	}
-	//readingUser := &models.ReadingPay{
-	//	OpenId: openId,
-	//	Money:  int64(money),
-	//	Status: READING_COURSE_STATUS_PAIED,
-	//}
-	//err = models.UpdateReadingPayStatusFromOpenId(readingUser)
-	//if err != nil {
-	//	holmes.Error("update reading pay status from openid error: %v", err)
-	//}
 
-	readingUser := &models.ReadingPay{
+	// --- new logic ---
+	course := &models.Course{
+		CourseType: READING_COURSE_TYPE_GD,
+	}
+	has, err := models.GetCourseMaxNum(course)
+	if err != nil {
+		holmes.Error("get course max num error: %v", err)
+		return
+	}
+	if !has {
+		holmes.Error("get course max num has none")
+		return
+	}
+	user := &models.User{
 		OpenId: openId,
 	}
-	has, err := models.GetReadingPay(readingUser)
+	has, err = models.GetUserFromOpenid(user)
 	if err != nil {
-		holmes.Error("get reading pay error: %v", err)
+		holmes.Error("[pay notify] get user error: %v", err)
 		return
 	}
 	if !has {
 		holmes.Error("openid[%s] not found, create it", openId)
-		readingUser = &models.ReadingPay{
-			AppId:  self.l.cfg.ReadingOauth.ReadingWxAppId,
-			OpenId: openId,
-			Money:  int64(money),
-			Status: READING_COURSE_STATUS_PAIED,
-		}
-		err = models.CreateReadingPay(readingUser)
+		user.AppId = self.l.cfg.ReadingOauth.ReadingWxAppId
+		err = models.CreateUser(user)
 		if err != nil {
-			holmes.Error("create reading pay error: %v", err)
+			holmes.Error("create user error: %v", err)
+			return
 		}
-		return
 	}
-	readingUser.Money = int64(money)
-	readingUser.Status = READING_COURSE_STATUS_PAIED
-	readingUser.Number = self.l.cfg.NowCourseNumber
-	err = models.UpdateReadingPayStatus(readingUser)
+	userCourse := &models.UserCourse{
+		UserId:   user.ID,
+		CourseId: course.ID,
+		Money:    int64(money),
+		Status:   READING_COURSE_STATUS_PAIED,
+		PayTime:  time.Now().Unix(),
+	}
+	err = models.CreateUserCourse(userCourse)
 	if err != nil {
-		holmes.Error("update reading pay status error: %v", err)
+		holmes.Error("create user course error: %v", err)
 	}
+	return
+	// --- end ---
+
+	//readingUser := &models.ReadingPay{
+	//	OpenId: openId,
+	//}
+	//has, err := models.GetReadingPay(readingUser)
+	//if err != nil {
+	//	holmes.Error("get reading pay error: %v", err)
+	//	return
+	//}
+	//if !has {
+	//	holmes.Error("openid[%s] not found, create it", openId)
+	//	readingUser = &models.ReadingPay{
+	//		AppId:  self.l.cfg.ReadingOauth.ReadingWxAppId,
+	//		OpenId: openId,
+	//		Money:  int64(money),
+	//		Status: READING_COURSE_STATUS_PAIED,
+	//	}
+	//	err = models.CreateReadingPay(readingUser)
+	//	if err != nil {
+	//		holmes.Error("create reading pay error: %v", err)
+	//	}
+	//	return
+	//}
+	//readingUser.Money = int64(money)
+	//readingUser.Status = READING_COURSE_STATUS_PAIED
+	//readingUser.Number = self.l.cfg.NowCourseNumber
+	//err = models.UpdateReadingPayStatus(readingUser)
+	//if err != nil {
+	//	holmes.Error("update reading pay status error: %v", err)
+	//}
 
 	// send sms notify
-	err = self.smsExt.SMSNotify(readingUser.Phone, readingUser.RealName)
+	err = self.smsExt.SMSNotify(user.Phone, user.RealName)
 	if err != nil {
 		holmes.Error("sms notify error: %v", err)
 	}
@@ -465,26 +762,51 @@ func (self *ReadingHandler) readingSuccess(rr *HandlerRequest, w http.ResponseWr
 	}
 	openid := queryValues.Get("openid")
 
-	readingUser := &models.ReadingPay{
-		OpenId: openid,
-	}
-	has, err := models.GetReadingPay(readingUser)
+	// --- new logic ---
+	userCourseList, err := models.GetUserCourse(openid)
 	if err != nil {
-		io.WriteString(w, "未找到你哦,请刷新重新登录")
 		holmes.Error("get reading pay error: %v", err)
+		io.WriteString(w, MSG_ERROR_SYSTEM)
 		return
 	}
-	if !has {
-		io.WriteString(w, "未找到你哦,请刷新重新登录")
-		return
+	for _, v := range userCourseList {
+		if v.Course.ID == READING_COURSE_TYPE_GD {
+			readingUserInfo := &ReadingEnrollUserInfo{
+				NickName:   v.User.Name,
+				AvatarUrl:  v.User.AvatarUrl,
+				OpenId:     openid,
+				CourseType: v.Course.CourseType,
+				CourseNum:  v.Course.CourseNum,
+				StartTime:  time.Unix(v.Course.StartTime, 0).Format("2006.01.02"),
+				EndTime:    time.Unix(v.Course.EndTime, 0).Format("2006.01.02"),
+			}
+			renderView(w, "./views/reading_sign_success.html", readingUserInfo)
+			return
+		}
 	}
+	io.WriteString(w, MSG_ERROR_COURSE_NOT_FOUND)
+	// --- end ---
 
-	readingUserInfo := &ReadingEnrollUserInfo{
-		NickName:  readingUser.Name,
-		AvatarUrl: readingUser.AvatarUrl,
-		OpenId:    openid,
-	}
-	renderView(w, "./views/reading_sign_success.html", readingUserInfo)
+	//readingUser := &models.ReadingPay{
+	//	OpenId: openid,
+	//}
+	//has, err := models.GetReadingPay(readingUser)
+	//if err != nil {
+	//	io.WriteString(w, "未找到你哦,请刷新重新登录")
+	//	holmes.Error("get reading pay error: %v", err)
+	//	return
+	//}
+	//if !has {
+	//	io.WriteString(w, "未找到你哦,请刷新重新登录")
+	//	return
+	//}
+	//
+	//readingUserInfo := &ReadingEnrollUserInfo{
+	//	NickName:  readingUser.Name,
+	//	AvatarUrl: readingUser.AvatarUrl,
+	//	OpenId:    openid,
+	//}
+	//renderView(w, "./views/reading_sign_success.html", readingUserInfo)
 }
 
 func (self *ReadingHandler) getOauthUserInfo(w http.ResponseWriter, r *http.Request) (bool, *mpoauth2.UserInfo, error) {

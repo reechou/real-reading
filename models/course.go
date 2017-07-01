@@ -8,18 +8,21 @@ import (
 
 type Course struct {
 	ID           int64  `xorm:"pk autoincr" json:"id"`
-	CourseType   int64  `xorm:"not null default 0 int" json:"courseType"`
-	CourseNum    int64  `xorm:"not null default 0 int" json:"courseNum"`
+	CourseType   int64  `xorm:"not null default 0 int index" json:"courseType"`
+	CourseNum    int64  `xorm:"not null default 0 int index" json:"courseNum"`
 	Name         string `xorm:"not null default '' varchar(128)" json:"name"`
 	Introduction string `xorm:"not null default '' varchar(512)" json:"introduction"`
+	Cover        string `xorm:"not null default '' varchar(256)" json:"cover"`
+	StartTime    int64  `xorm:"not null default 0 int index" json:"startTime"`
+	EndTime      int64  `xorm:"not null default 0 int index" json:"endTime"`
+	Money        int64  `xorm:"not null default 0 int" json:"money"`
 	CreatedAt    int64  `xorm:"not null default 0 int" json:"createdAt"`
 	UpdatedAt    int64  `xorm:"not null default 0 int" json:"-"`
 }
 
 type MonthCourse struct {
 	ID           int64  `xorm:"pk autoincr" json:"id"`
-	CourseType   int64  `xorm:"not null default 0 int" json:"courseType"`
-	CourseNum    int64  `xorm:"not null default 0 int index" json:"courseNum"`
+	CourseId     int64  `xorm:"not null default 0 int" json:"courseId"`
 	IndexId      int64  `xorm:"not null default 0 int index" json:"indexId"`
 	Year         int64  `xorm:"not null default 0 int" json:"year"`
 	Month        int64  `xorm:"not null default 0 int" json:"month"`
@@ -32,8 +35,7 @@ type MonthCourse struct {
 
 type MonthCourseBook struct {
 	ID            int64 `xorm:"pk autoincr" json:"id"`
-	CourseType    int64 `xorm:"not null default 0 int" json:"courseType"`
-	CourseNum     int64 `xorm:"not null default 0 int index" json:"courseNum"`
+	CourseId      int64 `xorm:"not null default 0 int" json:"courseId"`
 	MonthCourseId int64 `xorm:"not null default 0 int index" json:"monthCourseId"`
 	BookId        int64 `xorm:"not null default 0 int" json:"bookId"`
 	IndexId       int64 `xorm:"not null default 0 int index" json:"indexId"`
@@ -43,8 +45,7 @@ type MonthCourseBook struct {
 
 type MonthCourseCatalog struct {
 	ID            int64  `xorm:"pk autoincr" json:"id"`
-	CourseType    int64  `xorm:"not null default 0 int" json:"courseType"`
-	CourseNum     int64  `xorm:"not null default 0 int index" json:"courseNum"`
+	CourseId      int64  `xorm:"not null default 0 int" json:"courseId"`
 	MonthCourseId int64  `xorm:"not null default 0 int index" json:"monthCourseId"`
 	BookId        int64  `xorm:"not null default 0 int index" json:"bookId"`
 	IndexId       int64  `xorm:"not null default 0 int index" json:"indexId"`

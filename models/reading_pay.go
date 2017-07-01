@@ -55,6 +55,17 @@ func GetReadingPay(info *ReadingPay) (bool, error) {
 	return true, nil
 }
 
+func GetReadingPayWithStatus(info *ReadingPay) (bool, error) {
+	has, err := x.Where("open_id = ?", info.OpenId).And("status = 1").Get(info)
+	if err != nil {
+		return false, err
+	}
+	if !has {
+		return false, nil
+	}
+	return true, nil
+}
+
 func UpdateReadingPayUserInfo(info *ReadingPay) error {
 	info.UpdatedAt = time.Now().Unix()
 	_, err := x.ID(info.ID).Cols("real_name", "phone", "wechat", "updated_at").Update(info)

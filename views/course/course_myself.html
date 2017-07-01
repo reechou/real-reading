@@ -12,9 +12,9 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <link rel="stylesheet" href="/static/css/m-main.css?data=0512" >
-    <link rel="stylesheet" href="/static/css/m-show.css?data=0512" >
-    <link rel="stylesheet" href="/static/css/m-sy.css?data=0512" >
+    <link rel="stylesheet" href="/reading/m-main.css?data=0512" >
+    <link rel="stylesheet" href="/reading/m-show-1.css?data=0512" >
+    <link rel="stylesheet" href="/reading/m-sy.css?data=0512" >
 </head>
 <body>
 
@@ -28,26 +28,26 @@
 
     <div class="show-sybox sybox-pb60">
 
-        <div class="pb-info pt20 clearfix">
+        <div class="pb-info pt20 pb20 clearfix">
             <span class="show-over" id="info-name">{{ .Name }}</span>
             <img src="{{ .AvatarUrl }}">
         </div>
 
         <ul class="home-list">
-            <li class="home-one home-lclass" onclick="doGo('/sy/class-info')">我的课程</li>
+            <li class="home-one home-lleave" onclick="location.assign('/reading/course/attendance/{{.ID}}');">我的考勤</li>
             <!--<li class="home-one home-lclass" @click="doGo('/sy/class-info')">班级</li>-->
             <!--<li class="home-one home-lleave" @click="doGo('/sy/leave-record')">请假</li>-->
             <!--<li class="home-one home-linvite" @click="doGo('/zb/share')">邀请好友</li>-->
             <!--<li class="home-one home-lwallet" @click="doGo('/sy/wallet')">钱包</li>-->
-            <li class="home-one home-lremind" onclick="doGo('/sy/reading-remind')">阅读提醒设置</li>
-            <li class="home-one home-lhelp hide" onclick="doGo('xx')">帮助</li>
+            <!--<li class="home-one home-lremind" onclick="">阅读提醒设置</li>-->
+            <li class="home-one home-lhelp" onclick="">帮助</li>
         </ul>
 
     </div>
 
     <section class="sy-footerbox">
         <ul class="sy-footer">
-            <li class="sy-footerone" onclick="ftGoto('')">
+            <li class="sy-footerone" onclick="location.assign('/reading/course/usercourselist');">
                 <span class="sy-ficon sy-f-clock"></span>
                 <p>课程</p>
             </li>
@@ -55,7 +55,7 @@
                 <span class="sy-ficon sy-f-bl"></span>
                 <p>推荐</p>
             </li>
-            <li class="sy-footerone current">
+            <li class="sy-footerone current" onclick="location.assign('/reading/course/myself');">
                 <span class="sy-ficon sy-f-own"></span>
                 <p>我的</p>
             </li>
@@ -65,54 +65,6 @@
 </section>
 
 <div id="defined-prompt"><defined-prompt :flag="flag" :tipStr="tipstr" :cancelstr="cancelstr" :okStr="okstr" :cancelFlag="cancelflag" :callback="callback"></defined-prompt></div>
-
-<script src="/static/js/zepto.min.js"></script>
-<script src="/static/js/vue.min.js"></script>
-<script src="/static/js/h5-common.js?0323"></script>
-
-<script src="/static/plugins/m-emoji/emoji.js"></script>
-
-<script>
-
-var app00 = new Vue({
-    el: '#app00',
-    data: {
-        name: '',
-        avatar: 'http://wx.qlogo.cn/mmopen/iaI59KUL9O42ScmjErftwplc0XmppqTMvwBuibAHEUVgCayFywFiavxJiaqfscRhhAWzfS9U85nH6dVRSJ3aGicegRQ/0'
-    },
-    methods: {
-        doGo: function(a){
-            if(!a) return ;
-            location.assign(a);
-        },
-        ftGoto: function(a){
-            if(!a) return ;
-            location.assign(a);
-        }
-    },
-    mounted: function(){
-        $('#info-name').emoji();
-    }
-});
-
-</script>
-
-
-<script>
-
-(function(){
-    new Vue({
-        el: '#init-pageshow',
-        data: {
-            pageshowflag: false
-        },
-        created: function(){
-            this.pageshowflag = true;
-        }
-    });
-})();
-
-</script>
 
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 
@@ -218,21 +170,7 @@ function initShareConfig(opts){
 }
 
 })();
-
-
 </script>
-
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?764c0deab35b5c47b79e77ac7fa74eaa";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
-</script>
-
-<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261333177'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1261333177' type='text/javascript'%3E%3C/script%3E"));</script>
 
 </body>
 </html>

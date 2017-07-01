@@ -170,7 +170,7 @@
     <div class="read-checkinbox">
         <h2>您已阅读今日任务，打卡吧</h2>
         <div class="mt20">
-            <span class="show-do" @click="doSign">打卡</span>
+            <span class="show-do" onclick="doSign()">打卡</span>
         </div>
     </div>
     <template v-if="!checkedFlag">
@@ -191,6 +191,33 @@
 
 <script src="http://oe3slowqt.bkt.clouddn.com/zepto.min.js"></script>
 <script src="https://jhsy.caizhu.com/static/js/read-swipe.js"></script>
+
+<script>
+    function doSign() {
+        $.ajax({
+            type: 'POST',
+            url: '/reading/course/catalogsignin',
+            dataType: 'json',
+            data: JSON.stringify(
+                {
+                    openId: {{ .OpenId }},
+                    userId: {{ .UserId }},
+                    courseId: {{ .CourseId }},
+                    catalogId: {{ .CatalogId }}
+                }
+            ),
+            success: function(d){
+                if(d.code == 0){
+                    // location.assign('/reading/pay?openid={{ .OpenId }}');
+                    alert("go ok");
+                } else {
+                    alert("打卡失败，请稍后再试");
+                }
+            },
+            error: function(){}
+        });
+    }
+</script>
 
 <script>
     //前端全局获取appid

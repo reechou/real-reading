@@ -14,6 +14,13 @@ const (
 	COURSE_BOOK_CATALOG_UNLOCK
 )
 
+// user course
+type UserCourseDetail struct {
+	TodayCatalogs  []models.CourseBookCatalogTime
+	UserCourseList []models.UserCourseDetail
+	UserId         int64
+}
+
 // course
 type BookDetail struct {
 	models.CourseBookDetail
@@ -28,6 +35,8 @@ type MonthCourseDetail struct {
 type CourseDetail struct {
 	TodayCatalogs []models.CourseBookCatalogTime
 	MonthCourses  []MonthCourseDetail
+	UserId        int64
+	CourseId      int64
 }
 
 // catalog
@@ -40,6 +49,9 @@ type CatalogDetail struct {
 type CourseCatalogList struct {
 	models.Book
 	CatalogList []CatalogDetail
+	UserId      int64
+	CourseId    int64
+	BookId      int64
 }
 
 // book detail
@@ -48,4 +60,33 @@ type CourseCatalogDetailList struct {
 	models.MonthCourseCatalog
 	TaskTime          string
 	ChapterDetailList []models.CourseBookCatalogDetail
+	OpenId            string
+	UserId            int64
+	CourseId          int64
+	BookId            int64
+	CatalogId         int64
+}
+
+// course attendance
+type UserCourseAttendance struct {
+	AttendanceList []models.UserCourseList
+	UserId         int64
+}
+
+type UserCourseAttendanceDetail struct {
+	Course               models.Course
+	AttendanceDetailList []models.UserCourseAttendance
+	UserId               int64
+	CourseId             int64
+
+	StartYear        int
+	StartMonth       int
+	StartDay         int
+	EndYear          int
+	EndMonth         int
+	EndDay           int
+	NowYear          int
+	NowMonth         int
+	NowDay           int
+	BeforeRenderAttr string
 }

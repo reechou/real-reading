@@ -15,6 +15,12 @@ type ReadingEnrollUserInfo struct {
 	EnrollMobile string
 	EnrollWechat string
 
+	CourseType     int64
+	CourseNum      int64
+	StartTime      string
+	EndTime        string
+	IndexStartTime string
+
 	WxJsApiParams
 }
 
