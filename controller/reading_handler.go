@@ -784,7 +784,45 @@ func (self *ReadingHandler) readingSuccess(rr *HandlerRequest, w http.ResponseWr
 			return
 		}
 	}
-	io.WriteString(w, MSG_ERROR_COURSE_NOT_FOUND)
+	//io.WriteString(w, MSG_ERROR_COURSE_NOT_FOUND)
+	course := &models.Course{
+		CourseType: READING_COURSE_TYPE_GD,
+	}
+	has, err := models.GetCourseMaxNum(course)
+	if err != nil {
+		holmes.Error("get course max num error: %v", err)
+		io.WriteString(w, MSG_ERROR_SYSTEM)
+		return
+	}
+	if !has {
+		holmes.Error("get course max num has none")
+		io.WriteString(w, MSG_ERROR_COURSE_NOT_FOUND)
+		return
+	}
+	user := &models.User{
+		OpenId: openid,
+	}
+	has, err = models.GetUserFromOpenid(user)
+	if err != nil {
+		holmes.Error("get user error: %v", err)
+		io.WriteString(w, MSG_ERROR_SYSTEM)
+		return
+	}
+	if !has {
+		holmes.Error("get user has none")
+		io.WriteString(w, MSG_ERROR_USER_NOT_FOUND)
+		return
+	}
+	readingUserInfo := &ReadingEnrollUserInfo{
+		NickName:   user.Name,
+		AvatarUrl:  user.AvatarUrl,
+		OpenId:     openid,
+		CourseType: course.CourseType,
+		CourseNum:  course.CourseNum,
+		StartTime:  time.Unix(course.StartTime, 0).Format("2006.01.02"),
+		EndTime:    time.Unix(course.EndTime, 0).Format("2006.01.02"),
+	}
+	renderView(w, "./views/reading_sign_success.html", readingUserInfo)
 	// --- end ---
 
 	//readingUser := &models.ReadingPay{
