@@ -104,7 +104,7 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if rr.Path == "" {
 		return
 	}
-
+	
 	if strings.HasSuffix(rr.Path, "txt") {
 		http.ServeFile(w, r, self.l.cfg.ReadingOauth.MpVerifyDir+rr.Path)
 		return
@@ -117,12 +117,12 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./views/js/"+rr.Path)
 		return
 	}
-	if strings.HasPrefix(rr.Path, READING_COURSE_URI_PREFIX) {
-		self.courseHandle(rr, w, r)
-		return
-	}
 	if strings.HasPrefix(rr.Path, READING_COURSE_MANAGER_URI_PREFIX) {
 		self.courseManagerHandle(rr, w, r)
+		return
+	}
+	if strings.HasPrefix(rr.Path, READING_COURSE_URI_PREFIX) {
+		self.courseHandle(rr, w, r)
 		return
 	}
 
