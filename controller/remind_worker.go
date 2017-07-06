@@ -44,6 +44,10 @@ func NewRemindWorker(cfg *config.Config) *RemindWorker {
 	} else {
 		rw.WorkerNum = cfg.RemindWorkerNum
 	}
+	if rw.cfg.RemindCronTime == "" {
+		holmes.Error("course remind cron time is nil, maybe remind not used.")
+		return rw
+	}
 	rw.wtw = NewWechatTplWorker(cfg)
 	
 	go rw.do()
