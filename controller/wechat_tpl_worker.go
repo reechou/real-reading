@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/reechou/real-reading/config"
+	"github.com/reechou/holmes"
 )
 
 const (
@@ -25,6 +26,7 @@ func NewWechatTplWorker(cfg *config.Config) *WechatTplWorker {
 	wtw := &WechatTplWorker{
 		cfg:     cfg,
 		msgChan: make(chan *TplMsg, 10240),
+		stop:    make(chan struct{}),
 	}
 	if cfg.TplWorkerNum == 0 {
 		wtw.WorkerNum = DEFAULT_TPL_WORKER_NUM
@@ -32,10 +34,45 @@ func NewWechatTplWorker(cfg *config.Config) *WechatTplWorker {
 		wtw.WorkerNum = cfg.TplWorkerNum
 	}
 	wtw.wc = NewWechatController(cfg)
+	
+	for i := 0; i < wtw.WorkerNum; i++ {
+		wtw.wg.Add(1)
+		go wtw.runWorker()
+	}
+	
+	holmes.Debug("wechat tpl worker start..")
 
 	return wtw
 }
 
-func (self *WechatTplWorker) runWorker() {
+func (self *WechatTplWorker) Stop() {
+	close(self.stop)
+	self.wg.Wait()
+}
 
+func (self *WechatTplWorker) Send(msg *TplMsg) {
+	select {
+	case self.msgChan <- msg:
+	case <-self.stop:
+		return
+	}
+}
+
+func (self *WechatTplWorker) runWorker() {
+	for {
+		select {
+		case msg := <-self.msgChan:
+			self.sendTplMsg(msg)
+		case <-self.stop:
+			self.wg.Done()
+			return
+		}
+	}
+}
+
+func (self *WechatTplWorker) sendTplMsg(msg *TplMsg) {
+	err := self.wc.SendTplMsg(msg)
+	if err != nil {
+		holmes.Error("send tpl msg error: %v", err)
+	}
 }

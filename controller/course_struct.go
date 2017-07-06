@@ -58,6 +58,10 @@ type CourseCatalogList struct {
 type CourseCatalogDetailList struct {
 	models.Book
 	models.MonthCourseCatalog
+	models.MonthCourseCatalogAudio
+	AudioTime         string
+	PrevCatalogId     int64
+	NextCatalogId     int64
 	TaskTime          string
 	ChapterDetailList []models.CourseBookCatalogDetail
 	OpenId            string

@@ -74,6 +74,7 @@
 </style>
 
 <section id="app00">
+    {{ if .MonthCourseCatalogAudio.AudioUrl }}
     <input id="audioId" class="resourceId" style="display: none" type="hidden" value="a_59450d394f94a_WdE8qssf">
     <input id="audioResourceServer" style="display: none" type="hidden" value="https://resource.h5.xiaoe-tech.com/get_copy_audio_url_new">
     <input id="availableInfo" style="display: none" type="hidden" value="1">
@@ -95,7 +96,7 @@
                     <div class="progressLineBg"></div>
                 </div>
 
-                <div class="audioTime endTime t4">04:19</div>
+                <div class="audioTime endTime t4">{{ .AudioTime }}</div>
             </div>
 
             <div class="controlMenu clearfix">
@@ -108,24 +109,24 @@
                 </div>
                 <div id="playButton" class="play controlButton playBackground loadingBackground"></div>
 
-                <audio title="普通话技巧一 提颧肌"
+                <audio title="{{.MonthCourseCatalogAudio.AudioTitle}}"
                        id="audioInfo"
                        style="display: none"
-                       src="http://wechatapppro-1252524126.file.myqcloud.com/app4wLz27Ug4870/audio/18884f258d9038840a4e1b2bbc29874a/18884f258d9038840a4e1b2bbc29874apress.mp3"
+                       src="{{.MonthCourseCatalogAudio.AudioUrl}}"
                        data-type="0"
                        data-m3u8=""
-                       data-mp3="http://wechatapppro-1252524126.file.myqcloud.com/app4wLz27Ug4870/audio/18884f258d9038840a4e1b2bbc29874a/18884f258d9038840a4e1b2bbc29874apress.mp3"
-                       data-orginmp3="http://wechatapppro-1252524126.file.myqcloud.com/app4wLz27Ug4870/audio/18884f258d9038840a4e1b2bbc29874a.mp3"
+                       data-mp3="{{.MonthCourseCatalogAudio.AudioUrl}}"
+                       data-orginmp3="{{.MonthCourseCatalogAudio.AudioUrl}}"
                        autoplay
                 ></audio>
 
                 <a href="javascript:;" class="audioModeWrapper">
                     <div id="audio_mode" class="onlyOneBackground"></div>
                 </a>
-
             </div>
         </div>
     </div>
+    {{ end }}
 
     <div class="show-sybox">
 

@@ -25,7 +25,7 @@ func NewLogic(cfg *config.Config) *Logic {
 	}
 	l.robotExt = ext.NewRobotExt(cfg)
 	l.init()
-
+	
 	models.InitDB(cfg)
 
 	return l
@@ -44,6 +44,8 @@ func (self *Logic) Run() {
 	if self.cfg.Debug {
 		EnableDebug()
 	}
+	
+	NewRemindWorker(self.cfg)
 
 	mux := http.NewServeMux()
 	mux.Handle(ReadingPrefix+"/", NewReadingHandler(self))

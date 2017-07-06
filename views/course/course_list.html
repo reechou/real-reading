@@ -22,6 +22,7 @@
 <section id="app00">
 
     <div class="show-sybox sybox-pb20">
+        {{ $userId := .UserId }}
         {{ $lenToday := len .TodayCatalogs }}
         {{ if eq $lenToday 0 }}
         <div class="today-title clearfix">
@@ -44,9 +45,12 @@
             <strong>今日任务</strong>
         </div>
         {{ range .TodayCatalogs }}
-        <div class="task-info p-rela" onclick="gotoDetail(one.TaskID)">
-            <span v-if="one.Status==1" class="task-statusv1"></span>
-            <!--<span v-else class="task-statusn2"></span>-->
+        <div class="task-info p-rela" onclick="location.assign('/reading/course/bookdetail/{{$userId}}/{{.MonthCourseCatalog.CourseId}}/{{.Book.ID}}/{{.MonthCourseCatalog.ID}}')">
+            {{ if eq .IfCheck 1 }}
+            <span class="task-statusn2"></span>
+            {{ else }}
+            <span class="task-statusv1"></span>
+            {{ end }}
 
             <div class="task-coverv1">
                 <img class="" src="{{ .Book.Cover }}">
@@ -99,10 +103,10 @@
                 <span class="sy-ficon sy-f-clock"></span>
                 <p>课程</p>
             </li>
-            <li class="sy-footerone" @click="ftGoto('/sy/home')">
-                <span class="sy-ficon sy-f-bl"></span>
-                <p>推荐</p>
-            </li>
+            <!--<li class="sy-footerone" @click="ftGoto('/sy/home')">-->
+                <!--<span class="sy-ficon sy-f-bl"></span>-->
+                <!--<p>推荐</p>-->
+            <!--</li>-->
             <li class="sy-footerone" onclick="location.assign('/reading/course/myself');">
                 <span class="sy-ficon sy-f-own"></span>
                 <p>我的</p>

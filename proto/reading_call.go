@@ -15,6 +15,11 @@ type ReadingCourseSignIn struct {
 	CatalogId int64  `json:"catalogId"`
 }
 
+// about course manager
+type BookReq struct {
+	BookId int64 `json:"bookId"`
+}
+
 // about response
 type ReadingPayToday struct {
 	OrderNum int64 `json:"orderNum"`

@@ -2,11 +2,15 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/chanxuehong/rand"
+	mpoauth2 "github.com/chanxuehong/wechat.v2/mp/oauth2"
 	"github.com/jinzhu/now"
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-reading/models"
@@ -62,6 +66,7 @@ func (self *ReadingHandler) courseHandle(rr *HandlerRequest, w http.ResponseWrit
 	}
 }
 
+// api
 func (self *ReadingHandler) readingCourseCatalogAudios(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
 	rsp := &proto.Response{Code: proto.RESPONSE_OK}
 	defer func() {
@@ -134,12 +139,152 @@ func (self *ReadingHandler) readingCourseSignIn(rr *HandlerRequest, w http.Respo
 	}
 }
 
+// check user
+type UserInfo struct {
+	OpenId    string
+	Name      string
+	AvatarUrl string
+}
+
+func (self *ReadingHandler) checkUser(w http.ResponseWriter, r *http.Request, ifNeedInfo bool) (ui *UserInfo, ifRedirect bool) {
+	ui = &UserInfo{}
+
+	defer func() {
+		if ui.OpenId != "" {
+			// set cookie
+			http.SetCookie(w, &http.Cookie{
+				Name:    "user",
+				Value:   ui.OpenId,
+				Path:    "/",
+				Expires: time.Now().Add(time.Hour),
+			})
+		}
+	}()
+
+	// get cookie
+	cookie, err := r.Cookie("user")
+	if err == nil {
+		ui.OpenId = cookie.Value
+		holmes.Debug("get user[%s] from cookie", ui.OpenId)
+		if ifNeedInfo {
+			user := &models.User{
+				OpenId: ui.OpenId,
+			}
+			has, err := models.GetUserFromOpenid(user)
+			if err != nil {
+				holmes.Error("get user from openid error: %v", err)
+				goto NEED_OAUTH
+			}
+			if !has {
+				goto NEED_OAUTH
+			}
+			ui.Name = user.Name
+			ui.AvatarUrl = user.AvatarUrl
+		}
+		return
+	}
+NEED_OAUTH:
+	holmes.Debug("start to redirect oauth,")
+	queryValues, err := url.ParseQuery(r.URL.RawQuery)
+	if err != nil {
+		holmes.Error("url parse query error: %v", err)
+		return
+	}
+
+	code := queryValues.Get("code")
+	if code == "" {
+		state := string(rand.NewHex())
+		redirectUrl := fmt.Sprintf("http://%s%s", r.Host, r.URL.String())
+		AuthCodeURL := mpoauth2.AuthCodeURL(self.l.cfg.ReadingOauth.ReadingWxAppId,
+			redirectUrl,
+			self.l.cfg.ReadingOauth.ReadingOauth2ScopeUser, state)
+		ifRedirect = true
+		http.Redirect(w, r, AuthCodeURL, http.StatusFound)
+		return
+	}
+
+	token, err := self.oauth2Client.ExchangeToken(code)
+	if err != nil {
+		ifRedirect = true
+		http.Redirect(w, r, fmt.Sprintf("http://%s%s", r.Host, r.URL.Path), http.StatusFound)
+		return
+	}
+
+	userinfo, err := mpoauth2.GetUserInfo(token.AccessToken, token.OpenId, "", nil)
+	if err != nil {
+		holmes.Error("get user info error: %v", err)
+		return
+	}
+	holmes.Debug("user info: %+v", userinfo)
+	ui.OpenId = userinfo.OpenId
+	ui.Name = userinfo.Nickname
+	ui.AvatarUrl = userinfo.HeadImageURL
+
+	user := &models.User{
+		OpenId: ui.OpenId,
+	}
+	has, err := models.GetUserFromOpenid(user)
+	if err != nil {
+		holmes.Error("get user from openid error: %v", err)
+		return
+	}
+	if !has {
+		user.Name = ui.Name
+		user.AvatarUrl = ui.AvatarUrl
+		err = models.CreateUser(user)
+		if err != nil {
+			holmes.Error("create user error: %v", err)
+		}
+	} else {
+		if user.Name != ui.Name || user.AvatarUrl != ui.AvatarUrl {
+			user.Name = ui.Name
+			user.AvatarUrl = ui.AvatarUrl
+			err = models.UpdateUserWxInfo(user)
+			if err != nil {
+				holmes.Error("update user wx info error: %v", err)
+			}
+		}
+	}
+	return
+}
+
+func (self *ReadingHandler) checkUserCourse(openId string, userId, courseId int64) bool {
+	courseList, err := models.GetUserCourseFromOpenId(openId)
+	if err != nil {
+		holmes.Error("get user course error: %v", err)
+		return false
+	}
+	//holmes.Debug("%+v user: %d course: %d", courseList, userId, courseId)
+	if len(courseList) == 0 {
+		return false
+	}
+	var userCheck, courseCheck bool
+	for _, v := range courseList {
+		if v.User.ID == userId {
+			userCheck = true
+		}
+		if v.UserCourse.CourseId == courseId {
+			courseCheck = true
+		}
+	}
+	if userCheck && courseCheck {
+		return true
+	}
+	return false
+}
+
+// template view
 func (self *ReadingHandler) readingCourseList(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
-	openId := TEST_OPEN_ID
+	//openId := TEST_OPEN_ID
+
+	userinfo, ifRedirect := self.checkUser(w, r, false)
+	if ifRedirect {
+		return
+	}
 
 	var err error
 	userCourseList := new(UserCourseDetail)
-	userCourseList.UserCourseList, err = models.GetUserCourse(openId)
+	userCourseList.UserCourseList, err = models.GetUserCourse(userinfo.OpenId)
 	if err != nil {
 		holmes.Error("get user course error: %v", err)
 		return
@@ -159,11 +304,31 @@ func (self *ReadingHandler) readingCourseList(rr *HandlerRequest, w http.Respons
 		holmes.Error("get course book catalog list error: %v", err)
 		return
 	}
+	for i := 0; i < len(userCourseList.TodayCatalogs); i++ {
+		ucc := &models.UserCourseCheckin{
+			UserId:               userCourseList.UserId,
+			CourseId:             userCourseList.TodayCatalogs[i].MonthCourseCatalog.CourseId,
+			MonthCourseCatalogId: userCourseList.TodayCatalogs[i].MonthCourseCatalog.ID,
+		}
+		has, err := models.GetUserCourseCheckFromUCM(ucc)
+		if err != nil {
+			holmes.Error("get user course checkin error: %v", err)
+			continue
+		}
+		if has {
+			userCourseList.TodayCatalogs[i].IfCheck = 1
+		}
+	}
 
 	renderView(w, "./views/course/course_list.html", userCourseList)
 }
 
 func (self *ReadingHandler) readingCourseIndex(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	userinfo, ifRedirect := self.checkUser(w, r, false)
+	if ifRedirect {
+		return
+	}
+
 	if len(rr.Params) < 3 {
 		holmes.Error("params error: %v", rr.Params)
 		return
@@ -181,13 +346,33 @@ func (self *ReadingHandler) readingCourseIndex(rr *HandlerRequest, w http.Respon
 		holmes.Error("params[2][%s] strconv error: %v", rr.Params[2], err)
 		return
 	}
+	if !self.checkUserCourse(userinfo.OpenId, courseDetail.UserId, courseDetail.CourseId) {
+		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, courseDetail.UserId)
+		// todo: redirect to sign
+		return
+	}
 
 	courseDetail.TodayCatalogs, err = models.GetCourseBookFromTime(courseDetail.CourseId, now.BeginningOfDay().Unix())
 	if err != nil {
 		holmes.Error("get course book from time error: %v", err)
 		return
 	}
-
+	for i := 0; i < len(courseDetail.TodayCatalogs); i++ {
+		ucc := &models.UserCourseCheckin{
+			UserId:               courseDetail.UserId,
+			CourseId:             courseDetail.TodayCatalogs[i].MonthCourseCatalog.CourseId,
+			MonthCourseCatalogId: courseDetail.TodayCatalogs[i].MonthCourseCatalog.ID,
+		}
+		has, err := models.GetUserCourseCheckFromUCM(ucc)
+		if err != nil {
+			holmes.Error("get user course checkin error: %v", err)
+			continue
+		}
+		if has {
+			courseDetail.TodayCatalogs[i].IfCheck = 1
+		}
+	}
+	
 	monthCourses, err := models.GetMonthCourseList(courseDetail.CourseId)
 	if err != nil {
 		holmes.Error("get month course list error: %v", err)
@@ -228,6 +413,11 @@ func (self *ReadingHandler) readingCourseIndex(rr *HandlerRequest, w http.Respon
 }
 
 func (self *ReadingHandler) readingCourseCatalog(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	userinfo, ifRedirect := self.checkUser(w, r, false)
+	if ifRedirect {
+		return
+	}
+
 	if len(rr.Params) < 4 {
 		holmes.Error("params error: %v", rr.Params)
 		return
@@ -248,6 +438,11 @@ func (self *ReadingHandler) readingCourseCatalog(rr *HandlerRequest, w http.Resp
 	catalogList.BookId, err = strconv.ParseInt(rr.Params[3], 10, 0)
 	if err != nil {
 		holmes.Error("params[3][%s] strconv error: %v", rr.Params[3], err)
+		return
+	}
+	if !self.checkUserCourse(userinfo.OpenId, catalogList.UserId, catalogList.CourseId) {
+		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, catalogList.UserId)
+		// todo: redirect to sign
 		return
 	}
 
@@ -282,6 +477,11 @@ func (self *ReadingHandler) readingCourseCatalog(rr *HandlerRequest, w http.Resp
 }
 
 func (self *ReadingHandler) readingCourseChapterDetail(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	userinfo, ifRedirect := self.checkUser(w, r, false)
+	if ifRedirect {
+		return
+	}
+
 	if len(rr.Params) < 5 {
 		holmes.Error("params error: %v", rr.Params)
 		return
@@ -310,17 +510,56 @@ func (self *ReadingHandler) readingCourseChapterDetail(rr *HandlerRequest, w htt
 		holmes.Error("params[4][%s] strconv error: %v", rr.Params[4], err)
 		return
 	}
-
-	catalogDetailList.MonthCourseCatalog.ID = catalogDetailList.CatalogId
-	has, err := models.GetMonthCourseCatalog(&catalogDetailList.MonthCourseCatalog)
+	if !self.checkUserCourse(userinfo.OpenId, catalogDetailList.UserId, catalogDetailList.CourseId) {
+		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, catalogDetailList.UserId)
+		// todo: redirect to sign
+		return
+	}
+	
+	catalogs, err := models.GetMonthCourseCatalogFromBook(catalogDetailList.BookId)
 	if err != nil {
-		holmes.Error("get month course catalog error: %v", err)
+		holmes.Error("get month course catalog from book error: %v", err)
 		return
 	}
-	if !has {
-		holmes.Error("cannot found month course catalog from[%d]", catalogDetailList.CatalogId)
+	var ifHas bool
+	var prevCatalogId, nextCatalogId int64
+	for i := 0; i < len(catalogs); i++ {
+		if catalogs[i].ID == catalogDetailList.CatalogId {
+			ifHas = true
+			catalogDetailList.MonthCourseCatalog = catalogs[i]
+			if i < (len(catalogs)-1) {
+				nextCatalogId = catalogs[i+1].ID
+			}
+			break
+		}
+		prevCatalogId = catalogs[i].ID
+	}
+	if ifHas {
+		catalogDetailList.PrevCatalogId = prevCatalogId
+		catalogDetailList.NextCatalogId = nextCatalogId
+	} else {
+		catalogDetailList.MonthCourseCatalog.ID = catalogDetailList.CatalogId
+		has, err := models.GetMonthCourseCatalog(&catalogDetailList.MonthCourseCatalog)
+		if err != nil {
+			holmes.Error("get month course catalog error: %v", err)
+			return
+		}
+		if !has {
+			holmes.Error("cannot found month course catalog from[%d]", catalogDetailList.CatalogId)
+			return
+		}
+	}
+	
+	catalogDetailList.MonthCourseCatalogAudio.MonthCourseCatalogId = catalogDetailList.CatalogId
+	has, err := models.GetMonthCourseCatalogAudio(&catalogDetailList.MonthCourseCatalogAudio)
+	if err != nil {
+		holmes.Error("get month course catalog audio error: %v", err)
 		return
 	}
+	if has {
+		catalogDetailList.AudioTime = fmt.Sprintf("%2d:%2d", catalogDetailList.MonthCourseCatalogAudio.AudioTime/60, catalogDetailList.MonthCourseCatalogAudio.AudioTime%60)
+	}
+	
 	catalogDetailList.TaskTime = time.Unix(catalogDetailList.MonthCourseCatalog.TaskTime, 0).Format("2006-01-02")
 	catalogDetailList.ChapterDetailList, err = models.GetCourseBookCatalogDetailList(catalogDetailList.CatalogId)
 	if err != nil {
@@ -333,18 +572,23 @@ func (self *ReadingHandler) readingCourseChapterDetail(rr *HandlerRequest, w htt
 }
 
 func (self *ReadingHandler) readingCourseMyself(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
-	openId := TEST_OPEN_ID
+	//openId := TEST_OPEN_ID
+
+	userinfo, ifRedirect := self.checkUser(w, r, false)
+	if ifRedirect {
+		return
+	}
 
 	user := &models.User{
-		OpenId: openId,
+		OpenId: userinfo.OpenId,
 	}
 	has, err := models.GetUserFromOpenid(user)
 	if err != nil {
-		holmes.Error("get user from openid[%s] error: %v", openId, err)
+		holmes.Error("get user from openid[%s] error: %v", userinfo.OpenId, err)
 		return
 	}
 	if !has {
-		holmes.Error("cannot found this user[%s]", openId)
+		holmes.Error("cannot found this user[%s]", userinfo.OpenId)
 		return
 	}
 
@@ -375,6 +619,11 @@ func (self *ReadingHandler) readingCourseAttendance(rr *HandlerRequest, w http.R
 }
 
 func (self *ReadingHandler) readingCourseAttendanceDetail(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	userinfo, ifRedirect := self.checkUser(w, r, false)
+	if ifRedirect {
+		return
+	}
+
 	if len(rr.Params) < 3 {
 		holmes.Error("params error: %v", rr.Params)
 		return
@@ -390,6 +639,11 @@ func (self *ReadingHandler) readingCourseAttendanceDetail(rr *HandlerRequest, w 
 	userCourseAttendanceDetailList.CourseId, err = strconv.ParseInt(rr.Params[2], 10, 0)
 	if err != nil {
 		holmes.Error("params[2][%s] strconv error: %v", rr.Params[2], err)
+		return
+	}
+	if !self.checkUserCourse(userinfo.OpenId, userCourseAttendanceDetailList.UserId, userCourseAttendanceDetailList.CourseId) {
+		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, userCourseAttendanceDetailList.UserId)
+		// todo: redirect to sign
 		return
 	}
 
@@ -432,6 +686,5 @@ func (self *ReadingHandler) readingCourseAttendanceDetail(rr *HandlerRequest, w 
 }
 
 func (self *ReadingHandler) readingCourseRemind(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
-
 	renderView(w, "./views/course/course_remind.html", nil)
 }

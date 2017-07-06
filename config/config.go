@@ -56,6 +56,9 @@ type Config struct {
 
 	NowCourseNumber int64
 
+	ReadingHost    string
+	RemindCronTime string
+	
 	RemindWorkerNum int
 	TplWorkerNum    int
 

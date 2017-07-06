@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/reechou/holmes"
@@ -69,7 +70,6 @@ type MonthCourseCatalogAudio struct {
 	ID                   int64  `xorm:"pk autoincr" json:"id"`
 	MonthCourseCatalogId int64  `xorm:"not null default 0 int index" json:"monthCourseCatalogId"`
 	AudioTitle           string `xorm:"not null default '' varchar(128)" json:"AudioTitle"`
-	BookTitle            string `xorm:"not null default '' varchar(128)" json:"BookTitle"`
 	AudioUrl             string `xorm:"not null default '' varchar(128)" json:"AudioUrl"`
 	AudioTime            int64  `xorm:"not null default 0 int" json:"AudioTime"`
 	CreatedAt            int64  `xorm:"not null default 0 int" json:"createdAt"`
@@ -89,6 +89,24 @@ func CreateCourse(info *Course) error {
 	holmes.Info("create course[%v] success.", info)
 
 	return nil
+}
+
+func DelCourse(info *Course) error {
+	if info.ID == 0 {
+		return fmt.Errorf("del id cannot be nil.")
+	}
+	_, err := x.ID(info.ID).Delete(info)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdateCourse(info *Course) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols("course_type", "course_num", "name", "introduction",
+		"cover", "start_time", "end_time", "money", "updated_at").Update(info)
+	return err
 }
 
 func CreateMonthCourse(info *MonthCourse) error {

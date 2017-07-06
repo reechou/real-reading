@@ -4,6 +4,15 @@ import (
 	"time"
 )
 
+func GetCourseList() ([]Course, error) {
+	var courses []Course
+	err := x.Find(&courses)
+	if err != nil {
+		return nil, err
+	}
+	return courses, nil
+}
+
 func GetMonthCourseList(courseId int64) ([]MonthCourse, error) {
 	var courses []MonthCourse
 	err := x.Where("course_id = ?", courseId).OrderBy("index_id").Find(&courses)
@@ -11,6 +20,15 @@ func GetMonthCourseList(courseId int64) ([]MonthCourse, error) {
 		return nil, err
 	}
 	return courses, nil
+}
+
+func GetMonthCourseCatalogList(courseId, monthCourseId int64) ([]MonthCourseCatalog, error) {
+	var list []MonthCourseCatalog
+	err := x.Where("course_id = ?", courseId).And("month_course_id = ?", monthCourseId).Find(&list)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
 }
 
 func GetMonthCourseBookUnlock(courseId int64) (map[int64]int, error) {
@@ -83,6 +101,15 @@ func GetCourseFromCourse(info *Course) (bool, error) {
 	return true, nil
 }
 
+func GetCourseListActive(t int64) ([]Course, error) {
+	var courseList []Course
+	err := x.Where("start_time < ?", t).And("end_time > ?", t).Find(&courseList)
+	if err != nil {
+		return nil, err
+	}
+	return courseList, nil
+}
+
 func GetMonthCourseCatalog(info *MonthCourseCatalog) (bool, error) {
 	has, err := x.Id(info.ID).Get(info)
 	if err != nil {
@@ -93,6 +120,27 @@ func GetMonthCourseCatalog(info *MonthCourseCatalog) (bool, error) {
 	}
 	return true, nil
 }
+
+func GetMonthCourseCatalogFromBook(bookId int64) ([]MonthCourseCatalog, error) {
+	var list []MonthCourseCatalog
+	err := x.Where("book_id = ?", bookId).OrderBy("index_id").Find(&list)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
+func GetMonthCourseCatalogAudio(info *MonthCourseCatalogAudio) (bool, error) {
+	has, err := x.Where("month_course_catalog_id = ?", info.MonthCourseCatalogId).Get(info)
+	if err != nil {
+		return false, err
+	}
+	if !has {
+		return false, nil
+	}
+	return true, nil
+}
+
 
 type MonthCourseBooks struct {
 	MonthCourse     `xorm:"extends"`
@@ -138,6 +186,7 @@ func GetCourseBookDetail(courseId int64) ([]CourseBookDetail, error) {
 type CourseBookCatalogTime struct {
 	MonthCourseCatalog `xorm:"extends"`
 	Book               `xorm:"extends"`
+	IfCheck int
 }
 
 func (CourseBookCatalogTime) TableName() string {
@@ -148,7 +197,7 @@ func GetCourseBookFromTime(courseId, day int64) ([]CourseBookCatalogTime, error)
 	bookCatalogBooks := make([]CourseBookCatalogTime, 0)
 	err := x.Join("LEFT", "book", "month_course_catalog.book_id = book.id").
 		Where("month_course_catalog.course_id = ?", courseId).
-		And("task_time = ?", day).
+		And("month_course_catalog.task_time = ?", day).
 		Find(&bookCatalogBooks)
 	if err != nil {
 		return nil, err
@@ -160,7 +209,7 @@ func GetCourseBookCatalogListFromTime(courseIds []int64, day int64) ([]CourseBoo
 	bookCatalogBooks := make([]CourseBookCatalogTime, 0)
 	err := x.Join("LEFT", "book", "month_course_catalog.book_id = book.id").
 		In("month_course_catalog.course_id", courseIds).
-		And("task_time = ?", day).
+		And("month_course_catalog.task_time = ?", day).
 		Find(&bookCatalogBooks)
 	if err != nil {
 		return nil, err
@@ -207,6 +256,37 @@ func GetUserCourseList(userId int64) ([]UserCourseList, error) {
 		return nil, err
 	}
 	return userCourseList, nil
+}
+
+type CourseUserList struct {
+	UserCourse `xorm:"extends"`
+	User       `xorm:"extends"`
+}
+
+func (CourseUserList) TableName() string {
+	return "user_course"
+}
+
+func GetUserCourseFromOpenId(openId string) ([]CourseUserList, error) {
+	userCourseList := make([]CourseUserList, 0)
+	err := x.Join("LEFT", "user", "user_course.user_id = user.id").
+		Where("user.open_id = ?", openId).
+		Find(&userCourseList)
+	if err != nil {
+		return nil, err
+	}
+	return userCourseList, nil
+}
+
+func GetCourseUserList(courseId, offset int64) ([]CourseUserList, error) {
+	userList := make([]CourseUserList, 0)
+	err := x.Join("LEFT", "user", "user_course.user_id = user.id").
+		Where("user_course.course_id = ?", courseId).Limit(-1, int(offset)).
+		Find(&userList)
+	if err != nil {
+		return nil, err
+	}
+	return userList, nil
 }
 
 type UserCourseDetail struct {

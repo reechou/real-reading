@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/reechou/holmes"
+	"fmt"
 )
 
 type Book struct {
@@ -42,19 +43,21 @@ func CreateBook(info *Book) error {
 	return nil
 }
 
-func CreateChapter(info *Chapter) error {
-	now := time.Now().Unix()
-	info.CreatedAt = now
-	info.UpdatedAt = now
-
-	_, err := x.Insert(info)
+func DelBook(info *Book) error {
+	if info.ID == 0 {
+		return fmt.Errorf("del id cannot be nil.")
+	}
+	_, err := x.ID(info.ID).Delete(info)
 	if err != nil {
-		holmes.Error("create Chapter error: %v", err)
 		return err
 	}
-	holmes.Info("create Chapter[%d %s] success.", info.BookId, info.Title)
-
 	return nil
+}
+
+func UpdateBook(info *Book) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols("book_name", "author", "abstract", "cover", "updated_at").Update(info)
+	return err
 }
 
 func GetBook(info *Book) (bool, error) {
@@ -67,4 +70,65 @@ func GetBook(info *Book) (bool, error) {
 		return false, nil
 	}
 	return true, nil
+}
+
+func GetBookList() ([]Book, error) {
+	var books []Book
+	err := x.Find(&books)
+	if err != nil {
+		return nil, err
+	}
+	return books, nil
+}
+
+func CreateChapter(info *Chapter) error {
+	now := time.Now().Unix()
+	info.CreatedAt = now
+	info.UpdatedAt = now
+	
+	_, err := x.Insert(info)
+	if err != nil {
+		holmes.Error("create Chapter error: %v", err)
+		return err
+	}
+	holmes.Info("create Chapter[%d %s] success.", info.BookId, info.Title)
+	
+	return nil
+}
+
+func DelChapter(info *Chapter) error {
+	if info.ID == 0 {
+		return fmt.Errorf("del id cannot be nil.")
+	}
+	_, err := x.ID(info.ID).Delete(info)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdateChapter(info *Chapter) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols("index_id", "title", "cover", "content", "updated_at").Update(info)
+	return err
+}
+
+func GetChapter(info *Chapter) (bool, error) {
+	has, err := x.Id(info.ID).Get(info)
+	if err != nil {
+		return false, err
+	}
+	if !has {
+		return false, nil
+	}
+	return true, nil
+}
+
+func GetChapterList(bookId int64) ([]Chapter, error) {
+	var chapters []Chapter
+	err := x.Where("book_id = ?", bookId).Find(&chapters)
+	if err != nil {
+		return nil, err
+	}
+	return chapters, nil
 }
