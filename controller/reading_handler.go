@@ -121,6 +121,10 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		self.courseHandle(rr, w, r)
 		return
 	}
+	if strings.HasPrefix(rr.Path, READING_COURSE_MANAGER_URI_PREFIX) {
+		self.courseManagerHandle(rr, w, r)
+		return
+	}
 
 	switch rr.Path {
 	case READING_URI_SIGN_UP:
