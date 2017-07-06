@@ -928,7 +928,7 @@ func parseRequest(r *http.Request) (*HandlerRequest, error) {
 }
 
 func writeRsp(w http.ResponseWriter, rsp *proto.Response) {
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST")
 	w.Header().Set("Access-Control-Allow-Headers", "x-requested-with,content-type")
 	w.Header().Set("Content-Type", "application/json")
