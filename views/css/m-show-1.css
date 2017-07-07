@@ -34,6 +34,8 @@ body{color: #333; font-family: Microsoft Yahei;}
 .mt30{margin-top: 30px;}
 .mt40{margin-top: 40px;}
 
+.mb50{margin-bottom: 50px;}
+
 .pt{padding-top: 10px;}
 .pt20{padding-top: 20px;}
 .pt30{padding-top: 30px;}
@@ -109,7 +111,8 @@ body{color: #333; font-family: Microsoft Yahei;}
 .academy-footer{position: fixed; padding: 4px 0 0; width: 100%; bottom: 0; display: -webkit-box; display: box; text-align: center;}
 .academy-footer > span{display: block; -webkit-box-flex: 1; box-flex: 1; height: 44px; line-height: 40px;}
 .academy-pay{background: #fff; box-shadow: #abe9ff 0 -1px 4px;}
-.academy-invite{background: #52d2ff; box-shadow: #fff 0 -1px 4px; color: #fff;}
+.academy-invite{background: #f76e6c; box-shadow: #fff 0 -1px 4px; color: #fff;}
+.academy-not-start{background: #5e5d5e; box-shadow: #fff 0 -1px 4px; color: #fff;}
 
 /* lesson */
 

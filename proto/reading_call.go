@@ -20,6 +20,25 @@ type BookReq struct {
 	BookId int64 `json:"bookId"`
 }
 
+type CourseReq struct {
+	CourseId int64 `json:"courseId"`
+}
+
+type MonthCourseReq struct {
+	CourseId      int64 `json:"courseId"`
+	MonthCourseId int64 `json:"monthCourseId"`
+}
+
+type MonthCourseBookReq struct {
+	CourseId      int64 `json:"courseId"`
+	MonthCourseId int64 `json:"monthCourseId"`
+	BookId        int64 `json:"bookId"`
+}
+
+type MonthCourseCatalogReq struct {
+	MonthCourseCatalogId int64 `json:"monthCourseCatalogId"`
+}
+
 // about response
 type ReadingPayToday struct {
 	OrderNum int64 `json:"orderNum"`

@@ -33,6 +33,8 @@ const (
 	READING_COURSE_URI_ATTENDANCE        = "attendance"
 	READING_COURSE_URI_ATTENDANCE_DETAIL = "attendancedetail"
 	READING_COURSE_URI_REMIND            = "remind"
+	READING_COURSE_URI_SHARE             = "share"
+	READING_COURSE_URI_SHARE_TO          = "shareto"
 )
 
 func (self *ReadingHandler) courseHandle(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
@@ -63,6 +65,10 @@ func (self *ReadingHandler) courseHandle(rr *HandlerRequest, w http.ResponseWrit
 		self.readingCourseAttendanceDetail(rr, w, r)
 	case READING_COURSE_URI_REMIND:
 		self.readingCourseRemind(rr, w, r)
+	case READING_COURSE_URI_SHARE:
+		self.readingCourseShare(rr, w, r)
+	case READING_COURSE_URI_SHARE_TO:
+		self.readingCourseShareTo(rr, w, r)
 	}
 }
 
@@ -144,6 +150,58 @@ type UserInfo struct {
 	OpenId    string
 	Name      string
 	AvatarUrl string
+}
+
+func (self *ReadingHandler) checkUserBase(w http.ResponseWriter, r *http.Request) (ui *UserInfo, ifRedirect bool) {
+	ui = &UserInfo{}
+	
+	defer func() {
+		if ui.OpenId != "" {
+			// set cookie
+			http.SetCookie(w, &http.Cookie{
+				Name:    "user",
+				Value:   ui.OpenId,
+				Path:    "/",
+				Expires: time.Now().Add(time.Hour),
+			})
+		}
+	}()
+	
+	// get cookie
+	cookie, err := r.Cookie("user")
+	if err == nil {
+		ui.OpenId = cookie.Value
+		holmes.Debug("get user[%s] from cookie", ui.OpenId)
+		return
+	}
+
+	holmes.Debug("start to redirect oauth,")
+	queryValues, err := url.ParseQuery(r.URL.RawQuery)
+	if err != nil {
+		holmes.Error("url parse query error: %v", err)
+		return
+	}
+	
+	code := queryValues.Get("code")
+	if code == "" {
+		state := string(rand.NewHex())
+		redirectUrl := fmt.Sprintf("http://%s%s", r.Host, r.URL.String())
+		AuthCodeURL := mpoauth2.AuthCodeURL(self.l.cfg.ReadingOauth.ReadingWxAppId,
+			redirectUrl,
+			self.l.cfg.ReadingOauth.ReadingOauth2ScopeBase, state)
+		ifRedirect = true
+		http.Redirect(w, r, AuthCodeURL, http.StatusFound)
+		return
+	}
+	
+	token, err := self.oauth2Client.ExchangeToken(code)
+	if err != nil {
+		ifRedirect = true
+		http.Redirect(w, r, fmt.Sprintf("http://%s%s", r.Host, r.URL.Path), http.StatusFound)
+		return
+	}
+	ui.OpenId = token.OpenId
+	return
 }
 
 func (self *ReadingHandler) checkUser(w http.ResponseWriter, r *http.Request, ifNeedInfo bool) (ui *UserInfo, ifRedirect bool) {
@@ -372,7 +430,7 @@ func (self *ReadingHandler) readingCourseIndex(rr *HandlerRequest, w http.Respon
 			courseDetail.TodayCatalogs[i].IfCheck = 1
 		}
 	}
-	
+
 	monthCourses, err := models.GetMonthCourseList(courseDetail.CourseId)
 	if err != nil {
 		holmes.Error("get month course list error: %v", err)
@@ -515,7 +573,7 @@ func (self *ReadingHandler) readingCourseChapterDetail(rr *HandlerRequest, w htt
 		// todo: redirect to sign
 		return
 	}
-	
+
 	catalogs, err := models.GetMonthCourseCatalogFromBook(catalogDetailList.BookId)
 	if err != nil {
 		holmes.Error("get month course catalog from book error: %v", err)
@@ -527,7 +585,7 @@ func (self *ReadingHandler) readingCourseChapterDetail(rr *HandlerRequest, w htt
 		if catalogs[i].ID == catalogDetailList.CatalogId {
 			ifHas = true
 			catalogDetailList.MonthCourseCatalog = catalogs[i]
-			if i < (len(catalogs)-1) {
+			if i < (len(catalogs) - 1) {
 				nextCatalogId = catalogs[i+1].ID
 			}
 			break
@@ -549,7 +607,7 @@ func (self *ReadingHandler) readingCourseChapterDetail(rr *HandlerRequest, w htt
 			return
 		}
 	}
-	
+
 	catalogDetailList.MonthCourseCatalogAudio.MonthCourseCatalogId = catalogDetailList.CatalogId
 	has, err := models.GetMonthCourseCatalogAudio(&catalogDetailList.MonthCourseCatalogAudio)
 	if err != nil {
@@ -559,7 +617,21 @@ func (self *ReadingHandler) readingCourseChapterDetail(rr *HandlerRequest, w htt
 	if has {
 		catalogDetailList.AudioTime = fmt.Sprintf("%2d:%2d", catalogDetailList.MonthCourseCatalogAudio.AudioTime/60, catalogDetailList.MonthCourseCatalogAudio.AudioTime%60)
 	}
-	
+
+	userCourseCheckin := &models.UserCourseCheckin{
+		UserId:               catalogDetailList.UserId,
+		CourseId:             catalogDetailList.CourseId,
+		MonthCourseCatalogId: catalogDetailList.MonthCourseCatalog.ID,
+	}
+	has, err = models.GetUserCourseCheckFromUCM(userCourseCheckin)
+	if err != nil {
+		holmes.Error("get user course check from ucm error: %v", err)
+		return
+	}
+	if has {
+		catalogDetailList.IfChecked = 1
+	}
+
 	catalogDetailList.TaskTime = time.Unix(catalogDetailList.MonthCourseCatalog.TaskTime, 0).Format("2006-01-02")
 	catalogDetailList.ChapterDetailList, err = models.GetCourseBookCatalogDetailList(catalogDetailList.CatalogId)
 	if err != nil {
@@ -574,7 +646,7 @@ func (self *ReadingHandler) readingCourseChapterDetail(rr *HandlerRequest, w htt
 func (self *ReadingHandler) readingCourseMyself(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
 	//openId := TEST_OPEN_ID
 
-	userinfo, ifRedirect := self.checkUser(w, r, false)
+	userinfo, ifRedirect := self.checkUser(w, r, true)
 	if ifRedirect {
 		return
 	}
@@ -687,4 +759,83 @@ func (self *ReadingHandler) readingCourseAttendanceDetail(rr *HandlerRequest, w 
 
 func (self *ReadingHandler) readingCourseRemind(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
 	renderView(w, "./views/course/course_remind.html", nil)
+}
+
+func (self *ReadingHandler) readingCourseShare(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	userinfo, ifRedirect := self.checkUser(w, r, false)
+	if ifRedirect {
+		return
+	}
+	
+	if len(rr.Params) < 3 {
+		holmes.Error("params error: %v", rr.Params)
+		return
+	}
+	
+	var err error
+	courseShare := new(CourseShare)
+	courseShare.UserId, err = strconv.ParseInt(rr.Params[1], 10, 0)
+	if err != nil {
+		holmes.Error("params[1][%s] strconv error: %v", rr.Params[1], err)
+		return
+	}
+	courseShare.CourseId, err = strconv.ParseInt(rr.Params[2], 10, 0)
+	if err != nil {
+		holmes.Error("params[2][%s] strconv error: %v", rr.Params[2], err)
+		return
+	}
+	if !self.checkUserCourse(userinfo.OpenId, courseShare.UserId, courseShare.CourseId) {
+		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, courseShare.UserId)
+		// todo: redirect to sign
+		return
+	}
+	
+	courseShare.DayNum, err = models.GetUserCourseCheckinCount(courseShare.UserId, courseShare.CourseId)
+	if err != nil {
+		holmes.Error("get user course checkin count error: %v", err)
+		return
+	}
+	
+	courseShare.JssdkInfo.Url = fmt.Sprintf("http://%s%s", r.Host, r.URL.String())
+	self.l.wc.JssdkSign(&courseShare.JssdkInfo)
+	courseShare.OpenId = userinfo.OpenId
+	courseShare.AppId = self.l.cfg.ReadingOauth.ReadingWxAppId
+	
+	renderView(w, "./views/course/course_share.html", courseShare)
+}
+
+func (self *ReadingHandler) readingCourseShareTo(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	userinfo, ifRedirect := self.checkUserBase(w, r)
+	if ifRedirect {
+		return
+	}
+	
+	queryValues, err := url.ParseQuery(r.URL.RawQuery)
+	if err != nil {
+		holmes.Error("url parse query error: %v", err)
+		return
+	}
+	openid := queryValues.Get("openid")
+	
+	courseShareInfo := new(CourseShareInfo)
+	user := &models.User{
+		OpenId: openid,
+	}
+	has, err := models.GetUserFromOpenid(user)
+	if err != nil {
+		holmes.Error("get user from openid error: %v", err)
+		return
+	}
+	if !has {
+		holmes.Error("cannot found this man[%s]", openid)
+		return
+	}
+	courseShareInfo.OpenId = userinfo.OpenId
+	courseShareInfo.NickName = user.Name
+	courseShareInfo.AvatarUrl = user.AvatarUrl
+	courseShareInfo.AppId = self.l.cfg.ReadingOauth.ReadingWxAppId
+	courseShareInfo.JssdkInfo.Url = fmt.Sprintf("http://%s%s", r.Host, r.URL.String())
+	self.l.wc.JssdkSign(&courseShareInfo.JssdkInfo)
+	
+	renderView(w, "./views/course/course_share_to.html", courseShareInfo)
 }

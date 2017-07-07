@@ -22,3 +22,10 @@ type HomeworkRemindTplMsg struct {
 	Keyword3 *template.DataItem `json:"keyword3"`
 	Remark   *template.DataItem `json:"remark"`
 }
+
+type JssdkInfo struct {
+	NonceStr  string
+	Timestamp string
+	Sign      string
+	Url       string
+}

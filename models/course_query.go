@@ -22,9 +22,27 @@ func GetMonthCourseList(courseId int64) ([]MonthCourse, error) {
 	return courses, nil
 }
 
-func GetMonthCourseCatalogList(courseId, monthCourseId int64) ([]MonthCourseCatalog, error) {
+func GetMonthCourseBookList(courseId, monthCourseId int64) ([]MonthCourseBook, error) {
+	var list []MonthCourseBook
+	err := x.Where("course_id = ?", courseId).And("month_course_id = ?", monthCourseId).OrderBy("index_id").Find(&list)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
+func GetMonthCourseCatalogList(courseId, monthCourseId, bookId int64) ([]MonthCourseCatalog, error) {
 	var list []MonthCourseCatalog
-	err := x.Where("course_id = ?", courseId).And("month_course_id = ?", monthCourseId).Find(&list)
+	err := x.Where("course_id = ?", courseId).And("month_course_id = ?", monthCourseId).And("book_id = ?", bookId).OrderBy("index_id").Find(&list)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
+func GetMonthCourseCatalogChapterList(monthCourseCatalogId int64) ([]MonthCourseCatalogChapter, error) {
+	var list []MonthCourseCatalogChapter
+	err := x.Where("month_course_catalog_id = ?", monthCourseCatalogId).OrderBy("index_id").Find(&list)
 	if err != nil {
 		return nil, err
 	}

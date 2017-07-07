@@ -773,7 +773,7 @@ func (self *ReadingHandler) readingSuccess(rr *HandlerRequest, w http.ResponseWr
 		return
 	}
 	for _, v := range userCourseList {
-		if v.Course.ID == READING_COURSE_TYPE_GD {
+		if v.Course.CourseType == READING_COURSE_TYPE_GD {
 			readingUserInfo := &ReadingEnrollUserInfo{
 				NickName:   v.User.Name,
 				AvatarUrl:  v.User.AvatarUrl,
@@ -782,6 +782,9 @@ func (self *ReadingHandler) readingSuccess(rr *HandlerRequest, w http.ResponseWr
 				CourseNum:  v.Course.CourseNum,
 				StartTime:  time.Unix(v.Course.StartTime, 0).Format("2006.01.02"),
 				EndTime:    time.Unix(v.Course.EndTime, 0).Format("2006.01.02"),
+			}
+			if v.Course.StartTime <= time.Now().Unix() {
+				readingUserInfo.IfCourseStart = 1
 			}
 			renderView(w, "./views/reading_sign_success.html", readingUserInfo)
 			return
@@ -824,6 +827,9 @@ func (self *ReadingHandler) readingSuccess(rr *HandlerRequest, w http.ResponseWr
 		CourseNum:  course.CourseNum,
 		StartTime:  time.Unix(course.StartTime, 0).Format("2006.01.02"),
 		EndTime:    time.Unix(course.EndTime, 0).Format("2006.01.02"),
+	}
+	if course.StartTime <= time.Now().Unix() {
+		readingUserInfo.IfCourseStart = 1
 	}
 	renderView(w, "./views/reading_sign_success.html", readingUserInfo)
 	// --- end ---

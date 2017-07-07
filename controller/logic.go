@@ -15,6 +15,7 @@ type Logic struct {
 	sync.Mutex
 
 	robotExt *ext.RobotExt
+	wc       *WechatController
 
 	cfg *config.Config
 }
@@ -45,7 +46,8 @@ func (self *Logic) Run() {
 		EnableDebug()
 	}
 	
-	NewRemindWorker(self.cfg)
+	self.wc = NewWechatController(self.cfg)
+	NewRemindWorker(self.cfg, self.wc)
 
 	mux := http.NewServeMux()
 	mux.Handle(ReadingPrefix+"/", NewReadingHandler(self))

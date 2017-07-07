@@ -1,0 +1,188 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <title>一起学习吧</title>
+    <meta charset="utf-8" >
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="keywords" content="" >
+    <meta name="description" content="" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" >
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="/reading/m-main.css" >
+    <link rel="stylesheet" href="/reading/m-show-1.css" >
+    <link rel="stylesheet" href="/reading/m-sy.css" >
+</head>
+<body>
+
+<style>
+    .prompt-p{word-break: break-all;}
+</style>
+
+<style>
+html, body{height: 100%;}
+
+.shareto-box{position: absolute; width: 100%; height: 100%; left: 0; top: 0; background: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/share.png') no-repeat; background-size: 100% 100%;}
+.shareto-info{position: absolute; top: 30px; left: 0; padding: 10px 12px 10px 8px; border-radius: 0 30px 30px 0; height: 40px; line-height: 40px; background: #f76e6c; -webkit-transition: all .2s; transition: all .2s;}
+.shareto-btn{position: absolute; width: 80%; height: 40px; left: 50%; margin-left: -40%; bottom: 20px; line-height: 40px; color: #fff; font-size: 16px; text-align: center; border-radius: 10px; background: #f13652;}
+
+.shareto-go{position: absolute; width: 55px; height: 55px; left: 63%; bottom: 25%; line-height: 40px; color: #fff; font-size: 16px; text-align: center; border-radius: 10px; background: #f68b00; box-shadow: #ed5f00 0 3px 0 1px; }
+.shareto-go img{width: 100%; height: 100%; vertical-align: top;}
+
+.shareto-info > span{margin: 0 0 0 4px; color: #fff;}
+.shareto-info > img{width: 40px; height: 40px; border-radius: 20px; vertical-align: top;}
+
+@media (max-width: 380px){
+    .shareto-info{height: 35px; line-height: 35px; padding: 6px 12px 6px 8px;}
+    .shareto-info > img{width: 35px; height: 35px;}
+
+    .shareto-go{width: 45px; height: 45px;}
+
+}
+
+@media (max-width: 320px){
+    .shareto-info{height: 30px; line-height: 30px; padding: 4px 12px 4px 8px;}
+    .shareto-info > img{width: 30px; height: 30px;}
+
+    .shareto-go{width: 35px; height: 35px;}
+}
+
+</style>
+
+<section id="app00">
+
+    <section class="shareto-box">
+        <div class="shareto-info"><img src="{{.AvatarUrl}}"> <span>{{.NickName}}</span></div>
+        <span class="shareto-btn" onclick="doAccept()">点击加入</span>
+        <span class="shareto-go" onclick="doGoto()"><img src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/enter.png"></span>
+    </section>
+
+</section>
+
+<script>
+
+function doAccept() {
+    location.assign('/reading/enroll');
+}
+
+function doGoto() {
+    location.assign('/reading/signup');
+}
+
+</script>
+
+
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+<script>
+
+var shareOpts = {
+    tit: '我正在小鹿微课，快来和我一起进行6个月读书计划吧',
+    des: '【小鹿微课】携手同学们为期6个月一起读书计划，为大家设计科学的学习体系与经典书单，在6个月里，每天坚持20分钟在线阅读，每周读完一本书，课程结束后大家一起吸收24本书的精华内容，并且能从各个同学的不同思维引发更多的思考与学习，完善自己的思维能力及知识体系，做更好的自己',
+    link: 'http://reading.dingjiantaoke.cn/reading/course/shareto?openid={{.OpenId}}' || location.href,
+    pic: 'http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/xlwk-180X180.png'
+
+};
+
+(function(){
+
+    var WC,
+            appId, timestamp1, nonceStr, signature;
+
+    timestamp1 = 0;
+    appId = nonceStr = signature = '';
+
+
+if(window.shareOpts) initShareConfig(shareOpts);
+
+function initShareConfig(opts){
+
+    wx.config({
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: '{{.AppId}}', // 必填，公众号的唯一标识
+        timestamp: '{{.JssdkInfo.Timestamp}}', // 必填，生成签名的时间戳
+        nonceStr: '{{.JssdkInfo.NonceStr}}', // 必填，生成签名的随机串
+        signature: '{{.JssdkInfo.Sign}}',// 必填，签名，见附录1
+        jsApiList: ['hideAllNonBaseMenuItem', 'closeWindow', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'showMenuItems', 'hideMenuItems'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+
+    wx.ready(function(){
+
+        // 报名页面使用
+        if(window.GLOBALDOPAYELEMENT){
+            app00.abledDoPayFlag = true;
+        }
+
+        // 今日首页 - 等待开班 - 等待开学
+        if(window.$wxCloseBtn){
+            $wxCloseBtn[0].onclick = function(){
+                wx.closeWindow();
+            }
+        }
+
+        // 朋友圈
+        wx.onMenuShareTimeline({
+            title: opts.tit, // 分享标题
+            link: opts.link, // 分享链接
+            imgUrl: opts.pic, // 分享图标
+            success: function () {
+
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+        // 朋友
+        wx.onMenuShareAppMessage({
+            title: opts.tit, // 分享标题
+            desc: opts.des, // 分享描述
+            link: opts.link, // 分享链接
+            imgUrl: opts.pic, // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+        //wx.hideAllNonBaseMenuItem();      // 隐藏所有非基础按钮接口
+
+        wx.showMenuItems({
+            menuList: [
+                'menuItem:share:appMessage',
+                'menuItem:share:timeline'
+            ] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        });
+
+        wx.hideMenuItems({
+            menuList: ['menuItem:share:qq',
+                'menuItem:share:weiboApp',
+                'menuItem:favorite',
+                'menuItem:share:facebook',
+                'menuItem:share:QZone',
+
+                'menuItem:copyUrl',
+                'menuItem:openWithQQBrowser',
+                'menuItem:openWithSafari'
+            ] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        });
+
+    });
+
+}
+
+})();
+
+
+</script>
+
+</body>
+</html>

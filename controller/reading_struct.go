@@ -17,6 +17,7 @@ type ReadingEnrollUserInfo struct {
 
 	CourseType     int64
 	CourseNum      int64
+	IfCourseStart  int64
 	StartTime      string
 	EndTime        string
 	IndexStartTime string

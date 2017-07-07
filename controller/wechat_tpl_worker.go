@@ -22,9 +22,10 @@ type WechatTplWorker struct {
 	stop chan struct{}
 }
 
-func NewWechatTplWorker(cfg *config.Config) *WechatTplWorker {
+func NewWechatTplWorker(cfg *config.Config, wc *WechatController) *WechatTplWorker {
 	wtw := &WechatTplWorker{
 		cfg:     cfg,
+		wc:      wc,
 		msgChan: make(chan *TplMsg, 10240),
 		stop:    make(chan struct{}),
 	}
@@ -33,7 +34,6 @@ func NewWechatTplWorker(cfg *config.Config) *WechatTplWorker {
 	} else {
 		wtw.WorkerNum = cfg.TplWorkerNum
 	}
-	wtw.wc = NewWechatController(cfg)
 	
 	for i := 0; i < wtw.WorkerNum; i++ {
 		wtw.wg.Add(1)

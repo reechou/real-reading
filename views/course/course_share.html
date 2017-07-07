@@ -1,0 +1,161 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <title>小鹿微课</title>
+    <meta charset="utf-8" >
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="keywords" content="" >
+    <meta name="description" content="" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" >
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="/reading/m-main.css" >
+
+    <style>
+/* meida show-box */
+@media (max-height: 750px){
+    .media-day-num{font-size: 140px;line-height: 140px; margin: 24px auto}
+    .media-share-card{margin: 110px auto 30px;}
+}
+@media (max-height: 680px){
+    .media-day-num{font-size: 130px;line-height: 130px; margin: 18px auto}
+    .media-share-card{margin: 90px auto 24px;}
+}
+@media (max-height: 580px){
+    .media-day-num{font-size: 110px;line-height: 110px; margin: 14px auto}
+    .media-share-card{margin: 80px auto 24px;}
+}
+@media (max-height: 480px){
+    .media-day-num{font-size: 100px;line-height: 100px;margin: 10px auto}
+    .media-share-card{margin: 30px auto 24px;}
+}
+
+.head-card{margin: 30px auto 0;width: 100%;text-align:center;font-size: 20px;background: url("http://img.caizhu.com/jhsy/images/mv1/punch_ic_blackground_normal.png") no-repeat center;background-size: contain}
+.head-card img{margin: 0 14px 3px 0;width: 20px;display: inline-block;}
+.day-num{text-align: center;color:#f76e6c ;font-weight: bold;}
+.day-word{margin: 0 auto 24px; padding-bottom: 30px;text-align: center;width: 90%;border-bottom: 1px solid #f3f0f0;font-size: 18px;}
+.read-num,.read-word{width: 86%;margin: 0 auto 2px;}
+.read-num div{float: left;width: 50%;text-align: center;font-size: 16px;font-weight: bold}
+.read-word div{float: left;width: 50%;text-align: center;font-size: 18px;color: #c8c8c8;}
+.share-card{width: 50%;height:40px;border:1px solid #f76e6c;color:#f76e6c;border-radius: 20px; text-align: center;line-height: 40px;font-size: 16px}
+.read-heart{text-align: center;color:#52d2ff;font-size: 16px}
+.share-tip {position: fixed;left: 0;bottom: 0;width: 100%;height: 100%;background: rgba(10, 10, 10, .8) url(http://img.caizhu.com/jhsy/images/mv1/share.png) no-repeat top 20px right 20px;z-index: 1;background-size: 80% auto;}
+</style>
+</head>
+
+<body>
+
+<section id="app00">
+
+    <div class="head-card" ><img src="http://img.caizhu.com/jhsy/images/mv1/punch_ic_succeed_normal.png" alt="tick图标">打卡成功</div>
+    <div class="day-num media-day-num">{{ .DayNum }}</div>
+    <p class="day-word">坚持打卡天数</p>
+    <div class="share-card media-share-card" onclick="showTips()">打卡分享</div>
+    <div id="tip-id" style="display: none;" class="share-tip" onclick="closeTips()"></div>
+
+</section>
+
+<div id="defined-prompt"><defined-prompt :flag="flag" :tipStr="tipstr" :cancelstr="cancelstr" :okStr="okstr" :cancelFlag="cancelflag" :callback="callback" :cancelcallback="cancelcallback" :closeflag="closeflag"></defined-prompt></div>
+
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+<script>
+
+function showTips() {
+    document.getElementById("tip-id").style.display="";
+}
+
+function closeTips() {
+    document.getElementById("tip-id").style.display="none";
+}
+
+var shareOpts = {
+    tit: '我已经在小鹿微课坚持读书{{.DayNum}}天，来和我一起读书吧。',
+    des: '【小鹿微课】携手同学们为期6个月一起读书计划，为大家设计科学的学习体系与经典书单，在6个月里，每天坚持20分钟在线阅读，每周读完一本书，课程结束后大家一起吸收24本书的精华内容，并且能从各个同学的不同思维引发更多的思考与学习，完善自己的思维能力及知识体系，做更好的自己',
+    link: 'http://reading.dingjiantaoke.cn/reading/course/shareto?openid={{.OpenId}}' || location.href,
+    pic: 'http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/xlwk-180X180.png'
+
+};
+
+(function(){
+    if(window.shareOpts) initShareConfig(shareOpts);
+    function initShareConfig(opts){
+
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: '{{.AppId}}', // 必填，公众号的唯一标识
+            timestamp: '{{.JssdkInfo.Timestamp}}', // 必填，生成签名的时间戳
+            nonceStr: '{{.JssdkInfo.NonceStr}}', // 必填，生成签名的随机串
+            signature: '{{.JssdkInfo.Sign}}',// 必填，签名，见附录1
+            jsApiList: ['hideAllNonBaseMenuItem', 'closeWindow', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'showMenuItems', 'hideMenuItems'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+
+        wx.ready(function(){
+
+            // 朋友圈
+            wx.onMenuShareTimeline({
+                title: opts.tit, // 分享标题
+                link: opts.link, // 分享链接
+                imgUrl: opts.pic, // 分享图标
+                success: function () {
+
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+
+            // 朋友
+            wx.onMenuShareAppMessage({
+                title: opts.tit, // 分享标题
+                desc: opts.des, // 分享描述
+                link: opts.link, // 分享链接
+                imgUrl: opts.pic, // 分享图标
+                type: '', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+
+            //wx.hideAllNonBaseMenuItem();      // 隐藏所有非基础按钮接口
+
+            wx.showMenuItems({
+                menuList: [
+                    'menuItem:share:appMessage',
+                    'menuItem:share:timeline'
+                ] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+            });
+
+            wx.hideMenuItems({
+                menuList: ['menuItem:share:qq',
+                    'menuItem:share:weiboApp',
+                    'menuItem:favorite',
+                    'menuItem:share:facebook',
+                    'menuItem:share:QZone',
+
+                    'menuItem:copyUrl',
+                    'menuItem:openWithQQBrowser',
+                    'menuItem:openWithSafari'
+                ] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+            });
+
+            // wxCallBack();
+        });
+
+    }
+
+})();
+
+</script>
+
+</body>
+</html>

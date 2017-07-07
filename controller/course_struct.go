@@ -62,6 +62,7 @@ type CourseCatalogDetailList struct {
 	AudioTime         string
 	PrevCatalogId     int64
 	NextCatalogId     int64
+	IfChecked         int64
 	TaskTime          string
 	ChapterDetailList []models.CourseBookCatalogDetail
 	OpenId            string
@@ -69,6 +70,23 @@ type CourseCatalogDetailList struct {
 	CourseId          int64
 	BookId            int64
 	CatalogId         int64
+}
+
+type CourseShare struct {
+	DayNum   int64
+	UserId   int64
+	CourseId int64
+	OpenId   string
+	AppId    string
+	JssdkInfo
+}
+
+type CourseShareInfo struct {
+	NickName  string
+	AvatarUrl string
+	OpenId    string
+	AppId     string
+	JssdkInfo
 }
 
 // course attendance

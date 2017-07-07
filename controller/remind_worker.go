@@ -33,7 +33,7 @@ type RemindWorker struct {
 	stop chan struct{}
 }
 
-func NewRemindWorker(cfg *config.Config) *RemindWorker {
+func NewRemindWorker(cfg *config.Config, wc *WechatController) *RemindWorker {
 	rw := &RemindWorker{
 		cfg:        cfg,
 		remindChan: make(chan *RemindInfo, 256),
@@ -48,7 +48,7 @@ func NewRemindWorker(cfg *config.Config) *RemindWorker {
 		holmes.Error("course remind cron time is nil, maybe remind not used.")
 		return rw
 	}
-	rw.wtw = NewWechatTplWorker(cfg)
+	rw.wtw = NewWechatTplWorker(cfg, wc)
 	
 	go rw.do()
 

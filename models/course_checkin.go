@@ -40,3 +40,12 @@ func GetUserCourseCheckFromUCM(info *UserCourseCheckin) (bool, error) {
 	}
 	return true, nil
 }
+
+func GetUserCourseCheckinCount(userId, courseId int64) (int64, error) {
+	count, err := x.Where("user_id = ?", userId).And("course_id = ?", courseId).Count(&UserCourseCheckin{})
+	if err != nil {
+		holmes.Error("get user course checkin list count error: %v", err)
+		return 0, err
+	}
+	return count, nil
+}

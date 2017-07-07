@@ -23,7 +23,7 @@ type Course struct {
 
 type MonthCourse struct {
 	ID           int64  `xorm:"pk autoincr" json:"id"`
-	CourseId     int64  `xorm:"not null default 0 int" json:"courseId"`
+	CourseId     int64  `xorm:"not null default 0 int index" json:"courseId"`
 	IndexId      int64  `xorm:"not null default 0 int index" json:"indexId"`
 	Year         int64  `xorm:"not null default 0 int" json:"year"`
 	Month        int64  `xorm:"not null default 0 int" json:"month"`
@@ -36,7 +36,7 @@ type MonthCourse struct {
 
 type MonthCourseBook struct {
 	ID            int64 `xorm:"pk autoincr" json:"id"`
-	CourseId      int64 `xorm:"not null default 0 int" json:"courseId"`
+	CourseId      int64 `xorm:"not null default 0 int index" json:"courseId"`
 	MonthCourseId int64 `xorm:"not null default 0 int index" json:"monthCourseId"`
 	BookId        int64 `xorm:"not null default 0 int" json:"bookId"`
 	IndexId       int64 `xorm:"not null default 0 int index" json:"indexId"`
@@ -46,7 +46,7 @@ type MonthCourseBook struct {
 
 type MonthCourseCatalog struct {
 	ID            int64  `xorm:"pk autoincr" json:"id"`
-	CourseId      int64  `xorm:"not null default 0 int" json:"courseId"`
+	CourseId      int64  `xorm:"not null default 0 int index" json:"courseId"`
 	MonthCourseId int64  `xorm:"not null default 0 int index" json:"monthCourseId"`
 	BookId        int64  `xorm:"not null default 0 int index" json:"bookId"`
 	IndexId       int64  `xorm:"not null default 0 int index" json:"indexId"`
@@ -124,6 +124,24 @@ func CreateMonthCourse(info *MonthCourse) error {
 	return nil
 }
 
+func DelMonthCourse(info *MonthCourse) error {
+	if info.ID == 0 {
+		return fmt.Errorf("del id cannot be nil.")
+	}
+	_, err := x.ID(info.ID).Delete(info)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdateMonthCourse(info *MonthCourse) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols("course_id", "index_id", "year", "month",
+		"month_en", "title", "introduction", "updated_at").Update(info)
+	return err
+}
+
 func CreateMonthCourseBook(info *MonthCourseBook) error {
 	now := time.Now().Unix()
 	info.CreatedAt = now
@@ -137,6 +155,23 @@ func CreateMonthCourseBook(info *MonthCourseBook) error {
 	holmes.Info("create month course book[%v] success.", info)
 
 	return nil
+}
+
+func DelMonthCourseBook(info *MonthCourseBook) error {
+	if info.ID == 0 {
+		return fmt.Errorf("del id cannot be nil.")
+	}
+	_, err := x.ID(info.ID).Delete(info)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdateMonthCourseBook(info *MonthCourseBook) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols("course_id", "month_course_id", "book_id", "index_id", "updated_at").Update(info)
+	return err
 }
 
 func CreateMonthCourseCatalog(info *MonthCourseCatalog) error {
@@ -154,6 +189,24 @@ func CreateMonthCourseCatalog(info *MonthCourseCatalog) error {
 	return nil
 }
 
+func DelMonthCourseCatalog(info *MonthCourseCatalog) error {
+	if info.ID == 0 {
+		return fmt.Errorf("del id cannot be nil.")
+	}
+	_, err := x.ID(info.ID).Delete(info)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdateMonthCourseCatalog(info *MonthCourseCatalog) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols("course_id", "month_course_id", "book_id", "index_id",
+		"title", "task_time", "updated_at").Update(info)
+	return err
+}
+
 func CreateMonthCourseCatalogChapter(info *MonthCourseCatalogChapter) error {
 	now := time.Now().Unix()
 	info.CreatedAt = now
@@ -166,6 +219,29 @@ func CreateMonthCourseCatalogChapter(info *MonthCourseCatalogChapter) error {
 	}
 	holmes.Info("create month course catalog chapter[%v] success.", info)
 
+	return nil
+}
+
+func CreateMonthCourseCatalogChapterList(list []MonthCourseCatalogChapter) error {
+	if len(list) == 0 {
+		return nil
+	}
+	_, err := x.Insert(&list)
+	if err != nil {
+		holmes.Error("create month course catalog chapter list error: %v", err)
+		return err
+	}
+	return nil
+}
+
+func DelMonthCourseCatalogChapter(info *MonthCourseCatalogChapter) error {
+	if info.ID == 0 {
+		return fmt.Errorf("del id cannot be nil.")
+	}
+	_, err := x.ID(info.ID).Delete(info)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
