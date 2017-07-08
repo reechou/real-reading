@@ -90,6 +90,37 @@ func (self *ReadingHandler) courseManagerUpdateBook(rr *HandlerRequest, w http.R
 	}
 }
 
+func (self *ReadingHandler) courseManagerGetChapter(rr *HandlerRequest, w http.ResponseWriter, r *http.Request)  {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &proto.ChapterReq{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	
+	chapter := &models.Chapter{
+		ID: req.ChapterId,
+	}
+	has, err := models.GetChapter(chapter)
+	if err != nil {
+		holmes.Error("get chapter list error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	if !has {
+		holmes.Error("this chapter[%d] cannot found", req.ChapterId)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	rsp.Data = chapter
+}
+
 func (self *ReadingHandler) courseManagerGetChapterList(rr *HandlerRequest, w http.ResponseWriter, r *http.Request)  {
 	rsp := &proto.Response{Code: proto.RESPONSE_OK}
 	defer func() {

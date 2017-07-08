@@ -20,6 +20,10 @@ type BookReq struct {
 	BookId int64 `json:"bookId"`
 }
 
+type ChapterReq struct {
+	ChapterId int64 `json:"chapterId"`
+}
+
 type CourseReq struct {
 	CourseId int64 `json:"courseId"`
 }

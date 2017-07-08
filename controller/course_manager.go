@@ -16,6 +16,7 @@ const (
 	READING_COURSE_MANAGER_URI_CREATE_BOOK        = "createbook"
 	READING_COURSE_MANAGER_URI_DELETE_BOOK        = "deletebook"
 	READING_COURSE_MANAGER_URI_UPDATE_BOOK        = "updatebook"
+	READING_COURSE_MANAGER_URI_GET_CHAPTER        = "getchapter"
 	READING_COURSE_MANAGER_URI_GET_CHAPTERS       = "getchapterlist"
 	READING_COURSE_MANAGER_URI_CREATE_CHAPTER     = "createchapter"
 	READING_COURSE_MANAGER_URI_DELETE_CHAPTER     = "deletechapter"
@@ -74,6 +75,8 @@ func (self *ReadingHandler) courseManagerHandle(rr *HandlerRequest, w http.Respo
 		self.courseManagerDeleteBook(rr, w, r)
 	case READING_COURSE_MANAGER_URI_UPDATE_BOOK:
 		self.courseManagerUpdateBook(rr, w, r)
+	case READING_COURSE_MANAGER_URI_GET_CHAPTER:
+		self.courseManagerGetChapter(rr, w, r)
 	case READING_COURSE_MANAGER_URI_GET_CHAPTERS:
 		self.courseManagerGetChapterList(rr, w, r)
 	case READING_COURSE_MANAGER_URI_CREATE_CHAPTER:
