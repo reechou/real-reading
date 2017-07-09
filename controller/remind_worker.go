@@ -49,14 +49,14 @@ func NewRemindWorker(cfg *config.Config, wc *WechatController) *RemindWorker {
 		return rw
 	}
 	rw.wtw = NewWechatTplWorker(cfg, wc)
-	
+
 	go rw.do()
 
 	for i := 0; i < rw.WorkerNum; i++ {
 		rw.wg.Add(1)
 		go rw.runWorker()
 	}
-	
+
 	holmes.Debug("remind worker start..")
 
 	return rw

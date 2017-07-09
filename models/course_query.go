@@ -159,7 +159,6 @@ func GetMonthCourseCatalogAudio(info *MonthCourseCatalogAudio) (bool, error) {
 	return true, nil
 }
 
-
 type MonthCourseBooks struct {
 	MonthCourse     `xorm:"extends"`
 	MonthCourseBook `xorm:"extends"`
@@ -204,7 +203,7 @@ func GetCourseBookDetail(courseId int64) ([]CourseBookDetail, error) {
 type CourseBookCatalogTime struct {
 	MonthCourseCatalog `xorm:"extends"`
 	Book               `xorm:"extends"`
-	IfCheck int
+	IfCheck            int
 }
 
 func (CourseBookCatalogTime) TableName() string {

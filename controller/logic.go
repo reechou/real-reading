@@ -26,7 +26,7 @@ func NewLogic(cfg *config.Config) *Logic {
 	}
 	l.robotExt = ext.NewRobotExt(cfg)
 	l.init()
-	
+
 	models.InitDB(cfg)
 
 	return l
@@ -45,7 +45,7 @@ func (self *Logic) Run() {
 	if self.cfg.Debug {
 		EnableDebug()
 	}
-	
+
 	self.wc = NewWechatController(self.cfg)
 	NewRemindWorker(self.cfg, self.wc)
 

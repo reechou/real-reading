@@ -3,8 +3,8 @@ package models
 import (
 	"time"
 
-	"github.com/reechou/holmes"
 	"fmt"
+	"github.com/reechou/holmes"
 )
 
 type Book struct {
@@ -85,14 +85,14 @@ func CreateChapter(info *Chapter) error {
 	now := time.Now().Unix()
 	info.CreatedAt = now
 	info.UpdatedAt = now
-	
+
 	_, err := x.Insert(info)
 	if err != nil {
 		holmes.Error("create Chapter error: %v", err)
 		return err
 	}
 	holmes.Info("create Chapter[%d %s] success.", info.BookId, info.Title)
-	
+
 	return nil
 }
 

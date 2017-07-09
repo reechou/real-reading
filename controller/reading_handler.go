@@ -104,7 +104,7 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if rr.Path == "" {
 		return
 	}
-	
+
 	if strings.HasSuffix(rr.Path, "txt") {
 		http.ServeFile(w, r, self.l.cfg.ReadingOauth.MpVerifyDir+rr.Path)
 		return

@@ -509,7 +509,7 @@ func (self *ReadingHandler) courseManagerGetMonthCourseCatalogChapterList(rr *Ha
 	defer func() {
 		writeRsp(w, rsp)
 	}()
-	
+
 	req := &proto.MonthCourseCatalogReq{}
 	err := json.Unmarshal(rr.Val, &req)
 	if err != nil {
@@ -517,7 +517,7 @@ func (self *ReadingHandler) courseManagerGetMonthCourseCatalogChapterList(rr *Ha
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
-	
+
 	list, err := models.GetMonthCourseCatalogChapterList(req.MonthCourseCatalogId)
 	if err != nil {
 		holmes.Error("get month course catalog chapter list error: %v", err)
@@ -532,7 +532,7 @@ func (self *ReadingHandler) courseManagerCreateMonthCourseCatalogChapterList(rr 
 	defer func() {
 		writeRsp(w, rsp)
 	}()
-	
+
 	var req []models.MonthCourseCatalogChapter
 	err := json.Unmarshal(rr.Val, &req)
 	if err != nil {
@@ -540,7 +540,7 @@ func (self *ReadingHandler) courseManagerCreateMonthCourseCatalogChapterList(rr 
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
-	
+
 	err = models.CreateMonthCourseCatalogChapterList(req)
 	if err != nil {
 		holmes.Error("create month course catalog chapter list error: %v", err)
@@ -554,7 +554,7 @@ func (self *ReadingHandler) courseManagerDeleteMonthCourseCatalogChapter(rr *Han
 	defer func() {
 		writeRsp(w, rsp)
 	}()
-	
+
 	req := &models.MonthCourseCatalogChapter{}
 	err := json.Unmarshal(rr.Val, &req)
 	if err != nil {
@@ -562,7 +562,7 @@ func (self *ReadingHandler) courseManagerDeleteMonthCourseCatalogChapter(rr *Han
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
-	
+
 	err = models.DelMonthCourseCatalogChapter(req)
 	if err != nil {
 		holmes.Error("delete month course catalog chapter error: %v", err)

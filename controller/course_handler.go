@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -154,7 +155,7 @@ type UserInfo struct {
 
 func (self *ReadingHandler) checkUserBase(w http.ResponseWriter, r *http.Request) (ui *UserInfo, ifRedirect bool) {
 	ui = &UserInfo{}
-	
+
 	defer func() {
 		if ui.OpenId != "" {
 			// set cookie
@@ -166,7 +167,7 @@ func (self *ReadingHandler) checkUserBase(w http.ResponseWriter, r *http.Request
 			})
 		}
 	}()
-	
+
 	// get cookie
 	cookie, err := r.Cookie("user")
 	if err == nil {
@@ -181,7 +182,7 @@ func (self *ReadingHandler) checkUserBase(w http.ResponseWriter, r *http.Request
 		holmes.Error("url parse query error: %v", err)
 		return
 	}
-	
+
 	code := queryValues.Get("code")
 	if code == "" {
 		state := string(rand.NewHex())
@@ -193,7 +194,7 @@ func (self *ReadingHandler) checkUserBase(w http.ResponseWriter, r *http.Request
 		http.Redirect(w, r, AuthCodeURL, http.StatusFound)
 		return
 	}
-	
+
 	token, err := self.oauth2Client.ExchangeToken(code)
 	if err != nil {
 		ifRedirect = true
@@ -569,11 +570,12 @@ func (self *ReadingHandler) readingCourseChapterDetail(rr *HandlerRequest, w htt
 		return
 	}
 	if !self.checkUserCourse(userinfo.OpenId, catalogDetailList.UserId, catalogDetailList.CourseId) {
-		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, catalogDetailList.UserId)
+		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, catalogDetailList.CourseId)
+		io.WriteString(w, MSG_ERROR_USER_COURSE_NOT_JOIN)
 		// todo: redirect to sign
 		return
 	}
-	
+
 	catalogDetailList.Book.ID = catalogDetailList.BookId
 	_, err = models.GetBook(&catalogDetailList.Book)
 	if err != nil {
@@ -773,12 +775,12 @@ func (self *ReadingHandler) readingCourseShare(rr *HandlerRequest, w http.Respon
 	if ifRedirect {
 		return
 	}
-	
+
 	if len(rr.Params) < 3 {
 		holmes.Error("params error: %v", rr.Params)
 		return
 	}
-	
+
 	var err error
 	courseShare := new(CourseShare)
 	courseShare.UserId, err = strconv.ParseInt(rr.Params[1], 10, 0)
@@ -796,18 +798,18 @@ func (self *ReadingHandler) readingCourseShare(rr *HandlerRequest, w http.Respon
 		// todo: redirect to sign
 		return
 	}
-	
+
 	courseShare.DayNum, err = models.GetUserCourseCheckinCount(courseShare.UserId, courseShare.CourseId)
 	if err != nil {
 		holmes.Error("get user course checkin count error: %v", err)
 		return
 	}
-	
+
 	courseShare.JssdkInfo.Url = fmt.Sprintf("http://%s%s", r.Host, r.URL.String())
 	self.l.wc.JssdkSign(&courseShare.JssdkInfo)
 	courseShare.OpenId = userinfo.OpenId
 	courseShare.AppId = self.l.cfg.ReadingOauth.ReadingWxAppId
-	
+
 	renderView(w, "./views/course/course_share.html", courseShare)
 }
 
@@ -816,14 +818,14 @@ func (self *ReadingHandler) readingCourseShareTo(rr *HandlerRequest, w http.Resp
 	if ifRedirect {
 		return
 	}
-	
+
 	queryValues, err := url.ParseQuery(r.URL.RawQuery)
 	if err != nil {
 		holmes.Error("url parse query error: %v", err)
 		return
 	}
 	openid := queryValues.Get("openid")
-	
+
 	courseShareInfo := new(CourseShareInfo)
 	user := &models.User{
 		OpenId: openid,
@@ -843,6 +845,6 @@ func (self *ReadingHandler) readingCourseShareTo(rr *HandlerRequest, w http.Resp
 	courseShareInfo.AppId = self.l.cfg.ReadingOauth.ReadingWxAppId
 	courseShareInfo.JssdkInfo.Url = fmt.Sprintf("http://%s%s", r.Host, r.URL.String())
 	self.l.wc.JssdkSign(&courseShareInfo.JssdkInfo)
-	
+
 	renderView(w, "./views/course/course_share_to.html", courseShareInfo)
 }

@@ -3,8 +3,8 @@ package controller
 import (
 	"sync"
 
-	"github.com/reechou/real-reading/config"
 	"github.com/reechou/holmes"
+	"github.com/reechou/real-reading/config"
 )
 
 const (
@@ -34,12 +34,12 @@ func NewWechatTplWorker(cfg *config.Config, wc *WechatController) *WechatTplWork
 	} else {
 		wtw.WorkerNum = cfg.TplWorkerNum
 	}
-	
+
 	for i := 0; i < wtw.WorkerNum; i++ {
 		wtw.wg.Add(1)
 		go wtw.runWorker()
 	}
-	
+
 	holmes.Debug("wechat tpl worker start..")
 
 	return wtw

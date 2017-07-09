@@ -58,7 +58,7 @@ type Config struct {
 
 	ReadingHost    string
 	RemindCronTime string
-	
+
 	RemindWorkerNum int
 	TplWorkerNum    int
 

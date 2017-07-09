@@ -2,7 +2,7 @@ package models
 
 import (
 	"time"
-	
+
 	"github.com/reechou/holmes"
 )
 
@@ -19,14 +19,14 @@ func CreateCourseRemind(info *CourseRemind) error {
 	now := time.Now().Unix()
 	info.CreatedAt = now
 	info.UpdatedAt = now
-	
+
 	_, err := x.Insert(info)
 	if err != nil {
 		holmes.Error("create course error: %v", err)
 		return err
 	}
 	holmes.Info("create course[%v] success.", info)
-	
+
 	return nil
 }
 
