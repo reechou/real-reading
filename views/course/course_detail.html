@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
-    <title>小鹿微课</title>
+    <title>{{.Book.BookName}}</title>
     <meta charset="utf-8" >
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
@@ -142,7 +142,6 @@
         <ul class="read-titbox">
             <li @click="gotoBook(1)" class="read-titone readone01" :class="{current:prevFlag}"></li>
             <li class="read-titone readone02">
-                <span>{{ .Book.BookName }}</span>
                 <span>{{ .TaskTime }}</span>
             </li>
             <li @click="gotoBook(2)" class="read-titone readone03" :class="{current:nextFlag}"></li>

@@ -573,6 +573,13 @@ func (self *ReadingHandler) readingCourseChapterDetail(rr *HandlerRequest, w htt
 		// todo: redirect to sign
 		return
 	}
+	
+	catalogDetailList.Book.ID = catalogDetailList.BookId
+	_, err = models.GetBook(&catalogDetailList.Book)
+	if err != nil {
+		holmes.Error("get book error: %v", err)
+		return
+	}
 
 	catalogs, err := models.GetMonthCourseCatalogFromBook(catalogDetailList.BookId)
 	if err != nil {
@@ -638,7 +645,7 @@ func (self *ReadingHandler) readingCourseChapterDetail(rr *HandlerRequest, w htt
 		holmes.Error("get course book catalog detail list error: %v", err)
 		return
 	}
-	holmes.Debug("%+v", catalogDetailList)
+	//holmes.Debug("%+v", catalogDetailList)
 
 	renderView(w, "./views/course/course_detail.html", catalogDetailList)
 }
