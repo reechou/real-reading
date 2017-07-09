@@ -207,8 +207,8 @@
             ),
             success: function(d){
                 if(d.code == 0){
-                    // location.assign('/reading/pay?openid={{ .OpenId }}');
-                    alert("go ok");
+                    location.assign('/reading/course/share/{{.UserId}}/{{.CourseId}}');
+                    // alert("go ok");
                 } else {
                     alert("打卡失败，请稍后再试");
                 }
