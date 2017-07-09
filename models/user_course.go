@@ -32,6 +32,17 @@ func CreateUserCourse(info *UserCourse) error {
 	return nil
 }
 
+func GetUserCourseFromUser(info *UserCourse) (bool, error) {
+	has, err := x.Where("user_id = ?", info.UserId).Get(info)
+	if err != nil {
+		return false, err
+	}
+	if !has {
+		return false, nil
+	}
+	return true, nil
+}
+
 func GetUserCourseFromTime(fromTime int64) ([]UserCourse, error) {
 	var list []UserCourse
 	err := x.Where("pay_time >= ?", fromTime).Find(&list)

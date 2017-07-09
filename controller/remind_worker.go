@@ -170,7 +170,7 @@ func (self *RemindWorker) doRemind(ri *RemindInfo) {
 			Keyword1: &template.DataItem{Value: courseName},
 			Keyword2: &template.DataItem{Value: catalogName},
 			Keyword3: &template.DataItem{Value: readingDate},
-			Remark:   &template.DataItem{Value: "点击这里前往阅读"},
+			Remark:   &template.DataItem{Value: ">>>点击这里前往阅读<<<"},
 		}
 		msg := &TplMsg{
 			ToUser: v.OpenId,

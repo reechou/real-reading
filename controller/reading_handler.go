@@ -244,6 +244,9 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 				readingUserInfo.CourseNum = v.Course.CourseNum
 				readingUserInfo.StartTime = time.Unix(v.Course.StartTime, 0).Format("2006.01.02")
 				readingUserInfo.EndTime = time.Unix(v.Course.EndTime, 0).Format("2006.01.02")
+				if v.Course.StartTime <= time.Now().Unix() {
+					readingUserInfo.IfCourseStart = 1
+				}
 				renderView(w, "./views/reading_sign_success.html", readingUserInfo)
 				return
 			}

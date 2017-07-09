@@ -30,6 +30,67 @@ func initDb() {
 	})
 }
 
+func TestTransOldData(t *testing.T) {
+	initRealeaseDb()
+	
+	oldList, err := GetReadingPayFromTime(0)
+	if err != nil {
+		fmt.Printf("get reading pay from time error: %v\n", err)
+		return
+	}
+	for _, v := range oldList {
+		user := &User{
+			OpenId: v.OpenId,
+		}
+		has, err := GetUserFromOpenid(user)
+		if err != nil {
+			fmt.Printf("get user from openid error: %v\n", err)
+			return
+		}
+		if has {
+			if user.Phone == "" {
+				user.AppId = v.AppId
+				user.Name = v.Name
+				user.AvatarUrl = v.AvatarUrl
+				user.RealName = v.RealName
+				user.Phone = v.Phone
+				user.Wechat = v.Wechat
+				err = UpdateUserAll(user)
+				if err != nil {
+					fmt.Printf("update user error: %v\n", err)
+					return
+				}
+			}
+		}
+		//if !has {
+		//	err = CreateUser(user)
+		//	if err != nil {
+		//		fmt.Printf("create user error: %v\n", err)
+		//		return
+		//	}
+		//}
+		//userCourse := &UserCourse{
+		//	UserId: user.ID,
+		//}
+		//has, err = GetUserCourseFromUser(userCourse)
+		//if err != nil {
+		//	fmt.Printf("get user course from user error: %v\n", err)
+		//	return
+		//}
+		//if !has {
+		//	userCourse.CourseId = 1
+		//	userCourse.Money = 19900
+		//	userCourse.Status = 1
+		//	userCourse.PayTime = v.CreatedAt
+		//	err = CreateUserCourse(userCourse)
+		//	if err != nil {
+		//		fmt.Printf("create user course error: %v\n", err)
+		//		return
+		//	}
+		//}
+	}
+}
+
 func TestInit(t *testing.T) {
 	initRealeaseDb()
 	course := &Course{

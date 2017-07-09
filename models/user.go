@@ -36,6 +36,11 @@ func CreateUser(info *User) error {
 	return nil
 }
 
+func UpdateUserAll(info *User) error {
+	_, err := x.ID(info.ID).Cols("app_id", "name", "avatar_url", "real_name", "phone", "wechat").Update(info)
+	return err
+}
+
 func UpdateUserInfo(info *User) error {
 	info.UpdatedAt = time.Now().Unix()
 	_, err := x.ID(info.ID).Cols("real_name", "phone", "wechat", "updated_at").Update(info)
