@@ -548,7 +548,7 @@ func (self *ReadingHandler) readingCourseChapterDetail(rr *HandlerRequest, w htt
 
 	var err error
 	catalogDetailList := new(CourseCatalogDetailList)
-	catalogDetailList.OpenId = TEST_OPEN_ID
+	catalogDetailList.OpenId = userinfo.OpenId
 	catalogDetailList.UserId, err = strconv.ParseInt(rr.Params[1], 10, 0)
 	if err != nil {
 		holmes.Error("params[1][%s] strconv error: %v", rr.Params[1], err)
