@@ -415,6 +415,7 @@ func (self *ReadingHandler) readingCourseIndex(rr *HandlerRequest, w http.Respon
 	if !self.checkUserCourse(userinfo.OpenId, courseDetail.UserId, courseDetail.CourseId) {
 		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, courseDetail.UserId)
 		// todo: redirect to sign
+		self.readingCourseError(w, "/reading/signup")
 		return
 	}
 
@@ -509,6 +510,7 @@ func (self *ReadingHandler) readingCourseCatalog(rr *HandlerRequest, w http.Resp
 	if !self.checkUserCourse(userinfo.OpenId, catalogList.UserId, catalogList.CourseId) {
 		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, catalogList.UserId)
 		// todo: redirect to sign
+		self.readingCourseError(w, "/reading/signup")
 		return
 	}
 
@@ -733,6 +735,7 @@ func (self *ReadingHandler) readingCourseAttendanceDetail(rr *HandlerRequest, w 
 	if !self.checkUserCourse(userinfo.OpenId, userCourseAttendanceDetailList.UserId, userCourseAttendanceDetailList.CourseId) {
 		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, userCourseAttendanceDetailList.UserId)
 		// todo: redirect to sign
+		self.readingCourseError(w, "/reading/signup")
 		return
 	}
 

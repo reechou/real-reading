@@ -12,12 +12,201 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <style>
+        *{/*由于我这里只有弹窗所以直接就使用通配符了*/
+            margin:0;
+            padding:0;
+        }
+        #zhezhao,
+        #confirm{/*定义alert和confirm的遮罩层浅黑透明，高度宽度都为100%*/
+            background:rgba(0,0,0,0.6);
+            height:100%;/*继承父类，如果父类不是100%请自行设置*/
+            width:100%;
+            position:fixed;/*固定遮罩层*/
+            top:0;/*设置位置，这个很重要，如果不设置有可能导致位置错乱*/
+            left:0;
+            display:none;/*首先隐藏，弹出后处于最顶层*/
+            z-index:99999999999;
+        }
+        .alert{
+            overflow:hidden;
+            border:2px solid #d4d5dc;
+            height:150px;
+            width:300px;
+            border-radius:5px;
+            background: rgb(248, 248, 248);
+            position:fixed;
+            top:50%;/*让他绝对居中*/
+            left:50%;
+            margin-top:-180px;
+            margin-left:-160px;
+            z-index:999999999999;
+        }
+        /*之后就没有什么特别需要讲的css样式了*/
+        .alert_top{
+            width:100%;
+            height:25px;
+            line-height:25px;
+            color:#000;
+            text-indent:.5em;
+            border-bottom:1px dashed #ccc ;
+        }
+        #alert_content,
+        #confirm_content {
+            margin:5px 5px 2px;;
+            width:auto;
+            height:90px;
+            line-height:20px;
+            overflow:hidden;
+            text-indent:2em;
+            color:#555;
+            font-size:14px;
+        }
+        #alert_title,
+        #confirm_title{
+            float:left;
+            font-weight: bold;
+            color:#555;
+            font-size:12px;
+        }
+        .alert_exit{
+            float:right;
+            margin-right:10px;
+            width:auto;
+            font-size:13px;
+            height:100%;
+            cursor:pointer;
+        }
+        .alert_button{
+            width:100%;
+            height:45px;
+        }
+        .alert_ok_btn{
+            margin-bottom:10px;
+            margin-left:auto;
+            margin-right:auto;
+            display:block;
+            width:60px;
+            border:1px solid #f76e6c;
+            background: #f76e6c;
+            color:#fff;
+            border-radius:2px;
+            cursor:pointer;
+        }
+        .alert_ok_btn:hover{
+            border:1px solid #57c2e0;
+            background: #4cccde;
+        }
+        .select_alert_ok_btn{
+            margin-bottom:15px;
+            width:60px;
+            border:1px solid #5ad4f4;
+            background: #51dbee;
+            color:#fff;
+            border-radius:2px;
+            cursor:pointer;
+            float:left;
+            margin-left:50px;
+
+        }
+        .select_alert_ok_btn:hover{
+            border:1px solid #57c2e0;
+            background: #4cccde;
+        }
+        .select_alert_no_btn{
+            margin-bottom:15px;
+            margin-left:50px;
+            width:60px;
+            border:1px solid #eaeaea;
+            background: #d9d9d9;
+            color:#fff;
+            border-radius:2px;
+            cursor:pointer;
+            float:right;
+            margin-right:50px;
+
+        }
+        .select_alert_no_btn:hover{
+            border:1px solid #bababa;
+            background: #ababab;
+        }
+    </style>
+
+    <script>
+    //alert的自定义函数
+    //参数我设置了3个，第一个是标题，第二个是内容，第三个则是传递的类型(也可以叫确定触发的函数,可选项)
+        function alert_start(a_title, a_content, a_type) {
+            document.getElementById("zhezhao").style.display = "block";//首先点击触发alert弹窗函数后将他显示出来
+            document.getElementById("alert_title").innerHTML = a_title;//然后将传递的标题使用innerHTML替换为弹窗标题
+            document.getElementById("alert_content").innerHTML = a_content;//这个也是将传递的内容替换为弹窗内容
+            //下一步则是在文档中找到名为true_btn的id属性为onclick(此处的getAttributeNode是和JQ的attr属性差不多)
+            var true_btn = document.getElementById("true_btn").getAttributeNode("onclick");
+            //判断如果传递了类型属性就会使用(这是可选项)
+            if(a_type!=""){
+                //此处需注意一下：如果你选择使用函数的话无需更改，如果你要直接使用js代码的话 将+"()"删除掉
+    //传递的类型，这个地方你可以这样理解：true_btn的onclick 通过nodeValue就可以获取onclick的值
+    //在这里就可以将a_type的值替代原有的onclick的值
+                true_btn.nodeValue=a_type+"()";
+            }
+            //这也是可选项，在窗口弹出的时候禁止用户右键点击,需要无需修改，不需要请删除,下面也有此类代码
+            oncontextmenu = function () {
+                 return false;
+             }
+        }
+
+    //confirm的自定义函数
+    //同alert弹窗一样的参数代码可参考alert的来查看，这里我就不多说了
+        function confirm_start(c_title,c_content,c_type){
+            document.getElementById("confirm").style.display = "block";
+            document.getElementById("confirm_title").innerHTML = c_title;
+            document.getElementById("confirm_content").innerHTML = c_content;
+            var true_btn = document.getElementById("select_true_btn").getAttributeNode("onclick");
+            if(c_type!=""){
+                true_btn.nodeValue=c_type+"()";
+            }
+            oncontextmenu = function () {
+                 return false;
+             }
+        }
+    //默认确认按钮
+        function true_btn() {
+            document.getElementById("zhezhao").style.display = "none";//将alert与confirm隐藏
+            //document.getElementById("confirm").style.display = "none";
+            oncontextmenu = function () {//设置右键禁止的可以使用，如果没有设置删除代码即可
+                return true;
+            }
+            location.assign('{{.RedirectUrl}}');
+            return true;
+        }
+        function exit_btn() {
+            document.getElementById("confirm").style.display = "none";//将alert与confirm隐藏
+            document.getElementById("zhezhao").style.display = "none";
+            oncontextmenu = function () {
+                return true;
+            }
+            return false;
+        }
+    //上面两个自定义函数代码都差不多，但是最后面都返回的不同值，其实我最后才发现也没有什么用了，大家删掉就行了
+    </script>
 </head>
 <body>
+<div id="zhezhao">
+    <div class="alert">
+        <p class="alert_top">
+            <span id="alert_title"></span><!--不需要大家在这里直接设置标题-->
+        </p>
+        <p id="alert_content"></p><!--也不需要大家在这里直接设置内容-->
+        <div class="alert_button">
+            <input type="button" value="确  认" class="alert_ok_btn" id="true_btn" onclick="true_btn()"/>
+        </div>
+    </div>
+</div>
 <script>
     (function() {
-        alert("你还未报名该课程,请确认前往报名");
-        location.href="{{.RedirectUrl}}";
+        alert_start('小鹿微课','您还未报名该课程，请确认前往报名','');
+        //alert("你还未报名该课程,请确认前往报名");
+        //location.href="{{.RedirectUrl}}";
     })();
 </script>
 </body>
