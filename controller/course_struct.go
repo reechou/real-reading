@@ -112,3 +112,7 @@ type UserCourseAttendanceDetail struct {
 	NowDay           int
 	BeforeRenderAttr string
 }
+
+type CourseError struct {
+	RedirectUrl string
+}

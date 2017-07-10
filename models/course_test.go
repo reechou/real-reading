@@ -50,6 +50,11 @@ func initDb() {
 	})
 }
 
+func TestDB(t *testing.T) {
+	c := initConfig()
+	initReleaseDb(c)
+}
+
 func TestCourseNotify(t *testing.T) {
 	c := initConfig()
 	initReleaseDb(c)

@@ -8,9 +8,9 @@ import (
 
 type UserCourseCheckin struct {
 	ID                   int64 `xorm:"pk autoincr" json:"id"`
-	UserId               int64 `xorm:"not null default 0 int index" json:"userId"`
-	CourseId             int64 `xorm:"not null default 0 int index" json:"courseId"`
-	MonthCourseCatalogId int64 `xorm:"not null default 0 int index" json:"monthCourseCatalogId"`
+	UserId               int64 `xorm:"not null default 0 int unique(user_course)" json:"userId"`
+	CourseId             int64 `xorm:"not null default 0 int unique(user_course)" json:"courseId"`
+	MonthCourseCatalogId int64 `xorm:"not null default 0 int unique(user_course)" json:"monthCourseCatalogId"`
 	CreatedAt            int64 `xorm:"not null default 0 int" json:"createdAt"`
 	UpdatedAt            int64 `xorm:"not null default 0 int" json:"-"`
 }

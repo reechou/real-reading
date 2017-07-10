@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -243,7 +242,7 @@ func (self *ReadingHandler) checkUser(w http.ResponseWriter, r *http.Request, if
 		return
 	}
 NEED_OAUTH:
-	holmes.Debug("start to redirect oauth,")
+	//holmes.Debug("start to redirect oauth,")
 	queryValues, err := url.ParseQuery(r.URL.RawQuery)
 	if err != nil {
 		holmes.Error("url parse query error: %v", err)
@@ -288,6 +287,7 @@ NEED_OAUTH:
 		return
 	}
 	if !has {
+		user.AppId = self.l.cfg.ReadingOauth.ReadingWxAppId
 		user.Name = ui.Name
 		user.AvatarUrl = ui.AvatarUrl
 		err = models.CreateUser(user)
@@ -330,6 +330,13 @@ func (self *ReadingHandler) checkUserCourse(openId string, userId, courseId int6
 		return true
 	}
 	return false
+}
+
+func (self *ReadingHandler) readingCourseError(w http.ResponseWriter, redirectUrl string) {
+	courseError := &CourseError{
+		RedirectUrl: redirectUrl,
+	}
+	renderView(w, "./views/course/course_error.html", courseError)
 }
 
 // template view
@@ -571,8 +578,9 @@ func (self *ReadingHandler) readingCourseChapterDetail(rr *HandlerRequest, w htt
 	}
 	if !self.checkUserCourse(userinfo.OpenId, catalogDetailList.UserId, catalogDetailList.CourseId) {
 		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, catalogDetailList.CourseId)
-		io.WriteString(w, MSG_ERROR_USER_COURSE_NOT_JOIN)
+		//io.WriteString(w, MSG_ERROR_USER_COURSE_NOT_JOIN)
 		// todo: redirect to sign
+		self.readingCourseError(w, "/reading/signup")
 		return
 	}
 
