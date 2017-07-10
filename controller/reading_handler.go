@@ -753,7 +753,12 @@ func (self *ReadingHandler) readingPayNotify(rr *HandlerRequest, w http.Response
 	//}
 
 	// send sms notify
-	err = self.smsExt.SMSNotify(user.Phone, user.RealName)
+	//err = self.smsExt.SMSNotify(user.Phone, user.RealName)
+	//if err != nil {
+	//	holmes.Error("sms notify error: %v", err)
+	//}
+	params := fmt.Sprintf("#RealName#=%s&#StartTime#=%s", user.RealName, time.Unix(course.StartTime, 0).Format("2006-01-02"))
+	err = self.smsExt.SMSNotifyNormal(user.Phone, self.l.cfg.SMSNotify.TemplateId, params)
 	if err != nil {
 		holmes.Error("sms notify error: %v", err)
 	}

@@ -45,7 +45,7 @@ func (self *WechatController) SendTplMsg(msg *TplMsg) error {
 		holmes.Error("template send error: %v", err)
 		return err
 	}
-	holmes.Debug("template send msg success, msgid: %s", msgId)
+	holmes.Debug("template send msg success, msgid: %d", msgId)
 	return nil
 }
 

@@ -160,7 +160,8 @@ func (self *RemindWorker) doRemind(ri *RemindInfo) {
 		holmes.Error("get course user list error: %v", err)
 		return
 	}
-	courseName := fmt.Sprintf("%s第%d期", ri.Course.Name, ri.Course.CourseNum)
+	holmes.Debug("course[%d] get course user list from offset[%d] get user num: %d", ri.Course.ID, offset, len(userList))
+	courseName := fmt.Sprintf("%s 第%d期", ri.Course.Name, ri.Course.CourseNum)
 	catalogName := fmt.Sprintf("%s - %s", ri.Catalog.Book.BookName, ri.Catalog.Title)
 	readingDate := time.Unix(ri.Catalog.TaskTime, 0).Format("2006.01.02")
 	var sendUserNum int64

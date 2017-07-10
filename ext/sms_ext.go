@@ -25,6 +25,55 @@ func NewSMSNotifyExt(cfg *config.Config) *SMSNotifyExt {
 	return sms
 }
 
+func (self *SMSNotifyExt) SMSNotifyNormal(mobile, tmpId, params string) error {
+	if mobile == "" {
+		return fmt.Errorf("not found mobile")
+	}
+	
+	requestUrl := self.cfg.SMSNotify.Host
+	parseRequestUrl, _ := url.Parse(requestUrl)
+	
+	tplValue := url.QueryEscape(params)
+	extraParams := url.Values{
+		"mobile":    {mobile},
+		"tpl_id":    {tmpId},
+		"tpl_value": {tplValue},
+		"key":       {self.cfg.SMSNotify.Key},
+	}
+	parseRequestUrl.RawQuery = extraParams.Encode()
+	
+	req, err := http.NewRequest("GET", parseRequestUrl.String(), nil)
+	if err != nil {
+		holmes.Error("http new request error: %v", err)
+		return err
+	}
+	resp, err := self.client.Do(req)
+	if err != nil {
+		holmes.Error("http do request error: %v", err)
+		return err
+	}
+	defer resp.Body.Close()
+	rspBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		holmes.Error("ioutil ReadAll error: %v", err)
+		return err
+	}
+	var response SMSNotifyRsp
+	err = json.Unmarshal(rspBody, &response)
+	if err != nil {
+		holmes.Error("json decode error: %v [%s]", err, string(rspBody))
+		return err
+	}
+	if response.Code != 0 {
+		holmes.Error("sms notify error: %s", response.Reason)
+		return fmt.Errorf("sms notify error: %s", response.Reason)
+	}
+	
+	holmes.Info("sms send notify to mobile[%s] success", mobile)
+	
+	return nil
+}
+
 func (self *SMSNotifyExt) SMSNotify(mobile, realName string) error {
 	if mobile == "" {
 		return fmt.Errorf("not found mobile")

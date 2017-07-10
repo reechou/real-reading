@@ -6,6 +6,7 @@ import (
 
 	"github.com/jinzhu/now"
 	"github.com/reechou/real-reading/config"
+	"github.com/reechou/real-reading/ext"
 )
 
 func initRealeaseDb() {
@@ -19,6 +20,25 @@ func initRealeaseDb() {
 	})
 }
 
+func initConfig() *config.Config {
+	return &config.Config{
+		DBInfo: config.DBInfo{
+			User:   "fenxiao",
+			Pass:   "c^ljPgOGafAlo%pd",
+			Host:   "shanzhuan.mysql.rds.aliyuncs.com:3306",
+			DBName: "real-reading",
+		},
+		SMSNotify: config.SMSNotify{
+			Host: "http://v.juhe.cn/sms/send",
+			Key:  "6962e47932431e9608350c1d5bfb523c",
+		},
+	}
+}
+
+func initReleaseDb(c *config.Config) {
+	InitDB(c)
+}
+
 func initDb() {
 	InitDB(&config.Config{
 		DBInfo: config.DBInfo{
@@ -28,6 +48,27 @@ func initDb() {
 			DBName: "real_reading",
 		},
 	})
+}
+
+func TestCourseNotify(t *testing.T) {
+	c := initConfig()
+	initReleaseDb(c)
+	
+	userList, err := GetCourseUserList(1, 0)
+	if err != nil {
+		fmt.Printf("get course user list error: %v\n", err)
+		return
+	}
+	fmt.Println(len(userList))
+	
+	sms := ext.NewSMSNotifyExt(c)
+	for _, v := range userList {
+		params := fmt.Sprintf("#RealName#=%s", v.User.RealName)
+		err = sms.SMSNotifyNormal(v.User.Phone, "8886", params)
+		if err != nil {
+			fmt.Printf("sms send error: %v\n", err)
+		}
+	}
 }
 
 func TestTransOldData(t *testing.T) {

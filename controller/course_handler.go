@@ -176,7 +176,7 @@ func (self *ReadingHandler) checkUserBase(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	holmes.Debug("start to redirect oauth,")
+	//holmes.Debug("start to redirect oauth,")
 	queryValues, err := url.ParseQuery(r.URL.RawQuery)
 	if err != nil {
 		holmes.Error("url parse query error: %v", err)
