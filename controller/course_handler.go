@@ -357,6 +357,7 @@ func (self *ReadingHandler) readingCourseList(rr *HandlerRequest, w http.Respons
 	}
 	if len(userCourseList.UserCourseList) == 0 {
 		// TODO: redirect to course recommend
+		self.readingCourseError(w, "/reading/signup")
 		return
 	}
 	userCourseList.UserId = userCourseList.UserCourseList[0].User.ID
