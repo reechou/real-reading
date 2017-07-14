@@ -183,6 +183,12 @@ var scrollFlag = true,      // scroll + anchor
 
 var showFlag = 0;
 
+function changeMonthFlag(index) {
+    document.getElementById("slide-month"+showFlag).removeAttribute("class");
+    showFlag = index;
+    document.getElementById("slide-month"+showFlag).setAttribute("class", "current");
+}
+
 function changeMonth(index) {
     document.getElementById("slide-month"+showFlag).removeAttribute("class");
     showFlag = index;
@@ -216,7 +222,8 @@ function initOnePos(){
         n = distanceTop($self[0]);
         onePosArr.push(n);
     });
-    }
+    console.log(onePosArr);
+}
 
 var scrollProcessor = {
     timeId: '',
@@ -226,7 +233,7 @@ var scrollProcessor = {
                 pY;      // 页面向上滚动过的距离
         wH = window.innerHeight - 80;      // 60, 底部导航
         pY = window.pageYOffset;
-
+        //console.log(wH+" "+pY);
         handleShowIndex(pY, wH);
     },
     run: function(){
@@ -256,22 +263,26 @@ function handleShowIndex(n, wH){      // n ,页面线上滚动距离
             index = i;
         }
     }
-
-    if(flag){app00.showFlag = index;}
-    else{
-        for(var x, y,j=0; j<len; j++){
-            x = onePosArr[j];
-            y = onePosArr[j+1] || 0;
-            if(x < n && n < y){
-                index = j;
-            }
-
-        }
-        if(n > onePosArr[len-1]){
-            index = len-1;
-        }
-        app00.showFlag = index;
+    //console.log(index);
+    if(showFlag != index) {
+        changeMonthFlag(index);
     }
+
+    //if(flag){app00.showFlag = index;}
+    //else{
+    //    for(var x, y,j=0; j<len; j++){
+    //        x = onePosArr[j];
+    //        y = onePosArr[j+1] || 0;
+    //        if(x < n && n < y){
+    //            index = j;
+    //        }
+
+    //    }
+    //    if(n > onePosArr[len-1]){
+    //        index = len-1;
+    //    }
+    //    app00.showFlag = index;
+    //}
     return index;
 }
 
@@ -296,6 +307,10 @@ function distanceTop(elem){
     }
     return n;
 }
+
+(function() {
+    initOnePos();
+})();
 /****** scroll - E ******/
 
 </script>
