@@ -140,14 +140,11 @@
         <!--</ul>-->
 
         <ul class="read-titbox">
-            <li @click="gotoBook(1)" class="read-titone readone01" :class="{current:prevFlag}"></li>
+            <!--<li @click="gotoBook(1)" class="read-titone readone01" :class="{current:prevFlag}"></li>-->
             <li class="read-titone readone02">
-                <span>{{.MonthCourseCatalog.Title}}</span>
+                <span>{{.MonthCourseCatalog.Title}}({{.TaskTime}})</span>
             </li>
-            <li class="read-titone readone02">
-                <span>({{.TaskTime}})</span>
-            </li>
-            <li @click="gotoBook(2)" class="read-titone readone03" :class="{current:nextFlag}"></li>
+            <!--<li @click="gotoBook(2)" class="read-titone readone03" :class="{current:nextFlag}"></li>-->
         </ul>
 
         <section id="read-box" class="read-desbox">

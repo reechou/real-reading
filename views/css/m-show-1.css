@@ -161,7 +161,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 .comment-praise{padding: 0 0 0 20px; background: url('http://img.caizhu.com/jhsy/images/m/icon-praise.png') no-repeat 0 7px; background-size: auto 19px; }
 .comment-det{margin: 20px 0 0;}
 
-.read-titbox{width: 60%; margin: 0 auto; padding: 20px 0; display: -webkit-box; display: box; line-height: 20px;}
+.read-titbox{width: 80%; margin: 0 auto; padding: 20px 0; display: -webkit-box; display: box; line-height: 20px;}
 .readone01, .readone03{width: 20px; position: relative;}
 .readone02{-webkit-box-flex: 1; box-flex: 1; text-align: center;}
 .readone02 > div{height: 20px; overflow: hidden;}
