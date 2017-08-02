@@ -17,6 +17,10 @@ type Course struct {
 	StartTime    int64  `xorm:"not null default 0 int index" json:"startTime"`
 	EndTime      int64  `xorm:"not null default 0 int index" json:"endTime"`
 	Money        int64  `xorm:"not null default 0 int" json:"money"`
+	HeadImg      string `xorm:"not null default '' varchar(256)" json:"headImg"`
+	AbstractImg  string `xorm:"not null default '' varchar(256)" json:"abstractImg"`
+	SignupSlogan string `xorm:"not null default '' varchar(256)" json:"signupSlogan"`
+	SuccessInfo  string `xorm:"not null default '' varchar(1024)" json:"successInfo"`
 	CreatedAt    int64  `xorm:"not null default 0 int" json:"createdAt"`
 	UpdatedAt    int64  `xorm:"not null default 0 int" json:"-"`
 }

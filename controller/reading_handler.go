@@ -65,10 +65,10 @@ type ReadingHandler struct {
 
 	smsExt *ext.SMSNotifyExt
 
-	lefitSessionStorage *session.Storage
-	lefitOauth2Endpoint oauth2.Endpoint
-	oauth2Client        *oauth2.Client
-	mchClient           *mchcore.Client
+	sessionStorage *session.Storage
+	oauth2Endpoint oauth2.Endpoint
+	oauth2Client   *oauth2.Client
+	mchClient      *mchcore.Client
 }
 
 func NewReadingHandler(l *Logic) *ReadingHandler {
@@ -76,12 +76,12 @@ func NewReadingHandler(l *Logic) *ReadingHandler {
 
 	lh.smsExt = ext.NewSMSNotifyExt(lh.l.cfg)
 
-	lh.lefitSessionStorage = session.New(20*60, 60*60)
-	lh.lefitOauth2Endpoint = mpoauth2.NewEndpoint(
+	lh.sessionStorage = session.New(20*60, 60*60)
+	lh.oauth2Endpoint = mpoauth2.NewEndpoint(
 		lh.l.cfg.ReadingOauth.ReadingWxAppId,
 		lh.l.cfg.ReadingOauth.ReadingWxAppSecret)
 	lh.oauth2Client = &oauth2.Client{
-		Endpoint: lh.lefitOauth2Endpoint,
+		Endpoint: lh.oauth2Endpoint,
 	}
 	lh.mchClient = mchcore.NewClient(
 		lh.l.cfg.ReadingOauth.ReadingWxAppId,
@@ -104,7 +104,7 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if rr.Path == "" {
 		return
 	}
-
+	
 	if strings.HasSuffix(rr.Path, "txt") {
 		http.ServeFile(w, r, self.l.cfg.ReadingOauth.MpVerifyDir+rr.Path)
 		return
@@ -123,6 +123,10 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	if strings.HasPrefix(rr.Path, READING_COURSE_URI_PREFIX) {
 		self.courseHandle(rr, w, r)
+		return
+	}
+	if strings.HasPrefix(rr.Path, REGISTER_URI_PREFIX) {
+		self.registerHandle(rr, w, r)
 		return
 	}
 

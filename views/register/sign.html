@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <title>小鹿微课</title>
+    <meta charset="utf-8" >
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="keywords" content="" >
+    <meta name="description" content="" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" >
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="http://7xpo0j.com1.z0.glb.clouddn.com/reading/css/m-main.css" >
+    <link rel="stylesheet" href="http://7xpo0j.com1.z0.glb.clouddn.com/reading/css/photoswipe.css">
+    <link rel="stylesheet" href="http://7xpo0j.com1.z0.glb.clouddn.com/reading/css/default-skin.css">
+
+    <style>
+        body{background: #fff; color: #333; padding: 0 0 50px;}
+
+        .b-bd{border-bottom: #e6e6e6 solid 1px;}
+
+        .b-box{background: #fff; padding-top: 10px; padding-bottom: 10px; }
+        .b-title{text-align: center; padding: 20px 0 10px;}
+        .b-title > img{height: 18px; vertical-align: top;}
+
+        .why-box{}
+        .why-one{position: relative; padding: 0 15px 0 40px; color: #5a5a5a; margin: 10px 0 0;}
+        .why-one:after{position: absolute; content: ''; left: 18px; top: 12px; width: 8px; height: 8px; background: #f76e6c;}
+        .why-one h6{font-size: 15px; color: #f76e6c; line-height: 30px;}
+
+        .ct-box{margin: 10px 20px 0; color: #333; }
+        .ct-one{float: left; width: 33.3%; margin: 10px 0 20px; text-align: center;}
+        .ct-figure{padding: 0 0 15px;}
+        .ct-figure > img{vertical-align: top; max-height: 50px;}
+
+        .ag-title, .ag-one{display: -webkit-box; display: box; padding: 15px 0;}
+        .ag-info00, .ag-one00{display: inline-block; width: 50px; height: 30px; text-align: center; vertical-align: top;}
+        .ag-info01, .ag-one01{-webkit-box-flex: 1; box-flex: 1;}
+        .icon-bell, .icon-hat{background: no-repeat center center;}
+        .ag-title{line-height: 30px; font-weight: bold;}
+        .icon-bell{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/index_29.png'); background-size: 20px auto;}
+        .icon-hat{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/x_04.png'); background-size: auto 20px;}
+        .ag-one{border-bottom: #e6e6e6 solid 1px;}
+        .ag-one00 img{height: 20px;}
+        .ag-one01 > h6{font-size: 15px;}
+        .ag-one01 > p{margin: 5px 0 0; color: #5a5a5a; font-size: 12px;}
+
+        .fb-list{padding: 0 0 20px;}
+        .fb-onebox{padding: 10px; box-shadow: #ddd 0 0 8px 0; margin: 15px 0 0;}
+        .fb-one{display: -webkit-box; display: box; }
+        .fb-avatar{width: 40px; height: 40px; border-radius: 20px; margin: 0 10px 0 0;}
+        .fb-info{-webkit-box-flex: 1; box-flex: 1; font-size: 13px;}
+        .fb-d00{line-height: 24px; color: #666; font-size: 15px; font-weight: bold;}
+        .fb-d00 > span{color: #888; font-weight: 100;}
+        .fb-d01{color: #adadad; font-size: 12px;}
+        .fb-p{margin: 10px 0 0; color: #666; line-height: 26px;}
+
+        .note-list{}
+        .note-one img{width: 100%; vertical-align: top;}
+
+        .faq-list{}
+        .faq-one{margin: 25px 0 0;}
+        .faq-one > h5{font-size: 15px; color: #f76e6c;}
+        .faq-one > div{margin: 5px 0 0;}
+        .faq-dobox{font-size: 14px; text-align: center;}
+        .faq-do{display: inline-block; color: #288e76; line-height: 20px; padding: 20px 0 10px;}
+        .icon-pull{display: inline-block; width: 16px; height: 16px; background: url('http://img.caizhu.com/jhsy/images/mv1/v1.1/icon-pull.png') no-repeat; background-size: 100% 100%; vertical-align: -2px; margin: 0 0 0 6px;}
+        .icon-push{background-image: url('http://img.caizhu.com/jhsy/images/mv1/v1.1/icon-push.png');}
+
+        .more-box{text-align: center; color: #f76e6c; font-size: 17px; padding: 0 0 10px; line-height: 24px; font-weight: bold;}
+        .more-box p{padding: 0 0 8px;}
+        .more-box2{text-align: center; font-size: 17px; line-height: 24px;}
+        .more-box2 p{padding: 0 0 8px;}
+        .more-box2 span{color: #f76e6c;}
+
+        /* ft */
+        .jhsy-ftbox{height: 50px;}
+        .jhsy-ft{position: fixed; padding: 0; width: 100%; bottom: 0; display: -webkit-box; display: box; text-align: center; background: #f76e6c; color: #fff; -webkit-transition: all .2s linear; transition: all .2s linear;}
+        .jhsy-ft.hide{display: none;}
+        .jhsy-ft > span{display: block; -webkit-box-flex: 1; box-flex: 1; height: 50px; line-height: 50px; font-size: 20px;}
+
+        .jhsy-ftbox22{height: 45px; padding: 15px 0; background: #fff;}
+        .jhsy-ft22{position: relative; padding: 0; width: 100%; top: 15px; display: -webkit-box; display: box; text-align: center; /*background: #288e76;*/ color: #fff; -webkit-transition: all .2s linear; transition: all .2s linear; background: url('http://img.caizhu.com/jhsy/images/mv1/v1.1/icon-btn.png') no-repeat center center; background-size: auto 45px; height: 45px;}
+        /*.jhsy-ft33{background-image: url('http://img.caizhu.com/jhsy/images/mv1/v1.1/icon-share.png?052618');}*/
+        .jhsy-ft33{display: inline-block; width: 50%; vertical-align: top; height: 45px; border-radius: 4px; color: #fff; line-height: 45px; background: #f76e6c; text-align: center; font-size: 16px;}
+        .jhsy-ft33 > img{margin: 0 0 0 8px; height: 20px; vertical-align: -5px;}
+        /*.jhsy-ft > span{display: block; -webkit-box-flex: 1; box-flex: 1; height: 45px; line-height: 45px;}*/
+
+        /* pay */
+        .pay-box{color: #ccc;}
+        .pay-infobox{width: 200px; margin: 20px auto 0; height: 200px; border-radius: 150px; text-align: center; border: #fff solid 5px; box-shadow: #f76e6c 0 0 0 1px; }
+        .pay-info{width: 190px; height: 190px; border-radius: 50%; border: rgba(247, 110, 108, .8) solid 5px; color: #ccc;}
+        .pay-text{height: 40px;}
+        .pay-original{height: 50px; }
+        .pay-original{line-height: 24px; color: #9a9a9a; }
+        .pay-int{color: #f76e6c; height: 70px; line-height: 80px;}
+        .pay-int > span{display: inline-block;}
+        .pay-l{font-style: normal;}
+        .pay-m{font-size: 50px; font-weight: bold;}
+        .pay-r{color: #999; font-size: 13px; line-height: 20px;}
+        .pay-l, .pay-m{vertical-align: baseline;}
+        .pay-r i{text-decoration: line-through;}
+
+        .pay-infobox{width: 240px; height: 240px;}
+        .pay-info{width: 230px; height: 230px;}
+        .pay-int{height: 90px; line-height: 100px;}
+        .pay-l{font-size: 18px;}
+        .pay-m{font-size: 56px;}
+        .pay-r{font-size: 16px;}
+
+        @media (max-width: 380px){
+            .pay-infobox{width: 220px; height: 220px;}
+            .pay-info{width: 210px; height: 210px;}
+            .pay-int{height: 80px; line-height: 90px;}
+            .pay-l{font-size: 15px;}
+            .pay-m{font-size: 53px;}
+            .pay-r{font-size: 14px;}
+
+        }
+        @media (max-width: 320px){
+            .pay-infobox{width: 200px; height: 200px;}
+            .pay-info{width: 190px; height: 190px;}
+            .pay-int{height: 70px; line-height: 80px;}
+            .pay-l{font-size: 14px;}
+            .pay-m{font-size: 50px;}
+            .pay-r{font-size: 13px;}
+        }
+
+        .b-topbox{position: relative; background: #ede4db}
+        .tb-t, .tb-m, .tb-b{position: absolute; text-align: center;}
+        .tb-t{width: 48.6%; height: 12.4%; line-height: 16px; left: 10%; top: 21.89%; color: #587267; font-size: 13px;}
+        .tb-m{width: 58.6%; height: 24%; line-height: 30px; left: 6%; top: 38.68%; font-size: 18px; color: #756a65;}
+        .tb-b{width: 38.4%; height: 20px; margin-top: -10px; line-height: 20px; left: 15.3%; top: 76%; color: #ede4db; font-size: 12px;}
+
+        .tb-start{left: 23.4%; top: 78%; color: #288e76; font-size: 16px;}
+    </style>
+</head>
+<body>
+
+<section id="app00">
+    <div class="b-topbox p-rela">
+        <img class="show-figure100" src="{{.Course.HeadImg}}">
+    </div>
+
+    <div id="jhsy-ftbox22" class="jhsy-ftbox22 show-center">
+        <footer class="jhsy-ft33" onclick="location.assign('/reading/register/enroll/{{.Course.CourseType}}');">快速报名<img src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/icon-arrow.png"></footer>
+    </div>
+
+    <div class="b-topbox p-rela">
+        <img class="show-figure100" src="{{.Course.AbstractImg}}">
+    </div>
+
+    <section class="b-box mt">
+        <div class="more-box2">
+        <p>第{{.Course.CourseNum}}期训练营</p>
+        <p>将于{{.IndexStartTime}}开课</p>
+        <span>每期招生名额有限，赶紧来报名吧</span>
+        </div>
+
+        <section class="pay-infobox">
+            <div class="pay-info">
+                <p class="pay-text"></p>
+                <div class="pay-int">
+                    <span class="pay-l">￥</span>
+                    <span class="pay-m">{{.Course.Money}}</span>
+                    <span class="pay-r">原&nbsp;价<br><i>￥499</i></span>
+                </div>
+                <p class="pay-original">微信安全支付</p>
+            </div>
+        </section>
+
+        <div class="more-box mt30">
+            {{.Course.SignupSlogan | unescaped}}
+        </div>
+    </section>
+
+    <footer id="jhsy-ftbox" class="jhsy-ft"><span class="academy-invite" onclick="location.assign('/reading/register/enroll/{{.Course.CourseType}}');">立即报名</span></footer>
+
+</section>
+
+<section id="ajax-loadingbox" :class="{hide:!flag}"><ajax-loading></ajax-loading></section>
+
+<div id="defined-prompt"><defined-prompt :flag="flag" :tipStr="tipstr" :cancelstr="cancelstr" :okStr="okstr" :cancelFlag="cancelflag" :callback="callback" :cancelcallback="cancelcallback" :closeflag="closeflag"></defined-prompt></div>
+
+<!-- big preview -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="pswp__bg"></div>
+    <div class="pswp__scroll-wrap">
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display: none">
+    <script src="https://s19.cnzz.com/z_stat.php?id=1262185690&web_id=1262185690" language="JavaScript"></script>
+</div>
+
+</body>
+</html>

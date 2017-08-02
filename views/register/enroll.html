@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <title>小鹿微课</title>
+    <meta charset="utf-8" >
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="keywords" content="" >
+    <meta name="description" content="" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" >
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="http://7xpo0j.com1.z0.glb.clouddn.com/reading/css/m-main.css" >
+    <link rel="stylesheet" href="http://7xpo0j.com1.z0.glb.clouddn.com/reading/css/m-show-1.css" >
+    <link rel="stylesheet" href="http://7xpo0j.com1.z0.glb.clouddn.com/reading/css/m-sy.css" >
+</head>
+<body>
+
+<div class="show-box nobd">
+    <div class="pb-info pt20 clearfix">
+        <span class="show-over">{{ .NickName }}</span>
+        <img src="{{ .AvatarUrl }}">
+    </div>
+
+    <section class="enroll-box">
+        <ol class="enroll-status">
+            <li class="eb-tone eb-icon current">
+                <span class="icon-enroll"></span>
+                <p>报名</p>
+            </li>
+            <li class="eb-tone eb-line"></li>
+            <li class="eb-tone eb-icon">
+                <span class="icon-fee"></span>
+                <p>付费</p>
+            </li>
+            <li class="eb-tone eb-line"></li>
+            <li class="eb-tone eb-icon">
+                <span class="icon-begin"></span>
+                <p>开学</p>
+            </li>
+        </ol>
+        <ul class="enroll-infobox mt20">
+            <li class="eb-block eb-level0">
+                <ul class="eb-form">
+                    <li class="eb-one">
+                        <span class="ebv1-icon ebv1-name"></span>
+                        <div>
+                            <input class="eb-text validone" placeholder="请输入姓名" value="{{ .EnrollName }}" id="enrollName">
+                        </div>
+                    </li>
+                    <li class="eb-one">
+                        <span class="ebv1-icon ebv1-tel"></span>
+                        <div>
+                            <input class="eb-text validone" placeholder="请输入手机号" value="{{ .EnrollMobile }}" id="enrollMobile">
+                        </div>
+                    </li>
+                    <li class="eb-one">
+                        <span class="ebv1-icon ebv1-wechat"></span>
+                        <div>
+                            <input class="eb-text validone" placeholder="微信号（选填）" value="{{ .EnrollWechat }}" id="enrollWechat">
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="enroll-dobox"><span class="offer-btn do-enroll" onclick="doEnroll()">报名</span></div>
+            </li>
+        </ul>
+    </section>
+</div>
+
+<div id="app-pay-loading" :class="{hide: !loadingStatus}"><defined-pay-loading></defined-pay-loading></div>
+
+<script src="http://oe3slowqt.bkt.clouddn.com/zepto.min.js"></script>
+<script src="https://jhsy.caizhu.com/static/js/timecountdown.js?data"></script>
+
+<script>
+    function doEnroll() {
+        var name = document.getElementById("enrollName").value;
+        name = name.trim();
+        if(!name) {
+            alert('请输入姓名');
+            return ;
+        }
+        var mobile = document.getElementById("enrollMobile").value;
+        mobile = mobile.trim();
+        var reg = /[1-9]\d{10}/;
+        if(!mobile) {
+            alert('请输入手机号');
+            return ;
+        }
+        if(!reg.test(mobile)) {
+            alert('请输入有效的手机号');
+            return ;
+        }
+
+        var wechat = document.getElementById("enrollWechat").value;
+        wechat = wechat || '';
+
+        $.ajax({
+            type: 'POST',
+            url: '/reading/register/goenroll',
+            dataType: 'json',
+            data: JSON.stringify(
+                {
+                    mobile: mobile,
+                    realname: name,
+                    weixin: wechat,
+                    openid: {{ .OpenId }}
+                }
+            ),
+            success: function(d){
+                if(d.code == 0){
+                    location.assign('/reading/register/pay/{{.Course.CourseType}}');
+                    // alert("go ok");
+                } else {
+                    alert(d.msg);
+                }
+            },
+            error: function(){}
+        });
+    }
+</script>
+
+<div style="display: none">
+    <script src="https://s19.cnzz.com/z_stat.php?id=1262185690&web_id=1262185690" language="JavaScript"></script>
+</div>
+
+</body>
+</html>

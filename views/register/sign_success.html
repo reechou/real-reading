@@ -1,0 +1,168 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <title>小鹿微课</title>
+    <meta charset="utf-8" >
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="keywords" content="" >
+    <meta name="description" content="" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" >
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="http://7xpo0j.com1.z0.glb.clouddn.com/reading/css/m-main.css" >
+    <link rel="stylesheet" href="/reading/m-show-1.css" >
+    <link rel="stylesheet" href="http://7xpo0j.com1.z0.glb.clouddn.com/reading/css/m-sy.css" >
+</head>
+<body>
+
+<style>
+    .prompt-p{word-break: break-all;}
+
+    /* ft */
+    .jhsy-ftbox{height: 50px;}
+    .jhsy-ft{position: fixed; padding: 0; width: 100%; bottom: 0; display: -webkit-box; display: box; text-align: center; background: #f76e6c; color: #fff; -webkit-transition: all .2s linear; transition: all .2s linear;}
+    .jhsy-ft.hide{display: none;}
+    .jhsy-ft > span{display: block; -webkit-box-flex: 1; box-flex: 1; height: 50px; line-height: 50px; font-size: 16px;}
+
+    .jhsy-ftbox22{height: 45px; padding: 15px 0; background: #fff;}
+    .jhsy-ft22{position: relative; padding: 0; width: 100%; top: 15px; display: -webkit-box; display: box; text-align: center; /*background: #288e76;*/ color: #fff; -webkit-transition: all .2s linear; transition: all .2s linear; background: url('http://img.caizhu.com/jhsy/images/mv1/v1.1/icon-btn.png') no-repeat center center; background-size: auto 45px; height: 45px;}
+    /*.jhsy-ft33{background-image: url('http://img.caizhu.com/jhsy/images/mv1/v1.1/icon-share.png?052618');}*/
+    .jhsy-ft33{display: inline-block; width: 50%; vertical-align: top; height: 45px; border-radius: 4px; color: #fff; line-height: 45px; background: #f76e6c; text-align: center; font-size: 16px;}
+    .jhsy-ft33 > img{margin: 0 0 0 8px; height: 20px; vertical-align: -5px;}
+    /*.jhsy-ft > span{display: block; -webkit-box-flex: 1; box-flex: 1; height: 45px; line-height: 45px;}*/
+</style>
+
+<!--<div id="init-pageshow"><div class="init-pageshow"></div></div>-->
+<style>
+    .enroll-dobox{margin-bottom: 8px;}
+    .do-pay.disabled{background: #bfbfbf;}
+
+    .show-pay-loading{position: fixed; width: 60px; height: 60px; left: 50%; top: 40%; margin-left: -30px; margin-top: -30px; background: rgba(0, 0, 0, .6) url('http://img.caizhu.com/jhsy/images/m/icon-big-loading.gif') no-repeat center center; background-size: 45px auto; border-radius: 5px;}
+</style>
+
+<div class="show-box nobd">
+    <div class="pb-info pt20 clearfix">
+        <span class="show-over">{{ .NickName }}</span>
+        <img src="{{ .AvatarUrl }}">
+    </div>
+
+    <section class="enroll-box">
+        <ol class="enroll-status">
+            <li class="eb-tone eb-icon">
+                <span class="icon-enroll"></span>
+                <p>报名</p>
+            </li>
+            <li class="eb-tone eb-line"></li>
+            <li class="eb-tone eb-icon">
+                <span class="icon-fee"></span>
+                <p>付费</p>
+            </li>
+            <li class="eb-tone eb-line"></li>
+            <li class="eb-tone eb-icon current">
+                <span class="icon-begin"></span>
+                <p>开学</p>
+            </li>
+        </ol>
+        <ul class="enroll-infobox mt20">
+            <li class="eb-block eb-level2">
+                <div class="eb-lv-info">
+                    <div class="eb-code">
+                        <img src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/succeed_07.png">
+                        <h3>恭喜您成为「{{.Course.Name}}」第{{.Course.CourseNum}}期学员</h3>
+                    </div>
+                    <p class="eb-mod02">
+                        本期开学时间为{{.StartTime}}，请认真阅读以下开课须知
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </section>
+</div>
+
+<div class="show-bd nobd">
+    <section class="enroll-box">
+        <ul class="enroll-infobox mt20">
+            <li class="eb-block eb-level2">
+                <div class="eb-lv-info">
+                    <img class="eb-showb" src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/su_02.png">
+                    <div class="eb-step">
+                        <img src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/bu_03.png">
+                        <h3>长按添加你的专属助教老师<br>(备注"共读")</h3>
+                    </div>
+                    <div class="eb-code">
+                        <img src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/erweima1.png">
+                    </div>
+                </div>
+            </li>
+
+            <li class="eb-block eb-level2">
+                <div class="eb-lv-info2">
+                    <div class="eb-step">
+                        <img src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/bu_06.png">
+                        <h3>了解规则</h3>
+                        <p class="eb-mod04">
+                            <span>「共读成长计划」</span>这是由<span>「小鹿微课」</span>推出的一项自我改变的读书计划，学制六个月。<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;小鹿微课依据科学的学习体系，结合考勤制度等课堂单元，系统化地帮助学员完善自身知识结构。<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;学员每阶段阅读一本精选图书，六个月内汲取30本好书的精华。超过10000名学员在共读书院里，等你一起来，读出更好的自己。
+                        </p>
+                    </div>
+                    <div class="eb-step2">
+                        <h3>图解</h3>
+                        <div class="eb-step-bu-xu">
+                            <img src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/succeed_23.png">
+                        </div>
+                        <img class="eb-showb-bu-tu1" src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/content_03.png">
+                        <p class="eb-mod03">
+                            报名成功后，{{.StartTime}}开课
+                        </p>
+                        <div class="eb-step-bu-xu">
+                            <img src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/succeed_26.png">
+                        </div>
+                        <img class="eb-showb-bu-tu2" src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/success_05.png">
+                        <p class="eb-mod03">
+                            也可在个人中心页面选择今日课程阅读
+                        </p>
+                    </div>
+                </div>
+            </li>
+
+            <li class="eb-block eb-level2">
+                <div class="eb-lv-info2">
+                    <div class="eb-step">
+                        <img src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/bu_08.png">
+                        <h3>关注小鹿微课公众号</h3>
+                    </div>
+                    <p class="eb-mod03">
+                        请确认已关注小鹿微课公众号，共读期间请勿取消关注以免影响您的课程
+                    </p>
+                    <div class="eb-code2">
+                        <img src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/erweima2.png">
+                    </div>
+                    <div class="mb50">
+                        <img class="eb-showb-nm" src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/slogen.png">
+                    </div>
+                    <!--<img class="eb-showb-nm" src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/succeed_38.png">-->
+                </div>
+            </li>
+        </ul>
+    </section>
+</div>
+
+{{ if eq .IfCourseStart 1 }}
+<footer id="jhsy-ftbox" class="jhsy-ft"><span class="academy-invite" onclick="location.assign('/reading/course/usercourselist');">进入我的课堂</span></footer>
+{{ else }}
+<footer id="jhsy-ftbox" class="jhsy-ft"><span class="academy-not-start">进入我的课堂(开课等待中...)</span></footer>
+{{ end }}
+
+<script src="http://oe3slowqt.bkt.clouddn.com/zepto.min.js"></script>
+<script src="https://jhsy.caizhu.com/static/js/timecountdown.js?data"></script>
+
+<div style="display: none">
+    <script src="https://s19.cnzz.com/z_stat.php?id=1262185690&web_id=1262185690" language="JavaScript"></script>
+</div>
+
+</body>
+</html>

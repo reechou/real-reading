@@ -2,6 +2,7 @@ package controller
 
 const (
 	READING_COURSE_TYPE_GD = 1
+	ENGLISH_COURSE_TYPE_GD = 2
 )
 
 const (

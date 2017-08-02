@@ -42,9 +42,10 @@ type ReadingOauth struct {
 }
 
 type SMSNotify struct {
-	Host       string
-	TemplateId string
-	Key        string
+	Host        string
+	TemplateId  string
+	RegisterTid string
+	Key         string
 }
 
 type Config struct {
