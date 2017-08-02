@@ -275,7 +275,7 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 		fmt.Sprintf("%d", registerInfo.Course.CourseType),
 		user.OpenId,
 		GetIPFromRequest(r),
-		fmt.Sprintf("%s%s/%s", r.Host, ReadingPrefix, READING_URI_PAY_NOTIFY),
+		fmt.Sprintf("%s%s/%s/%s", r.Host, ReadingPrefix, REGISTER_URI_PREFIX, READING_URI_PAY_NOTIFY),
 	)
 	if err != nil {
 		holmes.Error("reading unified order error: %v", err)
