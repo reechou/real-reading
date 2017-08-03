@@ -129,7 +129,7 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 		}
 		for _, v := range courseList {
 			if v.Course.CourseType == registerInfo.Course.CourseType {
-				registerInfo.Course.CourseNum = v.Course.CourseNum
+				registerInfo.Course = v.Course
 				registerInfo.StartTime = time.Unix(v.Course.StartTime, 0).Format("2006.01.02")
 				registerInfo.EndTime = time.Unix(v.Course.EndTime, 0).Format("2006.01.02")
 				if v.Course.StartTime <= time.Now().Unix() {
