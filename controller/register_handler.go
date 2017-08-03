@@ -474,6 +474,7 @@ func (self *ReadingHandler) registerSuccess(rr *HandlerRequest, w http.ResponseW
 			if v.Course.StartTime <= time.Now().Unix() {
 				registerInfo.IfCourseStart = 1
 			}
+			holmes.Debug("success register info: %v", registerInfo)
 			renderView(w, "./views/register/sign_success.html", registerInfo)
 			return
 		}
