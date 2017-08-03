@@ -53,6 +53,17 @@ func UpdateUserWxInfo(info *User) error {
 	return err
 }
 
+func GetUser(info *User) (bool, error) {
+	has, err := x.ID(info.ID).Get(info)
+	if err != nil {
+		return false, err
+	}
+	if !has {
+		return false, nil
+	}
+	return true, nil
+}
+
 func GetUserFromOpenid(info *User) (bool, error) {
 	has, err := x.Where("open_id = ?", info.OpenId).Get(info)
 	if err != nil {

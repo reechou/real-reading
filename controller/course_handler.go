@@ -25,6 +25,9 @@ const (
 	READING_COURSE_URI_PREFIX            = "course"
 	READING_COURSE_URI_CATA_AUDIOS       = "catalogaudios"
 	READING_COURSE_URI_CATA_SIGNIN       = "catalogsignin"
+	READING_COURSE_URI_CREATE_COMMENT    = "createcomment"
+	READING_COURSE_URI_GET_COMMENT       = "getcommentlist"
+	READING_COURSE_URI_UPDATE_COMMENT    = "updatecomment"
 	READING_COURSE_URI_LIST              = "usercourselist"
 	READING_COURSE_URI_INDEX             = "index"
 	READING_COURSE_URI_BOOK_CATALOG      = "bookcatalog"
@@ -45,10 +48,18 @@ func (self *ReadingHandler) courseHandle(rr *HandlerRequest, w http.ResponseWrit
 		return
 	}
 	switch rr.Params[0] {
+	// api
 	case READING_COURSE_URI_CATA_AUDIOS:
 		self.readingCourseCatalogAudios(rr, w, r)
 	case READING_COURSE_URI_CATA_SIGNIN:
 		self.readingCourseSignIn(rr, w, r)
+	case READING_COURSE_URI_CREATE_COMMENT:
+		self.readingCreateComment(rr, w, r)
+	case READING_COURSE_URI_GET_COMMENT:
+		self.readingGetCommentList(rr, w, r)
+	case READING_COURSE_URI_UPDATE_COMMENT:
+		self.readingUpdateComment(rr, w, r)
+	// tmp html
 	case READING_COURSE_URI_LIST:
 		self.readingCourseList(rr, w, r)
 	case READING_COURSE_URI_INDEX:
@@ -140,6 +151,87 @@ func (self *ReadingHandler) readingCourseSignIn(rr *HandlerRequest, w http.Respo
 	err = models.CreateUserCourseCheckin(courseCheckin)
 	if err != nil {
 		holmes.Error("create course checkin error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+}
+
+func (self *ReadingHandler) readingCreateComment(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &models.CourseComment{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+
+	err = models.CreateCourseComment(req)
+	if err != nil {
+		holmes.Error("create course comment error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	user := &models.User{ID: req.UserId}
+	has, err := models.GetUser(user)
+	if err != nil {
+		holmes.Error("get user error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	if !has {
+		holmes.Error("cannot found this user[%d]", req.UserId)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	rsp.Data = user
+}
+
+func (self *ReadingHandler) readingGetCommentList(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &proto.GetCommentListReq{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	
+	list, err := models.GetUserCourseComment(req.UserId, req.MonthCourseCatalogId)
+	if err != nil {
+		holmes.Error("get course comment error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	rsp.Data = list
+}
+
+func (self *ReadingHandler) readingUpdateComment(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &models.CourseComment{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	
+	req.Status = int64(models.COMMENT_STATUS_SHOW)
+	err = models.UpdateCourseCommentStatus(req)
+	if err != nil {
+		holmes.Error("update course comment error: %v", err)
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}

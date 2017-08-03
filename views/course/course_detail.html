@@ -19,6 +19,16 @@
     <link rel="stylesheet" href="https://h5.xiaoeknow.com/css/common.css?v2017622213437v">
     <link rel="stylesheet" href="/reading/audio-detail.css">
 
+    <style>
+        .my-comment-list{background-color: #fff; margin: 5px 0px 55px; border-top: 1px solid #ddd;}
+        .my-comment-list .part{display: -webkit-box; padding: 9px 18px 15px 19px;}
+        .my-comment-list .part p{display: block; -webkit-box-flex: 1; width: 100%;}
+        .my-comment-list .part p img{display: block; width: 40px; height: 40px; float: left;}
+        .my-comment-list .part p b{display: block; font-size: 15px; line-height: 15px; padding-left: 52px; padding-top: 3px; font-weight: normal; color: #999999;}
+        .my-comment-list .part .content{color: #000; line-height: 20px;}
+        .my-comment-list .part p span{display: block; font-size: 10px; line-height: 10px; color: #bbb; padding-left: 52px; padding-top: 9px;}
+    </style>
+
     <script>
         var htmlDom = document.documentElement;
         var windowWidth = htmlDom.clientWidth;
@@ -184,6 +194,47 @@
     </div>
     {{ end }}
 
+    <div id="comment_div" class="comment_div">
+        <div id="new_comments_title_hint" class="title_hint c3 t3">
+            <div class="title_hint_left">
+                评论区
+            </div>
+        </div>
+    </div>
+    <div class="my-comment-list" id="comment-list">
+    </div>
+
+    <div id="comment_bottom_face" class="comment_bottom_face" onclick="clickCommentInputFace()">
+        <div class="comment_bottom_wrap_face">
+
+            <div id="comment_input_face" class="comment_input_face t2">
+                发评论
+            </div>
+        </div>
+    </div>
+    <div id="comment_bottom" class="comment_bottom">
+        <!-- <div id="comment_bottom_mb" style="position: absolute;height: 100%; width: 100%; top: 0; left: 0;"></div> -->
+
+        <div id="comment_bottom_wrap" class="comment_bottom_wrap">
+            <div class="comment_hint t1 c2_dark"> 评论一下</div>
+
+            <div id="comment_input" class="comment_input t2">
+                <textarea autofocus
+                          maxlength="1000"
+                          placeholder="发评论"
+                          id="comment_input_real"
+                          class="comment_input_real t1"
+                ></textarea>
+            </div>
+            <div class="send_btn_box">
+                <button id="phone_cancel_button" class="input_button_l t1 background_default c2_dark c3" onclick="clickPhoneCancelButton()">取消
+                </button>
+                <button id="send_ok_btn" class="input_button_r t1 background_default c1" onclick="clickSendComment()">发送</button>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 <section id="ajax-loadingbox" :class="{hide:!flag}"><ajax-loading></ajax-loading></section>
@@ -192,18 +243,103 @@
 <script src="https://jhsy.caizhu.com/static/js/read-swipe.js"></script>
 
 <script>
-    //function clickCommentInputFace() {
-    //    $("#comment_bottom_face").hide();
-    //    $("#comment_bottom").show();
-    //    $("#comment_input_real").focus();
-    //}
-    //function clickPhoneCancelButton() {
-    //    $("#comment_bottom").hide();
-    //    $("#comment_bottom_face").show();
-    //}
-</script>
+    $(function(){  
+        loadCommentList();  
+    });
 
-<script>
+    Date.prototype.Format = function (fmt) {
+        var o = {
+            "y+": this.getFullYear(),
+            "M+": this.getMonth() + 1,                 //月份
+            "d+": this.getDate(),                    //日
+            "h+": this.getHours(),                   //小时
+            "m+": this.getMinutes(),                 //分
+            "s+": this.getSeconds(),                 //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S+": this.getMilliseconds()             //毫秒
+        };
+        for (var k in o) {
+            if (new RegExp("(" + k + ")").test(fmt)){
+                if(k == "y+"){
+                    fmt = fmt.replace(RegExp.$1, ("" + o[k]).substr(4 - RegExp.$1.length));
+                }
+                else if(k=="S+"){
+                    var lens = RegExp.$1.length;
+                    lens = lens==1?3:lens;
+                    fmt = fmt.replace(RegExp.$1, ("00" + o[k]).substr(("" + o[k]).length - 1,lens));
+                }
+                else{
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                }
+            }
+        }
+        return fmt;
+    }
+
+    function clickCommentInputFace() {
+        $("#comment_bottom_face").hide();
+        $("#comment_bottom").show();
+        $("#comment_input_real").focus();
+    }
+    function clickPhoneCancelButton() {
+        $("#comment_bottom").hide();
+        $("#comment_bottom_face").show();
+    }
+    function clickSendComment() {
+        $("#comment_bottom").hide();
+        $("#comment_bottom_face").show();
+        var comment = $('#comment_input_real').val();
+        $("#comment_input_real").val('');
+
+        $.ajax({
+            type: 'POST',
+            url: '/reading/course/createcomment',
+            dataType: 'json',
+            data: JSON.stringify(
+                {
+                    userId: {{ .UserId }},
+                    monthCourseCatalogId: {{ .MonthCourseCatalog.ID }},
+                    comment: comment
+                }
+            ),
+            success: function(d) {
+                if(d.code == 0) {
+                    var date = new Date();
+                    $('#comment-list').prepend('<div class="part"><p class="realation"><img class="lazy" src="' + d.data.avatarUrl + '"><b>' + d.data.name + '</b><b class="content">' + comment +'</b><span>' + date.Format("yyyy-MM-dd hh:mm") + '</span></p></div>');
+                } else {
+                    alert("评论失败，请稍后再试");
+                }
+            },
+            error: function(){}
+        });
+    }
+    function loadCommentList() {
+        $.ajax({
+            type: 'POST',
+            url: '/reading/course/getcommentlist',
+            dataType: 'json',
+            data: JSON.stringify(
+                {
+                    userId: {{ .UserId }},
+                    monthCourseCatalogId: {{ .MonthCourseCatalog.ID }},
+                }
+            ),
+            success: function(d) {
+                if(d.code == 0) {
+                    if(!d.data || d.data.length === 0) { $('#comment-list').html([]); return; }
+                    var html = [];
+                    $(d.data.reverse()).each(function(idx, item){
+                        html.push(
+                            '<div class="part"><p class="realation"><img class="lazy" src="' + item.user.avatarUrl + '"><b>' + item.user.name + '</b><b class="content">' + item.courseComment.comment +'</b><span>' + item.courseComment.createdAtStr + '</span></p></div>'
+                        );
+                    });
+                    $('#comment-list').html(html);
+                }
+            },
+            error: function(){}
+        });
+    }
+
     function doSign() {
         $.ajax({
             type: 'POST',

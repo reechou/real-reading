@@ -15,6 +15,11 @@ type ReadingCourseSignIn struct {
 	CatalogId int64  `json:"catalogId"`
 }
 
+type GetCommentListReq struct {
+	UserId               int64 `json:"userId"`
+	MonthCourseCatalogId int64 `json:"monthCourseCatalogId"`
+}
+
 // about course manager
 type BookReq struct {
 	BookId int64 `json:"bookId"`
