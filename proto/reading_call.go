@@ -20,6 +20,11 @@ type GetCommentListReq struct {
 	MonthCourseCatalogId int64 `json:"monthCourseCatalogId"`
 }
 
+type GetAllCommentListReq struct {
+	Offset int64 `json:"offset"`
+	Num    int64 `json:"num"`
+}
+
 // about course manager
 type BookReq struct {
 	BookId int64 `json:"bookId"`

@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	COMMENT_STATUS_SHOW = 1
+	COMMENT_STATUS_SHOW   = 1
+	COMMENT_STATUS_IGNORE = 2
 )
 
 type CourseComment struct {
