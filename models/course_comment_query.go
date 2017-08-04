@@ -43,11 +43,11 @@ func GetCourseCommentCount() (int64, error) {
 	return count, nil
 }
 
-func GetCourseCommentList(offset, num int64) ([]UserCourseCommentDetail, error) {
+func GetCourseCommentList(status, offset, num int64) ([]UserCourseCommentDetail, error) {
 	comments := make([]UserCourseCommentDetail, 0)
 	err := x.Join("LEFT", "user", "course_comment.user_id = user.id").
 		Join("LEFT", "month_course_catalog", "course_comment.month_course_catalog_id = month_course_catalog.id").
-		And("course_comment.status = 0").
+		And("course_comment.status = ?", status).
 		Limit(int(num), int(offset)).
 		Find(&comments)
 	if err != nil {

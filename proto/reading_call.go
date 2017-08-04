@@ -21,6 +21,7 @@ type GetCommentListReq struct {
 }
 
 type GetAllCommentListReq struct {
+	Status int64 `json:"status"`
 	Offset int64 `json:"offset"`
 	Num    int64 `json:"num"`
 }

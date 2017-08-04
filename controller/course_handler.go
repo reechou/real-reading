@@ -258,8 +258,8 @@ func (self *ReadingHandler) readingGetAllComment(rr *HandlerRequest, w http.Resp
 	}
 
 	type CourseCommentList struct {
-		Count int64
-		List  []models.UserCourseCommentDetail
+		Count int64                            `json:"count"`
+		List  []models.UserCourseCommentDetail `json:"list"`
 	}
 	result := new(CourseCommentList)
 	result.Count, err = models.GetCourseCommentCount()
@@ -268,7 +268,7 @@ func (self *ReadingHandler) readingGetAllComment(rr *HandlerRequest, w http.Resp
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
-	result.List, err = models.GetCourseCommentList(req.Offset, req.Num)
+	result.List, err = models.GetCourseCommentList(req.Status, req.Offset, req.Num)
 	if err != nil {
 		holmes.Error("get course comment list error: %v", err)
 		rsp.Code = proto.RESPONSE_ERR
