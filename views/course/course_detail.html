@@ -286,9 +286,12 @@
         $("#comment_bottom_face").show();
     }
     function clickSendComment() {
+        var comment = $('#comment_input_real').val();
+        if(comment.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
+            return;
+        }
         $("#comment_bottom").hide();
         $("#comment_bottom_face").show();
-        var comment = $('#comment_input_real').val();
         $("#comment_input_real").val('');
 
         $.ajax({
