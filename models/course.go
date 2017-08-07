@@ -21,6 +21,8 @@ type Course struct {
 	AbstractImg  string `xorm:"not null default '' varchar(256)" json:"abstractImg"`
 	SignupSlogan string `xorm:"not null default '' varchar(256)" json:"signupSlogan"`
 	SuccessInfo  string `xorm:"not null default '' varchar(1024)" json:"successInfo"`
+	AuditionName string `xorm:"not null default '' varchar(128)" json:"auditionName"`
+	AuditionUrl  string `xorm:"not null default '' varchar(256)" json:"auditionUrl"`
 	CreatedAt    int64  `xorm:"not null default 0 int" json:"createdAt"`
 	UpdatedAt    int64  `xorm:"not null default 0 int" json:"-"`
 }

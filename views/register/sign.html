@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="http://7xpo0j.com1.z0.glb.clouddn.com/reading/css/m-main.css" >
     <link rel="stylesheet" href="http://7xpo0j.com1.z0.glb.clouddn.com/reading/css/photoswipe.css">
     <link rel="stylesheet" href="http://7xpo0j.com1.z0.glb.clouddn.com/reading/css/default-skin.css">
+    <link rel="stylesheet" href="/reading/wx-audio.css">
+    <script type="text/javascript" src="/reading/wx-audio.js"></script>
 
     <style>
         body{background: #fff; color: #333; padding: 0 0 50px;}
@@ -110,6 +112,8 @@
         .pay-m{font-size: 56px;}
         .pay-r{font-size: 16px;}
 
+        .audio-box{padding-left: 15px; padding-right: 15px;}
+
         @media (max-width: 380px){
             .pay-infobox{width: 220px; height: 220px;}
             .pay-info{width: 210px; height: 210px;}
@@ -147,6 +151,31 @@
     <div id="jhsy-ftbox22" class="jhsy-ftbox22 show-center">
         <footer class="jhsy-ft33" onclick="location.assign('/reading/register/enroll/{{.Course.CourseType}}');">快速报名<img src="http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/icon-arrow.png"></footer>
     </div>
+
+    {{ if .Course.AuditionUrl }}
+    <section class="audio-box">
+        <audio preload="true">
+            <source src="{{.Course.AuditionUrl}}">
+        </audio>
+        <!-- player style -->
+        <div class="audio_area" id="audioplayer">
+            <div class="audio_wrp" id="music" preload="true">
+                <div class="audio_play_area play " id="pButton ">
+                    <i class="icon_audio_default "></i>
+                    <i class="icon_audio_playing "></i>
+                </div>
+                <div class="audio_length tips_global ">08:54</div>
+                <div class="audio_info_area ">
+                    <strong class="audio_title ">{{.Course.AuditionName}}</strong>
+                    <div class="audio_source tips_global ">小鹿微课</div>
+                </div>
+                <div id="timeline" class="progress_bar">
+                    <div id="playhead"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {{ end }}
 
     <div class="b-topbox p-rela">
         <img class="show-figure100" src="{{.Course.AbstractImg}}">
