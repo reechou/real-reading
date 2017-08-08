@@ -452,6 +452,7 @@ NEED_OAUTH:
 		user.AppId = self.l.cfg.ReadingOauth.ReadingWxAppId
 		user.Name = ui.Name
 		user.AvatarUrl = ui.AvatarUrl
+		user.Source = int64(ui.Source)
 		err = models.CreateUser(user)
 		if err != nil {
 			holmes.Error("create user error: %v", err)
