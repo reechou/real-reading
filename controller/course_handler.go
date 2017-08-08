@@ -304,6 +304,7 @@ type UserInfo struct {
 	OpenId    string
 	Name      string
 	AvatarUrl string
+	Source    int
 }
 
 func (self *ReadingHandler) checkUserBase(w http.ResponseWriter, r *http.Request) (ui *UserInfo, ifRedirect bool) {
@@ -413,6 +414,13 @@ NEED_OAUTH:
 		ifRedirect = true
 		http.Redirect(w, r, AuthCodeURL, http.StatusFound)
 		return
+	}
+	src := queryValues.Get("src")
+	if src != "" {
+		ui.Source, err = strconv.Atoi(src)
+		if err != nil {
+			holmes.Error("strconv src[%s] error: %v", src, err)
+		}
 	}
 
 	token, err := self.oauth2Client.ExchangeToken(code)

@@ -109,25 +109,13 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 	registerInfo.NickName = userinfo.Name
 	registerInfo.AvatarUrl = userinfo.AvatarUrl
 	registerInfo.OpenId = userinfo.OpenId
+	registerInfo.Source = userinfo.Source
 	var err error
 	registerInfo.Course.CourseType, err = strconv.ParseInt(rr.Params[1], 10, 0)
 	if err != nil {
 		holmes.Error("params[1][%s] strconv error: %v", rr.Params[1], err)
 		return
 	}
-	queryValues, err := url.ParseQuery(r.URL.RawQuery)
-	if err != nil {
-		holmes.Error("url parse query error: %v", err)
-		return
-	}
-	src := queryValues.Get("src")
-	if src != "" {
-		registerInfo.Source, err = strconv.Atoi(src)
-		if err != nil {
-			holmes.Error("strconv src[%s] error: %v", src, err)
-		}
-	}
-	holmes.Debug("src: %s %v", r.URL.RawQuery, registerInfo)
 
 	user := &models.User{
 		OpenId: userinfo.OpenId,
@@ -257,23 +245,12 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 
 	registerInfo := new(RegisterInfo)
 	registerInfo.OpenId = userinfo.OpenId
+	registerInfo.Source = userinfo.Source
 	var err error
 	registerInfo.Course.CourseType, err = strconv.ParseInt(rr.Params[1], 10, 0)
 	if err != nil {
 		holmes.Error("params[1][%s] strconv error: %v", rr.Params[1], err)
 		return
-	}
-	queryValues, err := url.ParseQuery(r.URL.RawQuery)
-	if err != nil {
-		holmes.Error("url parse query error: %v", err)
-		return
-	}
-	src := queryValues.Get("src")
-	if src != "" {
-		registerInfo.Source, err = strconv.Atoi(src)
-		if err != nil {
-			holmes.Error("strconv src[%s] error: %v", src, err)
-		}
 	}
 
 	user := &models.User{
