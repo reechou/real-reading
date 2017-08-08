@@ -307,9 +307,9 @@ func GetCourseUserList(courseId, offset int64) ([]CourseUserList, error) {
 }
 
 type UserCourseDetail struct {
-	UserCourse `xorm:"extends"`
-	User       `xorm:"extends"`
-	Course     `xorm:"extends"`
+	UserCourse `xorm:"extends" json:"userCourse"`
+	User       `xorm:"extends" json:"user"`
+	Course     `xorm:"extends" json:"course"`
 }
 
 func (UserCourseDetail) TableName() string {

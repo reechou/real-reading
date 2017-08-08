@@ -9,7 +9,7 @@ import (
 
 type CourseType struct {
 	ID         int64  `xorm:"pk autoincr" json:"id"`
-	CourseType int64  `xorm:"not null default 0 int index" json:"courseType"`
+	CourseType int64  `xorm:"not null default 0 int unique" json:"courseType"`
 	Desc       string `xorm:"not null default '' varchar(256)" json:"desc"`
 	CreatedAt  int64  `xorm:"not null default 0 int" json:"createdAt"`
 	UpdatedAt  int64  `xorm:"not null default 0 int" json:"-"`
