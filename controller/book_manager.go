@@ -215,7 +215,7 @@ func (self *ReadingHandler) courseManagerUpdateChapterRemark(rr *HandlerRequest,
 	defer func() {
 		writeRsp(w, rsp)
 	}()
-	
+
 	req := &models.Chapter{}
 	err := json.Unmarshal(rr.Val, &req)
 	if err != nil {
@@ -223,7 +223,7 @@ func (self *ReadingHandler) courseManagerUpdateChapterRemark(rr *HandlerRequest,
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
-	
+
 	err = models.UpdateChapterRemark(req)
 	if err != nil {
 		holmes.Error("update chapter remark error: %v", err)

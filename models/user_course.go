@@ -7,15 +7,16 @@ import (
 )
 
 type UserCourse struct {
-	ID        int64 `xorm:"pk autoincr" json:"id"`
-	UserId    int64 `xorm:"not null default 0 int index" json:"userId"`
-	CourseId  int64 `xorm:"not null default 0 int index" json:"courseId"`
-	Money     int64 `xorm:"not null default 0 int" json:"money"`
-	Status    int64 `xorm:"not null default 0 int index" json:"status"`
-	PayTime   int64 `xorm:"not null default 0 int index" json:"payTime"`
-	Source    int64 `xorm:"not null default 0 int index" json:"source"`
-	CreatedAt int64 `xorm:"not null default 0 int" json:"createdAt"`
-	UpdatedAt int64 `xorm:"not null default 0 int" json:"-"`
+	ID         int64 `xorm:"pk autoincr" json:"id"`
+	UserId     int64 `xorm:"not null default 0 int index" json:"userId"`
+	CourseId   int64 `xorm:"not null default 0 int index" json:"courseId"`
+	CourseType int64 `xorm:"not null default 0 int index" json:"courseType"`
+	Money      int64 `xorm:"not null default 0 int" json:"money"`
+	Status     int64 `xorm:"not null default 0 int index" json:"status"`
+	PayTime    int64 `xorm:"not null default 0 int index" json:"payTime"`
+	Source     int64 `xorm:"not null default 0 int index" json:"source"`
+	CreatedAt  int64 `xorm:"not null default 0 int" json:"createdAt"`
+	UpdatedAt  int64 `xorm:"not null default 0 int" json:"-"`
 }
 
 func CreateUserCourse(info *UserCourse) error {

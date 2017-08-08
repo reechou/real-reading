@@ -282,7 +282,7 @@ func (self *ReadingHandler) readingReplyComment(rr *HandlerRequest, w http.Respo
 	defer func() {
 		writeRsp(w, rsp)
 	}()
-	
+
 	req := &models.CourseComment{}
 	err := json.Unmarshal(rr.Val, &req)
 	if err != nil {
@@ -290,7 +290,7 @@ func (self *ReadingHandler) readingReplyComment(rr *HandlerRequest, w http.Respo
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
-	
+
 	err = models.UpdateCourseCommentReply(req)
 	if err != nil {
 		holmes.Error("update course comment reply error: %v", err)
@@ -964,7 +964,7 @@ func (self *ReadingHandler) readingCourseShare(rr *HandlerRequest, w http.Respon
 		// todo: redirect to sign
 		return
 	}
-	
+
 	course := &models.Course{
 		ID: courseShare.CourseId,
 	}
@@ -977,7 +977,8 @@ func (self *ReadingHandler) readingCourseShare(rr *HandlerRequest, w http.Respon
 		holmes.Error("cannot found this course[%d]", courseShare.CourseId)
 		return
 	}
-	// TODO: add course type
+	// add course type
+	courseShare.CourseType = course.CourseType
 
 	courseShare.DayNum, err = models.GetUserCourseCheckinCount(courseShare.UserId, courseShare.CourseId)
 	if err != nil {

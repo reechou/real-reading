@@ -328,6 +328,30 @@ func GetUserCourse(openId string) ([]UserCourseDetail, error) {
 	return userCourseList, nil
 }
 
+func GetUserCourseDataStatistics(courseType, source, startTime, endTime int64) ([]UserCourseDetail, error) {
+	var list []UserCourseDetail
+	var err error
+	if source != 0 {
+		err = x.Join("LEFT", "user", "user_course.user_id = user.id").
+			Join("LEFT", "course", "user_course.course_id = course.id").
+			Where("user_course.source = ?", source).
+			And("user_course.pay_time >= ?", startTime).
+			And("user_course.pay_time <= ?", endTime).
+			Find(&list)
+	} else {
+		err = x.Join("LEFT", "user", "user_course.user_id = user.id").
+			Join("LEFT", "course", "user_course.course_id = course.id").
+			Where("user_course.course_type = ?", courseType).
+			And("user_course.pay_time >= ?", startTime).
+			And("user_course.pay_time <= ?", endTime).
+			Find(&list)
+	}
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
 type UserCourseAttendance struct {
 	UserCourseCheckin  `xorm:"extends"`
 	MonthCourseCatalog `xorm:"extends"`

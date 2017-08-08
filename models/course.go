@@ -7,6 +7,22 @@ import (
 	"github.com/reechou/holmes"
 )
 
+type CourseType struct {
+	ID         int64  `xorm:"pk autoincr" json:"id"`
+	CourseType int64  `xorm:"not null default 0 int index" json:"courseType"`
+	Desc       string `xorm:"not null default '' varchar(256)" json:"desc"`
+	CreatedAt  int64  `xorm:"not null default 0 int" json:"createdAt"`
+	UpdatedAt  int64  `xorm:"not null default 0 int" json:"-"`
+}
+
+type CourseChannel struct {
+	ID         int64  `xorm:"pk autoincr" json:"id"`
+	CourseType int64  `xorm:"not null default 0 int index" json:"courseType"`
+	Desc       string `xorm:"not null default '' varchar(256)" json:"desc"`
+	CreatedAt  int64  `xorm:"not null default 0 int" json:"createdAt"`
+	UpdatedAt  int64  `xorm:"not null default 0 int" json:"-"`
+}
+
 type Course struct {
 	ID           int64  `xorm:"pk autoincr" json:"id"`
 	CourseType   int64  `xorm:"not null default 0 int index" json:"courseType"`
@@ -82,6 +98,55 @@ type MonthCourseCatalogAudio struct {
 	UpdatedAt            int64  `xorm:"not null default 0 int" json:"-"`
 }
 
+func CreateCourseType(info *CourseType) error {
+	now := time.Now().Unix()
+	info.CreatedAt = now
+	info.UpdatedAt = now
+
+	_, err := x.Insert(info)
+	if err != nil {
+		holmes.Error("create course type error: %v", err)
+		return err
+	}
+	holmes.Info("create course type[%v] success.", info)
+
+	return nil
+}
+
+func GetCourseTypeList() ([]CourseType, error) {
+	var courseTypes []CourseType
+	err := x.Find(&courseTypes)
+	if err != nil {
+		return nil, err
+	}
+	return courseTypes, nil
+}
+
+func CreateCourseChannel(info *CourseChannel) error {
+	now := time.Now().Unix()
+	info.CreatedAt = now
+	info.UpdatedAt = now
+
+	_, err := x.Insert(info)
+	if err != nil {
+		holmes.Error("create course channel error: %v", err)
+		return err
+	}
+	holmes.Info("create course channel[%v] success.", info)
+
+	return nil
+}
+
+func GetCourseChannelList(courseType int64) ([]CourseChannel, error) {
+	var courseChannels []CourseChannel
+	err := x.Where("course_type = ?", courseType).Find(&courseChannels)
+	if err != nil {
+		return nil, err
+	}
+	return courseChannels, nil
+}
+
+// --------------- course ---------------
 func CreateCourse(info *Course) error {
 	now := time.Now().Unix()
 	info.CreatedAt = now

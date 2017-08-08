@@ -104,7 +104,7 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if rr.Path == "" {
 		return
 	}
-	
+
 	if strings.HasSuffix(rr.Path, "txt") {
 		http.ServeFile(w, r, self.l.cfg.ReadingOauth.MpVerifyDir+rr.Path)
 		return
@@ -127,6 +127,10 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	if strings.HasPrefix(rr.Path, REGISTER_URI_PREFIX) {
 		self.registerHandle(rr, w, r)
+		return
+	}
+	if strings.HasPrefix(rr.Path, DATA_STATISTICS_URI_PREFIX) {
+		self.dataStatisticsHandle(rr, w, r)
 		return
 	}
 
@@ -289,11 +293,12 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 			return
 		}
 		userCourse := &models.UserCourse{
-			UserId:   user.ID,
-			CourseId: course.ID,
-			Money:    readingUser.Money,
-			Status:   readingUser.Status,
-			PayTime:  readingUser.UpdatedAt,
+			UserId:     user.ID,
+			CourseId:   course.ID,
+			CourseType: READING_COURSE_TYPE_GD,
+			Money:      readingUser.Money,
+			Status:     readingUser.Status,
+			PayTime:    readingUser.UpdatedAt,
 		}
 		err = models.CreateUserCourse(userCourse)
 		if err != nil {
@@ -506,11 +511,12 @@ func (self *ReadingHandler) readingPay(rr *HandlerRequest, w http.ResponseWriter
 		if strings.Contains(err.Error(), "ORDERPAID") {
 			// 订单已支付, 但未更新状态
 			userCourse := &models.UserCourse{
-				UserId:   user.ID,
-				CourseId: course.ID,
-				Money:    payMoney,
-				Status:   READING_COURSE_STATUS_PAIED,
-				PayTime:  time.Now().Unix(),
+				UserId:     user.ID,
+				CourseId:   course.ID,
+				CourseType: READING_COURSE_TYPE_GD,
+				Money:      payMoney,
+				Status:     READING_COURSE_STATUS_PAIED,
+				PayTime:    time.Now().Unix(),
 			}
 			err = models.CreateUserCourse(userCourse)
 			if err != nil {
@@ -714,11 +720,12 @@ func (self *ReadingHandler) readingPayNotify(rr *HandlerRequest, w http.Response
 		}
 	}
 	userCourse := &models.UserCourse{
-		UserId:   user.ID,
-		CourseId: course.ID,
-		Money:    int64(money),
-		Status:   READING_COURSE_STATUS_PAIED,
-		PayTime:  time.Now().Unix(),
+		UserId:     user.ID,
+		CourseId:   course.ID,
+		CourseType: READING_COURSE_TYPE_GD,
+		Money:      int64(money),
+		Status:     READING_COURSE_STATUS_PAIED,
+		PayTime:    time.Now().Unix(),
 	}
 	err = models.CreateUserCourse(userCourse)
 	if err != nil {

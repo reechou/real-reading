@@ -1,9 +1,9 @@
 package models
 
 import (
-	"time"
 	"fmt"
-	
+	"time"
+
 	"github.com/reechou/holmes"
 )
 
@@ -116,7 +116,7 @@ func UpdateChapter(info *Chapter) error {
 
 func UpdateChapterRemark(info *Chapter) error {
 	info.UpdatedAt = time.Now().Unix()
-	_, err := x.ID(info.ID).Cols( "remark", "updated_at").Update(info)
+	_, err := x.ID(info.ID).Cols("remark", "updated_at").Update(info)
 	return err
 }
 

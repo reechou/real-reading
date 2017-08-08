@@ -54,6 +54,18 @@ type MonthCourseCatalogReq struct {
 	MonthCourseCatalogId int64 `json:"monthCourseCatalogId"`
 }
 
+// about data statistics
+type GetCourseChannelReq struct {
+	CourseType int64 `json:"courseType"`
+}
+
+type GetCourseDataStatisticsReq struct {
+	CourseType int64 `json:"courseType"`
+	Source     int64 `json:"source"`
+	StartTime  int64 `json:"startTime"`
+	EndTime    int64 `json:"endTime"`
+}
+
 // about response
 type ReadingPayToday struct {
 	OrderNum int64 `json:"orderNum"`

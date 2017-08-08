@@ -29,10 +29,10 @@ func (self *SMSNotifyExt) SMSNotifyNormal(mobile, tmpId, params string) error {
 	if mobile == "" {
 		return fmt.Errorf("not found mobile")
 	}
-	
+
 	requestUrl := self.cfg.SMSNotify.Host
 	parseRequestUrl, _ := url.Parse(requestUrl)
-	
+
 	tplValue := url.QueryEscape(params)
 	extraParams := url.Values{
 		"mobile":    {mobile},
@@ -41,7 +41,7 @@ func (self *SMSNotifyExt) SMSNotifyNormal(mobile, tmpId, params string) error {
 		"key":       {self.cfg.SMSNotify.Key},
 	}
 	parseRequestUrl.RawQuery = extraParams.Encode()
-	
+
 	req, err := http.NewRequest("GET", parseRequestUrl.String(), nil)
 	if err != nil {
 		holmes.Error("http new request error: %v", err)
@@ -68,9 +68,9 @@ func (self *SMSNotifyExt) SMSNotifyNormal(mobile, tmpId, params string) error {
 		holmes.Error("sms notify error: %s", response.Reason)
 		return fmt.Errorf("sms notify error: %s", response.Reason)
 	}
-	
+
 	holmes.Info("sms send notify to mobile[%s] success", mobile)
-	
+
 	return nil
 }
 

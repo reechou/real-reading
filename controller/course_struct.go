@@ -73,11 +73,12 @@ type CourseCatalogDetailList struct {
 }
 
 type CourseShare struct {
-	DayNum   int64
-	UserId   int64
-	CourseId int64
-	OpenId   string
-	AppId    string
+	DayNum     int64
+	UserId     int64
+	CourseId   int64
+	CourseType int64
+	OpenId     string
+	AppId      string
 	JssdkInfo
 }
 

@@ -58,14 +58,14 @@ func TestDB(t *testing.T) {
 func TestCourseNotify(t *testing.T) {
 	c := initConfig()
 	initReleaseDb(c)
-	
+
 	userList, err := GetCourseUserList(1, 0)
 	if err != nil {
 		fmt.Printf("get course user list error: %v\n", err)
 		return
 	}
 	fmt.Println(len(userList))
-	
+
 	sms := ext.NewSMSNotifyExt(c)
 	for _, v := range userList {
 		params := fmt.Sprintf("#RealName#=%s", v.User.RealName)
@@ -78,7 +78,7 @@ func TestCourseNotify(t *testing.T) {
 
 func TestTransOldData(t *testing.T) {
 	initRealeaseDb()
-	
+
 	oldList, err := GetReadingPayFromTime(0)
 	if err != nil {
 		fmt.Printf("get reading pay from time error: %v\n", err)

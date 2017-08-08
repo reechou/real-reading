@@ -2,7 +2,7 @@ package models
 
 import (
 	"time"
-	
+
 	"github.com/reechou/holmes"
 )
 
@@ -29,14 +29,14 @@ func CreateCourseComment(info *CourseComment) error {
 	now := time.Now()
 	info.CreatedAt = now.Unix()
 	info.CreatedAtStr = now.Format("2006-01-02 15:04")
-	
+
 	_, err := x.Insert(info)
 	if err != nil {
 		holmes.Error("create course comment error: %v", err)
 		return err
 	}
 	holmes.Info("create course comment[%v] success.", info)
-	
+
 	return nil
 }
 

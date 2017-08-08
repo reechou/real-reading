@@ -12,13 +12,13 @@ type RegisterInfo struct {
 	EnrollMobile string
 	EnrollWechat string
 	Source       int
-	
+
 	Course models.Course
-	
+
 	IfCourseStart  int64
 	StartTime      string
 	EndTime        string
 	IndexStartTime string
-	
+
 	WxJsApiParams
 }

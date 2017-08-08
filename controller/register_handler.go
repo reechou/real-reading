@@ -1,24 +1,24 @@
 package controller
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
-	"io"
-	"bytes"
-	"net/url"
-	
+
 	"github.com/chanxuehong/rand"
 	"github.com/chanxuehong/util"
 	"github.com/chanxuehong/util/security"
+	mchcore "github.com/chanxuehong/wechat.v2/mch/core"
+	mchpay "github.com/chanxuehong/wechat.v2/mch/pay"
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-reading/models"
 	"github.com/reechou/real-reading/proto"
-	mchcore "github.com/chanxuehong/wechat.v2/mch/core"
-	mchpay "github.com/chanxuehong/wechat.v2/mch/pay"
 )
 
 const (
@@ -53,7 +53,7 @@ func (self *ReadingHandler) registerSignup(rr *HandlerRequest, w http.ResponseWr
 		holmes.Error("params error: %v", rr.Params)
 		return
 	}
-	
+
 	registerInfo := new(RegisterInfo)
 	var err error
 	registerInfo.Course.CourseType, err = strconv.ParseInt(rr.Params[1], 10, 0)
@@ -73,7 +73,7 @@ func (self *ReadingHandler) registerSignup(rr *HandlerRequest, w http.ResponseWr
 			holmes.Error("strconv src[%s] error: %v", src, err)
 		}
 	}
-	
+
 	has, err := models.GetCourseMaxNum(&registerInfo.Course)
 	if err != nil {
 		holmes.Error("get course max num error: %v", err)
@@ -85,12 +85,12 @@ func (self *ReadingHandler) registerSignup(rr *HandlerRequest, w http.ResponseWr
 		io.WriteString(w, MSG_ERROR_COURSE_NOT_FOUND)
 		return
 	}
-	
+
 	registerInfo.Course.Money /= 100
 	registerInfo.IndexStartTime = time.Unix(registerInfo.Course.StartTime, 0).Format("2006年01月02日")
 	registerInfo.StartTime = time.Unix(registerInfo.Course.StartTime, 0).Format("2006.01")
 	registerInfo.EndTime = time.Unix(registerInfo.Course.EndTime, 0).Format("2006.01")
-	
+
 	renderView(w, "./views/register/sign.html", registerInfo)
 }
 
@@ -99,12 +99,12 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 	if ifRedirect {
 		return
 	}
-	
+
 	if len(rr.Params) < 2 {
 		holmes.Error("params error: %v", rr.Params)
 		return
 	}
-	
+
 	registerInfo := new(RegisterInfo)
 	registerInfo.NickName = userinfo.Name
 	registerInfo.AvatarUrl = userinfo.AvatarUrl
@@ -127,7 +127,7 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 			holmes.Error("strconv src[%s] error: %v", src, err)
 		}
 	}
-	
+
 	user := &models.User{
 		OpenId: userinfo.OpenId,
 	}
@@ -165,7 +165,7 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 			}
 		}
 	}
-	
+
 	if !has {
 		user.AppId = self.l.cfg.ReadingOauth.ReadingWxAppId
 		user.Name = userinfo.Name
@@ -177,7 +177,7 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 			return
 		}
 	}
-	
+
 	has, err = models.GetCourseMaxNum(&registerInfo.Course)
 	if err != nil {
 		holmes.Error("get course max num error: %v", err)
@@ -189,7 +189,7 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 		io.WriteString(w, MSG_ERROR_COURSE_NOT_FOUND)
 		return
 	}
-	
+
 	if user.RealName != "" {
 		registerInfo.EnrollName = user.RealName
 	}
@@ -209,7 +209,7 @@ func (self *ReadingHandler) registerGoEnroll(rr *HandlerRequest, w http.Response
 	defer func() {
 		writeRsp(w, rsp)
 	}()
-	
+
 	req := &proto.ReadingEnrollReq{}
 	err := json.Unmarshal(rr.Val, &req)
 	if err != nil {
@@ -217,7 +217,7 @@ func (self *ReadingHandler) registerGoEnroll(rr *HandlerRequest, w http.Response
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
-	
+
 	user := &models.User{
 		OpenId: req.OpenId,
 	}
@@ -248,12 +248,12 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 	if ifRedirect {
 		return
 	}
-	
+
 	if len(rr.Params) < 2 {
 		holmes.Error("params error: %v", rr.Params)
 		return
 	}
-	
+
 	registerInfo := new(RegisterInfo)
 	registerInfo.OpenId = userinfo.OpenId
 	var err error
@@ -274,7 +274,7 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 			holmes.Error("strconv src[%s] error: %v", src, err)
 		}
 	}
-	
+
 	user := &models.User{
 		OpenId: userinfo.OpenId,
 	}
@@ -301,7 +301,7 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 		io.WriteString(w, MSG_ERROR_COURSE_NOT_FOUND)
 		return
 	}
-	
+
 	payMoney := registerInfo.Course.Money
 	if userinfo.OpenId == "oaKrZwsAF6pRX6z3Qn_EhIZ3DG90" || userinfo.OpenId == "oaKrZwotcenPmZyLKtMyoHZSTlaQ" {
 		payMoney = 1
@@ -320,11 +320,13 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 		if strings.Contains(err.Error(), "ORDERPAID") {
 			// 订单已支付, 但未更新状态
 			userCourse := &models.UserCourse{
-				UserId:   user.ID,
-				CourseId: registerInfo.Course.ID,
-				Money:    payMoney,
-				Status:   READING_COURSE_STATUS_PAIED,
-				PayTime:  time.Now().Unix(),
+				UserId:     user.ID,
+				CourseId:   registerInfo.Course.ID,
+				CourseType: registerInfo.Course.CourseType,
+				Money:      payMoney,
+				Status:     READING_COURSE_STATUS_PAIED,
+				PayTime:    time.Now().Unix(),
+				Source:     int64(registerInfo.Source),
 			}
 			err = models.CreateUserCourse(userCourse)
 			if err != nil {
@@ -337,9 +339,9 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 		}
 		return
 	}
-	
+
 	registerInfo.Course.Money /= 100
-	
+
 	registerInfo.WxJsApiParams = WxJsApiParams{
 		AppId:     self.l.cfg.ReadingOauth.ReadingWxAppId,
 		TimeStamp: fmt.Sprintf("%d", time.Now().Unix()),
@@ -362,14 +364,14 @@ func (self *ReadingHandler) registerPayNotify(rr *HandlerRequest, w http.Respons
 	defer func() {
 		io.WriteString(w, "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>")
 	}()
-	
+
 	msg, err := util.DecodeXMLToMap(bytes.NewReader(rr.Val))
 	if err != nil {
 		holmes.Error("decode xml error: %v", err)
 		return
 	}
 	holmes.Debug("pay notify msg: %v", msg)
-	
+
 	returnCode, ok := msg["return_code"]
 	if returnCode == mchcore.ReturnCodeSuccess || !ok {
 		haveAppId := msg["appid"]
@@ -379,7 +381,7 @@ func (self *ReadingHandler) registerPayNotify(rr *HandlerRequest, w http.Respons
 			holmes.Error("%v", err)
 			return
 		}
-		
+
 		haveMchId := msg["mch_id"]
 		wantMchId := self.l.cfg.ReadingOauth.ReadingMchId
 		if haveMchId != "" && wantMchId != "" && !security.SecureCompareString(haveMchId, wantMchId) {
@@ -387,7 +389,7 @@ func (self *ReadingHandler) registerPayNotify(rr *HandlerRequest, w http.Respons
 			holmes.Error("%v", err)
 			return
 		}
-		
+
 		// 认证签名
 		haveSignature, ok := msg["sign"]
 		if !ok {
@@ -401,7 +403,7 @@ func (self *ReadingHandler) registerPayNotify(rr *HandlerRequest, w http.Respons
 			return
 		}
 	}
-	
+
 	openId, ok := msg["openid"]
 	if !ok {
 		holmes.Error("msg openid not found.")
@@ -427,7 +429,7 @@ func (self *ReadingHandler) registerPayNotify(rr *HandlerRequest, w http.Respons
 		holmes.Error("msg attach[%s] strconv error: %v", attach, err)
 		return
 	}
-	
+
 	course := &models.Course{
 		CourseType: int64(courseType),
 	}
@@ -458,12 +460,13 @@ func (self *ReadingHandler) registerPayNotify(rr *HandlerRequest, w http.Respons
 		}
 	}
 	userCourse := &models.UserCourse{
-		UserId:   user.ID,
-		CourseId: course.ID,
-		Money:    int64(money),
-		Status:   READING_COURSE_STATUS_PAIED,
-		PayTime:  time.Now().Unix(),
-		Source:   user.Source,
+		UserId:     user.ID,
+		CourseId:   course.ID,
+		CourseType: course.CourseType,
+		Money:      int64(money),
+		Status:     READING_COURSE_STATUS_PAIED,
+		PayTime:    time.Now().Unix(),
+		Source:     user.Source,
 	}
 	err = models.CreateUserCourse(userCourse)
 	if err != nil {
@@ -482,12 +485,12 @@ func (self *ReadingHandler) registerSuccess(rr *HandlerRequest, w http.ResponseW
 	if ifRedirect {
 		return
 	}
-	
+
 	if len(rr.Params) < 2 {
 		holmes.Error("params error: %v", rr.Params)
 		return
 	}
-	
+
 	registerInfo := new(RegisterInfo)
 	registerInfo.OpenId = userinfo.OpenId
 	var err error
@@ -496,7 +499,7 @@ func (self *ReadingHandler) registerSuccess(rr *HandlerRequest, w http.ResponseW
 		holmes.Error("params[1][%s] strconv error: %v", rr.Params[1], err)
 		return
 	}
-	
+
 	userCourseList, err := models.GetUserCourse(registerInfo.OpenId)
 	if err != nil {
 		holmes.Error("get reading pay error: %v", err)
@@ -553,7 +556,6 @@ func (self *ReadingHandler) registerSuccess(rr *HandlerRequest, w http.ResponseW
 	renderView(w, "./views/register/sign_success.html", registerInfo)
 }
 
-
 func (self *ReadingHandler) registerUnifiedOrder(payId, payMoney int64, title, attach, openId, userIp, notifyUrl string) (*mchpay.UnifiedOrderResponse, error) {
 	uor := &mchpay.UnifiedOrderRequest{
 		DeviceInfo:     "WEB",
@@ -567,12 +569,12 @@ func (self *ReadingHandler) registerUnifiedOrder(payId, payMoney int64, title, a
 		TradeType:      "JSAPI",
 		OpenId:         openId,
 	}
-	
+
 	rsp, err := mchpay.UnifiedOrder2(self.mchClient, uor)
 	if err != nil {
 		holmes.Error("mch pay unified order error: %v", err)
 		return nil, err
 	}
-	
+
 	return rsp, nil
 }
