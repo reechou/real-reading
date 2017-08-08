@@ -127,6 +127,7 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 			holmes.Error("strconv src[%s] error: %v", src, err)
 		}
 	}
+	holmes.Debug("src: %s %v", r.URL.RawQuery, registerInfo)
 
 	user := &models.User{
 		OpenId: userinfo.OpenId,
