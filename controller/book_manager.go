@@ -209,3 +209,25 @@ func (self *ReadingHandler) courseManagerUpdateChapter(rr *HandlerRequest, w htt
 		return
 	}
 }
+
+func (self *ReadingHandler) courseManagerUpdateChapterRemark(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &models.Chapter{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	
+	err = models.UpdateChapterRemark(req)
+	if err != nil {
+		holmes.Error("update chapter remark error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+}

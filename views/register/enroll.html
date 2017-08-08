@@ -112,7 +112,7 @@
             ),
             success: function(d){
                 if(d.code == 0){
-                    location.assign('/reading/register/pay/{{.Course.CourseType}}');
+                    location.assign('/reading/register/pay/{{.Course.CourseType}}?src={{.Source}}');
                     // alert("go ok");
                 } else {
                     alert(d.msg);

@@ -17,7 +17,8 @@ type User struct {
 	Wechat      string `xorm:"not null default '' varchar(64)" json:"tempUri"`
 	IfNotRemind int64  `xorm:"not null default 0 int" json:"ifNotRemind"`
 	RemindTime  int64  `xorm:"not null default 0 int" json:"remindTime"`
-	CreatedAt   int64  `xorm:"not null default 0 int" json:"createdAt"`
+	Source      int64  `xorm:"not null default 0 int index" json:"source"`
+	CreatedAt   int64  `xorm:"not null default 0 int index" json:"createdAt"`
 	UpdatedAt   int64  `xorm:"not null default 0 int index" json:"-"`
 }
 

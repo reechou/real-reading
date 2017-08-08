@@ -13,6 +13,7 @@ type UserCourse struct {
 	Money     int64 `xorm:"not null default 0 int" json:"money"`
 	Status    int64 `xorm:"not null default 0 int index" json:"status"`
 	PayTime   int64 `xorm:"not null default 0 int index" json:"payTime"`
+	Source    int64 `xorm:"not null default 0 int index" json:"source"`
 	CreatedAt int64 `xorm:"not null default 0 int" json:"createdAt"`
 	UpdatedAt int64 `xorm:"not null default 0 int" json:"-"`
 }

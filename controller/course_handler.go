@@ -964,6 +964,20 @@ func (self *ReadingHandler) readingCourseShare(rr *HandlerRequest, w http.Respon
 		// todo: redirect to sign
 		return
 	}
+	
+	course := &models.Course{
+		ID: courseShare.CourseId,
+	}
+	has, err := models.GetCourse(course)
+	if err != nil {
+		holmes.Error("get course error: %v", err)
+		return
+	}
+	if !has {
+		holmes.Error("cannot found this course[%d]", courseShare.CourseId)
+		return
+	}
+	// TODO: add course type
 
 	courseShare.DayNum, err = models.GetUserCourseCheckinCount(courseShare.UserId, courseShare.CourseId)
 	if err != nil {

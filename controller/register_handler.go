@@ -9,6 +9,7 @@ import (
 	"time"
 	"io"
 	"bytes"
+	"net/url"
 	
 	"github.com/chanxuehong/rand"
 	"github.com/chanxuehong/util"
@@ -60,6 +61,18 @@ func (self *ReadingHandler) registerSignup(rr *HandlerRequest, w http.ResponseWr
 		holmes.Error("params[1][%s] strconv error: %v", rr.Params[1], err)
 		return
 	}
+	queryValues, err := url.ParseQuery(r.URL.RawQuery)
+	if err != nil {
+		holmes.Error("url parse query error: %v", err)
+		return
+	}
+	src := queryValues.Get("src")
+	if src != "" {
+		registerInfo.Source, err = strconv.Atoi(src)
+		if err != nil {
+			holmes.Error("strconv src[%s] error: %v", src, err)
+		}
+	}
 	
 	has, err := models.GetCourseMaxNum(&registerInfo.Course)
 	if err != nil {
@@ -101,6 +114,18 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 	if err != nil {
 		holmes.Error("params[1][%s] strconv error: %v", rr.Params[1], err)
 		return
+	}
+	queryValues, err := url.ParseQuery(r.URL.RawQuery)
+	if err != nil {
+		holmes.Error("url parse query error: %v", err)
+		return
+	}
+	src := queryValues.Get("src")
+	if src != "" {
+		registerInfo.Source, err = strconv.Atoi(src)
+		if err != nil {
+			holmes.Error("strconv src[%s] error: %v", src, err)
+		}
 	}
 	
 	user := &models.User{
@@ -145,6 +170,7 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 		user.AppId = self.l.cfg.ReadingOauth.ReadingWxAppId
 		user.Name = userinfo.Name
 		user.AvatarUrl = userinfo.AvatarUrl
+		user.Source = int64(registerInfo.Source)
 		err = models.CreateUser(user)
 		if err != nil {
 			holmes.Error("create user error: %v", err)
@@ -235,6 +261,18 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 	if err != nil {
 		holmes.Error("params[1][%s] strconv error: %v", rr.Params[1], err)
 		return
+	}
+	queryValues, err := url.ParseQuery(r.URL.RawQuery)
+	if err != nil {
+		holmes.Error("url parse query error: %v", err)
+		return
+	}
+	src := queryValues.Get("src")
+	if src != "" {
+		registerInfo.Source, err = strconv.Atoi(src)
+		if err != nil {
+			holmes.Error("strconv src[%s] error: %v", src, err)
+		}
 	}
 	
 	user := &models.User{
@@ -425,6 +463,7 @@ func (self *ReadingHandler) registerPayNotify(rr *HandlerRequest, w http.Respons
 		Money:    int64(money),
 		Status:   READING_COURSE_STATUS_PAIED,
 		PayTime:  time.Now().Unix(),
+		Source:   user.Source,
 	}
 	err = models.CreateUserCourse(userCourse)
 	if err != nil {

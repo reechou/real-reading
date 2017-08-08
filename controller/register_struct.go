@@ -11,6 +11,7 @@ type RegisterInfo struct {
 	EnrollName   string
 	EnrollMobile string
 	EnrollWechat string
+	Source       int
 	
 	Course models.Course
 	

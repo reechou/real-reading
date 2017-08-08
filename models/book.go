@@ -24,6 +24,7 @@ type Chapter struct {
 	Title     string `xorm:"not null default '' varchar(256)" json:"title"`
 	Cover     string `xorm:"not null default '' varchar(256)" json:"cover"`
 	Content   string `xorm:"text" json:"content"`
+	Remark    string `xorm:"not null default '' varchar(128)" json:"remark"`
 	CreatedAt int64  `xorm:"not null default 0 int" json:"createdAt"`
 	UpdatedAt int64  `xorm:"not null default 0 int" json:"-"`
 }
@@ -109,7 +110,13 @@ func DelChapter(info *Chapter) error {
 
 func UpdateChapter(info *Chapter) error {
 	info.UpdatedAt = time.Now().Unix()
-	_, err := x.ID(info.ID).Cols("index_id", "title", "cover", "content", "updated_at").Update(info)
+	_, err := x.ID(info.ID).Cols("index_id", "title", "cover", "content", "remark", "updated_at").Update(info)
+	return err
+}
+
+func UpdateChapterRemark(info *Chapter) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols( "remark", "updated_at").Update(info)
 	return err
 }
 
