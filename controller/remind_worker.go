@@ -155,7 +155,7 @@ func (self *RemindWorker) doRemind(ri *RemindInfo) {
 	} else {
 		courseRemind.RemindUserNum = 0
 	}
-	userList, err := models.GetCourseUserList(ri.Course.ID, offset)
+	userList, err := models.GetCourseUserList(ri.Course.ID, offset, int64(READING_COURSE_STATUS_PAIED))
 	if err != nil {
 		holmes.Error("get course user list error: %v", err)
 		return

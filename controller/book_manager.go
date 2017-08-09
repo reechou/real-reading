@@ -231,3 +231,160 @@ func (self *ReadingHandler) courseManagerUpdateChapterRemark(rr *HandlerRequest,
 		return
 	}
 }
+
+func (self *ReadingHandler) courseManagerCreateBookCatalog(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &models.BookCatalog{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	
+	err = models.CreateBookCatalog(req)
+	if err != nil {
+		holmes.Error("create book catalog error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+}
+
+func (self *ReadingHandler) courseManagerDeleteBookCatalog(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &models.BookCatalog{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	
+	err = models.DelBookCatalog(req)
+	if err != nil {
+		holmes.Error("delete book catalog error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+}
+
+func (self *ReadingHandler) courseManagerUpdateBookCatalog(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &models.BookCatalog{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	
+	err = models.UpdateBookCatalog(req)
+	if err != nil {
+		holmes.Error("update book catalog error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+}
+
+func (self *ReadingHandler) courseManagerGetBookCatalogList(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &proto.BookReq{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	
+	list, err := models.GetBookCatalogList(req.BookId)
+	if err != nil {
+		holmes.Error("get book catalog list error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	rsp.Data = list
+}
+
+func (self *ReadingHandler) courseManagerCreateBookCatalogChapter(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	var req []models.BookCatalogChapter
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	
+	err = models.CreateBookCatalogChapterList(req)
+	if err != nil {
+		holmes.Error("create book catalog chapter list error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+}
+
+func (self *ReadingHandler) courseManagerDeleteBookCatalogChapter(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &models.BookCatalogChapter{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	
+	err = models.DelBookCatalogChapter(req)
+	if err != nil {
+		holmes.Error("delete book catalog chapter error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+}
+
+func (self *ReadingHandler) courseManagerGetBookCatalogChapterList(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &proto.BookCatalogReq{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	
+	list, err := models.GetBookCatalogChapterList(req.BookCatalogId)
+	if err != nil {
+		holmes.Error("get book catalog chapter list error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	rsp.Data = list
+}
+

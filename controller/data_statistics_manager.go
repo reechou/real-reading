@@ -19,6 +19,7 @@ const (
 	DATA_STATISTICS_GET_COURSE_TYPE_LIST    = "getcoursetypelist"
 	DATA_STATISTICS_CREATE_COURSE_CHANNEL   = "createcoursechannel"
 	DATA_STATISTICS_GET_COURSE_CHANNEL_LIST = "getcoursechannellist"
+	DATA_STATISTICS_SET_USER_COURSE_REFUND  = "setusercourserefund"
 	DATA_STATISTICS_GET_COURSE_STATISTICS   = "getcoursedatastatistics"
 )
 
@@ -38,6 +39,8 @@ func (self *ReadingHandler) dataStatisticsHandle(rr *HandlerRequest, w http.Resp
 		self.createCourseChannel(rr, w, r)
 	case DATA_STATISTICS_GET_COURSE_CHANNEL_LIST:
 		self.getCourseChannelList(rr, w, r)
+	case DATA_STATISTICS_SET_USER_COURSE_REFUND:
+		self.setUserCourseRefund(rr, w, r)
 	case DATA_STATISTICS_GET_COURSE_STATISTICS:
 		self.getCourseDataStatistics(rr, w, r)
 	}
@@ -123,6 +126,29 @@ func (self *ReadingHandler) getCourseChannelList(rr *HandlerRequest, w http.Resp
 		return
 	}
 	rsp.Data = list
+}
+
+func (self *ReadingHandler) setUserCourseRefund(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &models.UserCourse{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	
+	req.Status = READING_COURSE_STATUS_REFUND
+	err = models.UpdateUserCourseStatus(req)
+	if err != nil {
+		holmes.Error("update user course status of refund error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
 }
 
 func (self *ReadingHandler) getCourseDataStatistics(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {

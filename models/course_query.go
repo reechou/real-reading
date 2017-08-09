@@ -295,10 +295,12 @@ func GetUserCourseFromOpenId(openId string) ([]CourseUserList, error) {
 	return userCourseList, nil
 }
 
-func GetCourseUserList(courseId, offset int64) ([]CourseUserList, error) {
+func GetCourseUserList(courseId, offset, status int64) ([]CourseUserList, error) {
 	userList := make([]CourseUserList, 0)
 	err := x.Join("LEFT", "user", "user_course.user_id = user.id").
-		Where("user_course.course_id = ?", courseId).Limit(-1, int(offset)).
+		Where("user_course.course_id = ?", courseId).
+		And("user_course.status = ?", status).
+		Limit(-1, int(offset)).
 		Find(&userList)
 	if err != nil {
 		return nil, err

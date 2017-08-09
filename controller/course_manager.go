@@ -22,6 +22,13 @@ const (
 	READING_COURSE_MANAGER_URI_DELETE_CHAPTER     = "deletechapter"
 	READING_COURSE_MANAGER_URI_UPDATE_CHAPTER     = "updatechapter"
 	READING_COURSE_MANAGER_URI_UPDATE_CHAPTER_RE  = "updatechapterre"
+	READING_COURSE_MANAGER_URI_GET_BCATALOGS      = "getbookcatalogs"
+	READING_COURSE_MANAGER_URI_CREATE_BCATALOG    = "createbookcatalog"
+	READING_COURSE_MANAGER_URI_DELETE_BCATALOG    = "deletebookcatalog"
+	READING_COURSE_MANAGER_URI_UPDATE_BCATALOG    = "updatebookcatalog"
+	READING_COURSE_MANAGER_URI_GET_BCCHAPTERS     = "getbcchapters"
+	READING_COURSE_MANAGER_URI_CREATE_BCCHAPTERS  = "createbcchapters"
+	READING_COURSE_MANAGER_URI_DELETE_BCCHAPTER   = "deletebcchapter"
 	READING_COURSE_MANAGER_URI_GET_COURSES        = "getcourselist"
 	READING_COURSE_MANAGER_URI_CREATE_COURSE      = "createcourse"
 	READING_COURSE_MANAGER_URI_DELETE_COURSE      = "deletecourse"
@@ -68,6 +75,7 @@ func (self *ReadingHandler) courseManagerHandle(rr *HandlerRequest, w http.Respo
 		return
 	}
 	switch rr.Params[0] {
+	// about book manager
 	case READING_COURSE_MANAGER_URI_GET_BOOKS:
 		self.courseManagerGetBookList(rr, w, r)
 	case READING_COURSE_MANAGER_URI_CREATE_BOOK:
@@ -86,6 +94,22 @@ func (self *ReadingHandler) courseManagerHandle(rr *HandlerRequest, w http.Respo
 		self.courseManagerDeleteChapter(rr, w, r)
 	case READING_COURSE_MANAGER_URI_UPDATE_CHAPTER:
 		self.courseManagerUpdateChapter(rr, w, r)
+	// about book catalog
+	case READING_COURSE_MANAGER_URI_GET_BCATALOGS:
+		self.courseManagerGetBookCatalogList(rr, w, r)
+	case READING_COURSE_MANAGER_URI_CREATE_BCATALOG:
+		self.courseManagerCreateBookCatalog(rr, w, r)
+	case READING_COURSE_MANAGER_URI_DELETE_BCATALOG:
+		self.courseManagerDeleteBookCatalog(rr, w, r)
+	case READING_COURSE_MANAGER_URI_UPDATE_BCATALOG:
+		self.courseManagerUpdateBookCatalog(rr, w, r)
+	case READING_COURSE_MANAGER_URI_GET_BCCHAPTERS:
+		self.courseManagerGetBookCatalogChapterList(rr, w, r)
+	case READING_COURSE_MANAGER_URI_CREATE_BCCHAPTERS:
+		self.courseManagerCreateBookCatalogChapter(rr, w, r)
+	case READING_COURSE_MANAGER_URI_DELETE_BCCHAPTER:
+		self.courseManagerDeleteBookCatalogChapter(rr, w, r)
+	// about course manager
 	case READING_COURSE_MANAGER_URI_GET_COURSES:
 		self.courseManagerGetCourseList(rr, w, r)
 	case READING_COURSE_MANAGER_URI_CREATE_COURSE:

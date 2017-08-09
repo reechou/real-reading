@@ -59,7 +59,7 @@ func TestCourseNotify(t *testing.T) {
 	c := initConfig()
 	initReleaseDb(c)
 
-	userList, err := GetCourseUserList(1, 0)
+	userList, err := GetCourseUserList(1, 0, 1)
 	if err != nil {
 		fmt.Printf("get course user list error: %v\n", err)
 		return

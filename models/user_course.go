@@ -53,3 +53,9 @@ func GetUserCourseFromTime(fromTime int64) ([]UserCourse, error) {
 	}
 	return list, nil
 }
+
+func UpdateUserCourseStatus(info *UserCourse) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols("status", "updated_at").Update(info)
+	return err
+}

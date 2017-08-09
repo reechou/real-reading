@@ -29,6 +29,24 @@ type Chapter struct {
 	UpdatedAt int64  `xorm:"not null default 0 int" json:"-"`
 }
 
+type BookCatalog struct {
+	ID        int64  `xorm:"pk autoincr" json:"id"`
+	BookId    int64  `xorm:"not null default 0 int index" json:"bookId"`
+	Title     string `xorm:"not null default '' varchar(256)" json:"title"`
+	CreatedAt int64  `xorm:"not null default 0 int" json:"createdAt"`
+	UpdatedAt int64  `xorm:"not null default 0 int" json:"-"`
+}
+
+type BookCatalogChapter struct {
+	ID            int64 `xorm:"pk autoincr" json:"id"`
+	BookCatalogId int64 `xorm:"not null default 0 int index" json:"bookCatalogId"`
+	BookId        int64 `xorm:"not null default 0 int" json:"bookId"`
+	ChapterId     int64 `xorm:"not null default 0 int" json:"chapterId"`
+	IndexId       int64 `xorm:"not null default 0 int index" json:"indexId"`
+	CreatedAt     int64 `xorm:"not null default 0 int" json:"createdAt"`
+	UpdatedAt     int64 `xorm:"not null default 0 int" json:"-"`
+}
+
 func CreateBook(info *Book) error {
 	now := time.Now().Unix()
 	info.CreatedAt = now
@@ -138,4 +156,77 @@ func GetChapterList(bookId int64) ([]Chapter, error) {
 		return nil, err
 	}
 	return chapters, nil
+}
+
+func CreateBookCatalog(info *BookCatalog) error {
+	now := time.Now().Unix()
+	info.CreatedAt = now
+	info.UpdatedAt = now
+	
+	_, err := x.Insert(info)
+	if err != nil {
+		holmes.Error("create book catalog error: %v", err)
+		return err
+	}
+	holmes.Info("create book catalog[%v] success.", info)
+	
+	return nil
+}
+
+func DelBookCatalog(info *BookCatalog) error {
+	if info.ID == 0 {
+		return fmt.Errorf("del id cannot be nil.")
+	}
+	_, err := x.ID(info.ID).Delete(info)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdateBookCatalog(info *BookCatalog) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols("book_id", "title", "updated_at").Update(info)
+	return err
+}
+
+func GetBookCatalogList(bookId int64) ([]BookCatalog, error) {
+	var list []BookCatalog
+	err := x.Where("book_id = ?", bookId).Find(&list)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
+func CreateBookCatalogChapterList(list []BookCatalogChapter) error {
+	if len(list) == 0 {
+		return nil
+	}
+	_, err := x.Insert(&list)
+	if err != nil {
+		holmes.Error("create book catalog chapter list error: %v", err)
+		return err
+	}
+	return nil
+}
+
+func DelBookCatalogChapter(info *BookCatalogChapter) error {
+	if info.ID == 0 {
+		return fmt.Errorf("del id cannot be nil.")
+	}
+	_, err := x.ID(info.ID).Delete(info)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetBookCatalogChapterList(bookCatalogId int64) ([]BookCatalogChapter, error) {
+	var list []BookCatalogChapter
+	err := x.Where("book_catalog_id = ?", bookCatalogId).OrderBy("index_id").Find(&list)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
 }

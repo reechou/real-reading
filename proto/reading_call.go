@@ -31,6 +31,10 @@ type BookReq struct {
 	BookId int64 `json:"bookId"`
 }
 
+type BookCatalogReq struct {
+	BookCatalogId int64 `json:"bookCatalogId"`
+}
+
 type ChapterReq struct {
 	ChapterId int64 `json:"chapterId"`
 }
