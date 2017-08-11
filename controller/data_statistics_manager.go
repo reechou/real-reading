@@ -18,6 +18,7 @@ const (
 	DATA_STATISTICS_CREATE_COURSE_TYPE      = "createcoursetype"
 	DATA_STATISTICS_GET_COURSE_TYPE_LIST    = "getcoursetypelist"
 	DATA_STATISTICS_CREATE_COURSE_CHANNEL   = "createcoursechannel"
+	DATA_STATISTICS_DELETE_COURSE_CHANNEL   = "deletecoursechannel"
 	DATA_STATISTICS_GET_COURSE_CHANNEL_LIST = "getcoursechannellist"
 	DATA_STATISTICS_SET_USER_COURSE_REFUND  = "setusercourserefund"
 	DATA_STATISTICS_GET_COURSE_STATISTICS   = "getcoursedatastatistics"
@@ -37,6 +38,8 @@ func (self *ReadingHandler) dataStatisticsHandle(rr *HandlerRequest, w http.Resp
 		self.getCourseTypeList(rr, w, r)
 	case DATA_STATISTICS_CREATE_COURSE_CHANNEL:
 		self.createCourseChannel(rr, w, r)
+	case DATA_STATISTICS_DELETE_COURSE_CHANNEL:
+		self.deleteCourseChannel(rr, w, r)
 	case DATA_STATISTICS_GET_COURSE_CHANNEL_LIST:
 		self.getCourseChannelList(rr, w, r)
 	case DATA_STATISTICS_SET_USER_COURSE_REFUND:
@@ -100,6 +103,28 @@ func (self *ReadingHandler) createCourseChannel(rr *HandlerRequest, w http.Respo
 	err = models.CreateCourseChannel(req)
 	if err != nil {
 		holmes.Error("create course channel error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+}
+
+func (self *ReadingHandler) deleteCourseChannel(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &models.CourseChannel{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	
+	err = models.DelCourseChannel(req)
+	if err != nil {
+		holmes.Error("delete course channel error: %v", err)
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}

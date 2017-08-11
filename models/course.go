@@ -137,6 +137,17 @@ func CreateCourseChannel(info *CourseChannel) error {
 	return nil
 }
 
+func DelCourseChannel(info *CourseChannel) error {
+	if info.ID == 0 {
+		return fmt.Errorf("del id cannot be nil.")
+	}
+	_, err := x.ID(info.ID).Delete(info)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func GetCourseChannelList(courseType int64) ([]CourseChannel, error) {
 	var courseChannels []CourseChannel
 	err := x.Where("course_type = ?", courseType).Find(&courseChannels)
