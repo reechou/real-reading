@@ -83,6 +83,87 @@
 
 </style>
 
+<style>
+    .navigation_home_menu {
+        margin: 0;
+        font-size: .24rem; /*防止vue加载css时字体过大*/
+    }
+    .navigation_menu {
+        position: fixed;
+        bottom: 1.89rem;
+        right: 0;
+        height: .6rem;
+        width: 1.58rem;
+        background-color: rgba(0,0,0,.5);
+        z-index: 1000;
+        border-radius: 0.5rem 0 0 0.5rem;
+        overflow: hidden;
+    }
+    .navi_control {
+        position: absolute;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        z-index: 2;
+        text-decoration: none;
+        color: #fff;
+    }
+    .navi_home {
+        width: 0.24rem;
+        height: 0.24rem;
+        position: absolute;
+        left: .2rem;
+        top: 50%;
+        margin-left: 0;
+        margin-top: -0.12rem;
+        background: url("/images/navi/homeButtonIcon.png") center center;
+        background-repeat: no-repeat;
+        background-size: 100%;
+    }
+    .navi_home_txt{
+        text-align: right;
+        padding-right: .1rem;
+        line-height: .6rem;
+        font-size: .24rem;
+    }
+</style>
+
+<div id="navigation_menu" class="navigation_menu navigation_home_menu t2">
+    <a href="http://reading.dingjiantaoke.cn/reading/course/usercourselist" id="navi_control" class="navi_control"
+       onclick="localStorage.setItem('current_page', 10);localStorage.setItem('needInitPage', true);">
+        <div class="navi_home"></div>
+        <div class="navi_home_txt t3">回到首页</div>
+    </a>
+</div>
+
+<script type="text/javascript">
+    var menu_init = function () {
+        var bd = document.querySelector('body');
+        // 事件委托
+        bd.addEventListener('touchend', function(e){
+            e = e || window.event;
+            var navigation_menu = document.querySelector('#navigation_menu');
+            if (!navigation_menu) {
+                return;
+            }
+            var target = e.target || e.srcElement;
+            var nodeName = target.nodeName.toLocaleLowerCase();
+             // 输入表单时隐藏回到首页，防止ios输入法弹框造成回到首页图标fixed定位错乱
+            if (nodeName == 'input' || nodeName == 'textarea') {
+                target.addEventListener('focus', function() {
+                    navigation_menu.style.display = 'none'; // 隐藏回到首页
+                });
+                target.addEventListener('blur', function() {
+                    navigation_menu.style.display = 'block'; // 隐藏回到首页
+                });
+            }
+        });
+        return;
+    }
+    window.onload = menu_init;
+</script>
+
 <section id="app00">
     {{ if .MonthCourseCatalogAudio.AudioUrl }}
     <input id="audioId" class="resourceId" style="display: none" type="hidden" value="a_59450d394f94a_WdE8qssf">
