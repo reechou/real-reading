@@ -513,7 +513,7 @@ func (self *ReadingHandler) readingCourseList(rr *HandlerRequest, w http.Respons
 
 	var err error
 	userCourseList := new(UserCourseDetail)
-	userCourseList.UserCourseList, err = models.GetUserCourse(userinfo.OpenId)
+	userCourseList.UserCourseList, err = models.GetUserCourseFromStatus(userinfo.OpenId, READING_COURSE_STATUS_PAIED)
 	if err != nil {
 		holmes.Error("get user course error: %v", err)
 		return

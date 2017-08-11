@@ -318,6 +318,19 @@ func (UserCourseDetail) TableName() string {
 	return "user_course"
 }
 
+func GetUserCourseFromStatus(openId string, status int64) ([]UserCourseDetail, error) {
+	userCourseList := make([]UserCourseDetail, 0)
+	err := x.Join("LEFT", "user", "user_course.user_id = user.id").
+		Join("LEFT", "course", "user_course.course_id = course.id").
+		Where("user.open_id = ?", openId).
+		And("user_course.status = ?", status).
+		Find(&userCourseList)
+	if err != nil {
+		return nil, err
+	}
+	return userCourseList, nil
+}
+
 func GetUserCourse(openId string) ([]UserCourseDetail, error) {
 	userCourseList := make([]UserCourseDetail, 0)
 	err := x.Join("LEFT", "user", "user_course.user_id = user.id").

@@ -157,7 +157,7 @@ func GetCourseChannelList(courseType int64) ([]CourseChannel, error) {
 	return courseChannels, nil
 }
 
-// --------------- course ---------------
+// -------------- course ---------------
 func CreateCourse(info *Course) error {
 	now := time.Now().Unix()
 	info.CreatedAt = now
