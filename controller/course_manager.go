@@ -45,6 +45,7 @@ const (
 	READING_COURSE_MANAGER_URI_CREATE_MCBCATALOG  = "createmcbcatalog"
 	READING_COURSE_MANAGER_URI_DELETE_MCBCATALOG  = "deletemcbcatalog"
 	READING_COURSE_MANAGER_URI_UPDATE_MCBCATALOG  = "updatemcbcatalog"
+	READING_COURSE_MANAGER_URI_CREATE_MCBCAUDIO   = "createmcbcaudio"
 	READING_COURSE_MANAGER_URI_GET_MCBCCHAPTERS   = "getmcbcchapterlist"
 	READING_COURSE_MANAGER_URI_CREATE_MCBCCHAPTER = "createmcbcchapter"
 	READING_COURSE_MANAGER_URI_DELETE_MCBCCHAPTER = "deletemcbcchapter"
@@ -142,6 +143,8 @@ func (self *ReadingHandler) courseManagerHandle(rr *HandlerRequest, w http.Respo
 		self.courseManagerDeleteMonthCourseCatalog(rr, w, r)
 	case READING_COURSE_MANAGER_URI_UPDATE_MCBCATALOG:
 		self.courseManagerUpdateMonthCourseCatalog(rr, w, r)
+	case READING_COURSE_MANAGER_URI_CREATE_MCBCAUDIO:
+		self.courseManagerCreateMonthCourseCatalogAudio(rr, w, r)
 	case READING_COURSE_MANAGER_URI_GET_MCBCCHAPTERS:
 		self.courseManagerGetMonthCourseCatalogChapterList(rr, w, r)
 	case READING_COURSE_MANAGER_URI_CREATE_MCBCCHAPTER:
@@ -524,6 +527,28 @@ func (self *ReadingHandler) courseManagerUpdateMonthCourseCatalog(rr *HandlerReq
 	err = models.UpdateMonthCourseCatalog(req)
 	if err != nil {
 		holmes.Error("update month course catalog error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+}
+
+func (self *ReadingHandler) courseManagerCreateMonthCourseCatalogAudio(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+	
+	req := &models.MonthCourseCatalogAudio{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	
+	err = models.CreateMonthCourseCatalogAudio(req)
+	if err != nil {
+		holmes.Error("create month course catalog audio error: %v", err)
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
