@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	TPL_ID_HOMEWORK_REMIND = "Vt_LIlDURVOShw0xLutBYUblfosl2QWl_rhyIY9drj4"
+	TPL_ID_HOMEWORK_REMIND = "8DEs9THO9WeRxayQqjYROyOHGFXPoTAAi4tJFqWQkb0"
 )
 
 type TplMsg struct {
