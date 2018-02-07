@@ -30,6 +30,7 @@ const (
 	READING_COURSE_URI_UPDATE_COMMENT  = "updatecomment"
 	READING_COURSE_URI_GET_ALL_COMMENT = "getallcomment"
 	READING_COURSE_URI_REPLY_COMMENT   = "replycomment"
+	READING_COURSE_URI_GET_GRADUATION  = "getgraduation"
 	// tmp html
 	READING_COURSE_URI_LIST              = "usercourselist"
 	READING_COURSE_URI_INDEX             = "index"
@@ -66,6 +67,8 @@ func (self *ReadingHandler) courseHandle(rr *HandlerRequest, w http.ResponseWrit
 		self.readingGetAllComment(rr, w, r)
 	case READING_COURSE_URI_REPLY_COMMENT:
 		self.readingReplyComment(rr, w, r)
+	case READING_COURSE_URI_GET_GRADUATION:
+		self.readingGetGraduation(rr, w, r)
 	// tmp html
 	case READING_COURSE_URI_LIST:
 		self.readingCourseList(rr, w, r)
@@ -299,6 +302,57 @@ func (self *ReadingHandler) readingReplyComment(rr *HandlerRequest, w http.Respo
 	}
 }
 
+func (self *ReadingHandler) readingGetGraduation(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+
+	req := &proto.GetGraduationReq{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+
+	course := &models.Course{ID: req.CourseId}
+	has, err := models.GetCourse(course)
+	if err != nil {
+		holmes.Error("get course error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	if !has {
+		holmes.Error("cannot found this course: %d", course.ID)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	if time.Now().Unix() < course.EndTime {
+		holmes.Error("This course[%d] is not end.", course.ID)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	graduationNum := fmt.Sprintf("%s%d%d", time.Unix(course.StartTime, 0).Format("20060102"), course.ID, req.UserId)
+	if picUrl, ok := self.gm.CheckUserImage(graduationNum); ok {
+		rsp.Data = picUrl
+		return
+	}
+	picUrl, err := self.gm.HandleUserImage(&GraduationInfo{
+		Name:          req.UserName,
+		TimeInfo:      fmt.Sprintf("%s - %s", time.Unix(course.StartTime, 0).Format("2006/01/02"), time.Unix(course.EndTime, 0).Format("2006/01/02")),
+		CourseName:    course.Name,
+		CourseNum:     strconv.Itoa(int(course.CourseNum)),
+		GraduationNum: graduationNum,
+	})
+	if err != nil {
+		holmes.Error("handle user graduation error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	rsp.Data = picUrl
+}
+
 // check user
 type UserInfo struct {
 	OpenId    string
@@ -513,6 +567,7 @@ func (self *ReadingHandler) readingCourseList(rr *HandlerRequest, w http.Respons
 
 	var err error
 	userCourseList := new(UserCourseDetail)
+	userCourseList.Now = time.Now().Unix()
 	userCourseList.UserCourseList, err = models.GetUserCourseFromStatus(userinfo.OpenId, READING_COURSE_STATUS_PAIED)
 	if err != nil {
 		holmes.Error("get user course error: %v", err)
@@ -524,6 +579,11 @@ func (self *ReadingHandler) readingCourseList(rr *HandlerRequest, w http.Respons
 		return
 	}
 	userCourseList.UserId = userCourseList.UserCourseList[0].User.ID
+	if userCourseList.UserCourseList[0].User.RealName != "" {
+		userCourseList.UserName = userCourseList.UserCourseList[0].User.RealName
+	} else {
+		userCourseList.UserName = userCourseList.UserCourseList[0].User.Name
+	}
 
 	courseIds := make([]int64, 0)
 	for _, v := range userCourseList.UserCourseList {

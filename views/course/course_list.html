@@ -16,6 +16,25 @@
     <link rel="stylesheet" href="/reading/m-main.css?v=0622" >
     <link rel="stylesheet" href="/reading/m-show-1.css?v=0622" >
     <link rel="stylesheet" href="/reading/m-sy.css?v=0622" >
+
+    <style>
+        .wxtip {
+            background: rgba(0,0,0,0.8);
+            text-align: center;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999;
+        }
+        .wxtip img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 
@@ -23,6 +42,7 @@
 
     <div class="show-sybox sybox-pb80">
         {{ $userId := .UserId }}
+        {{ $now := .Now }}
         {{ $lenToday := len .TodayCatalogs }}
         {{ if eq $lenToday 0 }}
         <div class="today-title clearfix">
@@ -77,7 +97,7 @@
             <strong>我的课程</strong>
         </div>
         {{ range .UserCourseList }}
-        <div class="task-info p-rela" onclick="location.assign('/reading/course/index/{{.UserId}}/{{.Course.ID}}');">
+        <div class="task-info p-rela">
             <div class="task-cover-course">
                 <img class="" src="{{ .Course.Cover }}">
             </div>
@@ -89,7 +109,10 @@
                     {{ .Course.Introduction }}
                 </p>
                 <div class="task-seeboxv1 mt">
-                    <span class="task-seev1">查看课程</span>
+                    <span class="task-seev1" onclick="location.assign('/reading/course/index/{{.UserId}}/{{.Course.ID}}');">查看课程</span>
+                    {{ if ge $now .Course.EndTime }}
+                    <span class="task-seev2" onclick="getGraduation({{ .Course.ID }})">毕业证书</span>
+                    {{ end }}
                 </div>
             </div>
         </div>
@@ -113,6 +136,10 @@
             </li>
         </ul>
     </section>
+
+    <div class="wxtip" id="byzstips" style="display: none;" >
+        <img id="byzstipsimg" src="/reading/2017061031.jpg">
+    </div>
 
 </section>
 
@@ -161,7 +188,36 @@ function initOnePos(){
         n = distanceTop($self[0]);
         onePosArr.push(n);
     });
-    }
+}
+
+$('#byzstips').click(function(e) {
+    document.getElementById('byzstips').style.display='none';
+});
+
+function getGraduation(courseId) {
+    $.ajax({
+        type: 'POST',
+        url: '/reading/course/getgraduation',
+        dataType: 'json',
+        data: JSON.stringify(
+            {
+                userId: {{ .UserId }},
+                courseId: courseId,
+                userName: {{ .UserName }}
+            }
+        ),
+        success: function(d) {
+            if(d.code == 0) {
+                // alert(d.data);
+                $("#byzstipsimg").src = "/reading/"+d.data;
+                document.getElementById('byzstips').style.display='block';
+            } else {
+                alert("获取毕业证书失败，请稍后再试");
+            }
+        },
+        error: function(){}
+    });
+}
 
 var scrollProcessor = {
     timeId: '',
@@ -260,7 +316,7 @@ var shareOpts = {
 
 (function(){
 
-if(window.shareOpts) initShareConfig(shareOpts);
+// if(window.shareOpts) initShareConfig(shareOpts);
 
 function initShareConfig(opts){
 

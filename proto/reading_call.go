@@ -26,6 +26,12 @@ type GetAllCommentListReq struct {
 	Num    int64 `json:"num"`
 }
 
+type GetGraduationReq struct {
+	UserId   int64  `json:"userId"`
+	UserName string `json:"userName"`
+	CourseId int64  `json:"courseId"`
+}
+
 // about course manager
 type BookReq struct {
 	BookId int64 `json:"bookId"`

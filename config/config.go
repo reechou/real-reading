@@ -48,6 +48,12 @@ type SMSNotify struct {
 	Key         string
 }
 
+type Graduation struct {
+	ByzsPic string
+	Font    string
+	TmpPath string
+}
+
 type Config struct {
 	Debug     bool
 	Path      string
@@ -72,6 +78,8 @@ type Config struct {
 
 	SMSNotify
 	ReadingOauth
+
+	Graduation
 }
 
 func NewConfig() *Config {

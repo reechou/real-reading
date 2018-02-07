@@ -19,6 +19,8 @@ type UserCourseDetail struct {
 	TodayCatalogs  []models.CourseBookCatalogTime
 	UserCourseList []models.UserCourseDetail
 	UserId         int64
+	Now            int64
+	UserName       string
 }
 
 // course

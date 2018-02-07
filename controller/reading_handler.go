@@ -64,6 +64,7 @@ type ReadingHandler struct {
 	l *Logic
 
 	smsExt *ext.SMSNotifyExt
+	gm     *GraduationManager
 
 	sessionStorage *session.Storage
 	oauth2Endpoint oauth2.Endpoint
@@ -75,6 +76,11 @@ func NewReadingHandler(l *Logic) *ReadingHandler {
 	lh := &ReadingHandler{l: l}
 
 	lh.smsExt = ext.NewSMSNotifyExt(lh.l.cfg)
+	var err error
+	lh.gm, err = NewGraduationManager(lh.l.cfg)
+	if err != nil {
+		holmes.Fatal("new graduation manager error: %v", err)
+	}
 
 	lh.sessionStorage = session.New(20*60, 60*60)
 	lh.oauth2Endpoint = mpoauth2.NewEndpoint(
@@ -115,6 +121,10 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	if strings.HasSuffix(rr.Path, "js") {
 		http.ServeFile(w, r, "./views/js/"+rr.Path)
+		return
+	}
+	if strings.HasSuffix(rr.Path, "jpg") {
+		http.ServeFile(w, r, "./tmp/"+rr.Path)
 		return
 	}
 	if strings.HasPrefix(rr.Path, READING_COURSE_MANAGER_URI_PREFIX) {
