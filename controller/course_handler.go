@@ -335,6 +335,7 @@ func (self *ReadingHandler) readingGetGraduation(rr *HandlerRequest, w http.Resp
 	}
 	graduationNum := fmt.Sprintf("%s%d%d", time.Unix(course.StartTime, 0).Format("20060102"), course.ID, req.UserId)
 	if picUrl, ok := self.gm.CheckUserImage(graduationNum); ok {
+		holmes.Debug("get local graduation url: %s", picUrl)
 		rsp.Data = picUrl
 		return
 	}
@@ -350,6 +351,7 @@ func (self *ReadingHandler) readingGetGraduation(rr *HandlerRequest, w http.Resp
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
+	holmes.Debug("get handle graduation url: %s", picUrl)
 	rsp.Data = picUrl
 }
 
