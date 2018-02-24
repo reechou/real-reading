@@ -975,7 +975,7 @@ func writeRsp(w http.ResponseWriter, rsp *proto.Response) {
 
 func renderView(w http.ResponseWriter, tpl string, data interface{}) {
 	t := template.New(filepath.Base(tpl))
-	t = t.Funcs(template.FuncMap{"unescaped": unescaped})
+	t = t.Funcs(template.FuncMap{"unescaped": unescaped, "formattime": formattime})
 	t, err := t.ParseFiles(tpl)
 	if err != nil {
 		holmes.Error("parse file error: %v", err)
@@ -989,6 +989,8 @@ func renderView(w http.ResponseWriter, tpl string, data interface{}) {
 }
 
 func unescaped(x string) interface{} { return template.HTML(x) }
+
+func formattime(t int64) interface{} { return time.Unix(t, 0).Format("2006年01月02日") }
 
 func GetIPFromRequest(r *http.Request) string {
 	ip, _, err := net.SplitHostPort(r.RemoteAddr)

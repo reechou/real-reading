@@ -109,7 +109,11 @@
                     {{ .Course.Introduction }}
                 </p>
                 <div class="task-seeboxv1 mt">
-                    <span class="task-seev1" onclick="location.assign('/reading/course/index/{{.UserId}}/{{.Course.ID}}');">查看课程</span>
+                    {{ if ge $now .Course.StartTime }}
+                        <span class="task-seev1" onclick="location.assign('/reading/course/index/{{.UserId}}/{{.Course.ID}}');">查看课程</span>
+                    {{ else }}
+                        <span class="task-titlev1">开课时间: {{ .Course.StartTime | formattime }}</span>
+                    {{ end }}
                     {{ if ge $now .Course.EndTime }}
                     <span class="task-seev2" onclick="getGraduation({{ .Course.ID }})">毕业证书</span>
                     {{ end }}
