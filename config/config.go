@@ -68,6 +68,7 @@ type Config struct {
 
 	RemindWorkerNum int
 	TplWorkerNum    int
+	RemindTplId     string
 
 	DefaultRobotHost string
 	RobotHost

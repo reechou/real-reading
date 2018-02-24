@@ -167,15 +167,15 @@ func (self *RemindWorker) doRemind(ri *RemindInfo) {
 	var sendUserNum int64
 	for _, v := range userList {
 		homeworkMsg := &HomeworkRemindTplMsg{
-			First:    &template.DataItem{Value: "您今天的阅读任务已更新", Color: "#f76e6c"},
-			Keyword1: &template.DataItem{Value: courseName},
-			Keyword2: &template.DataItem{Value: catalogName},
-			Keyword3: &template.DataItem{Value: readingDate},
+			First:    &template.DataItem{Value: courseName, Color: "#f76e6c"},
+			Keyword1: &template.DataItem{Value: catalogName},
+			Keyword2: &template.DataItem{Value: readingDate},
+			Keyword3: &template.DataItem{Value: "小鹿微课大学堂"},
 			Remark:   &template.DataItem{Value: ">>>点击这里前往阅读<<< PS: 回复 TD 可以退订哦", Color: "#f76e6c"},
 		}
 		msg := &TplMsg{
 			ToUser: v.OpenId,
-			TplId:  TPL_ID_HOMEWORK_REMIND,
+			TplId:  self.cfg.RemindTplId,
 			Url: fmt.Sprintf("%s/reading/course/bookdetail/%d/%d/%d/%d", self.cfg.ReadingHost,
 				v.User.ID,
 				ri.Catalog.MonthCourseCatalog.CourseId,
