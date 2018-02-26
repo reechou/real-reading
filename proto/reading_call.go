@@ -8,6 +8,10 @@ type ReadingEnrollReq struct {
 	OpenId   string `json:"openid"`
 }
 
+type ReadingRefundReq struct {
+	UserCourseId int64 `json:"userCourseId"`
+}
+
 type ReadingCourseSignIn struct {
 	OpenId    string `json:"openId"`
 	UserId    int64  `json:"userId"`

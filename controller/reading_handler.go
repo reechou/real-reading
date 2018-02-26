@@ -20,14 +20,14 @@ import (
 	"github.com/chanxuehong/session"
 	"github.com/chanxuehong/util"
 	"github.com/chanxuehong/util/security"
-	mchcore "github.com/chanxuehong/wechat.v2/mch/core"
-	mchpay "github.com/chanxuehong/wechat.v2/mch/pay"
-	mpoauth2 "github.com/chanxuehong/wechat.v2/mp/oauth2"
-	"github.com/chanxuehong/wechat.v2/oauth2"
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-reading/ext"
 	"github.com/reechou/real-reading/models"
 	"github.com/reechou/real-reading/proto"
+	mchcore "gopkg.in/chanxuehong/wechat.v2/mch/core"
+	mchpay "gopkg.in/chanxuehong/wechat.v2/mch/pay"
+	mpoauth2 "gopkg.in/chanxuehong/wechat.v2/mp/oauth2"
+	"gopkg.in/chanxuehong/wechat.v2/oauth2"
 )
 
 const (
@@ -41,6 +41,7 @@ const (
 	READING_URI_PAY        = "pay"
 	READING_URI_PAY_NOTIFY = "paynotify"
 	READING_URI_SUCCESS    = "success"
+	READING_URI_PROTO      = "proto"
 )
 
 // manager uri

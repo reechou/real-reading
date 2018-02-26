@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/chanxuehong/wechat.v2/mp/message/template"
+	"gopkg.in/chanxuehong/wechat.v2/mp/message/template"
 )
 
 const (

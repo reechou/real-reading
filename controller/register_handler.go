@@ -14,11 +14,11 @@ import (
 	"github.com/chanxuehong/rand"
 	"github.com/chanxuehong/util"
 	"github.com/chanxuehong/util/security"
-	mchcore "github.com/chanxuehong/wechat.v2/mch/core"
-	mchpay "github.com/chanxuehong/wechat.v2/mch/pay"
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-reading/models"
 	"github.com/reechou/real-reading/proto"
+	mchcore "gopkg.in/chanxuehong/wechat.v2/mch/core"
+	mchpay "gopkg.in/chanxuehong/wechat.v2/mch/pay"
 )
 
 const (
@@ -45,6 +45,8 @@ func (self *ReadingHandler) registerHandle(rr *HandlerRequest, w http.ResponseWr
 		self.registerPayNotify(rr, w, r)
 	case READING_URI_SUCCESS:
 		self.registerSuccess(rr, w, r)
+	case READING_URI_PROTO:
+		self.registerProto(rr, w, r)
 	}
 }
 
@@ -284,8 +286,9 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 	if userinfo.OpenId == "oaKrZwsAF6pRX6z3Qn_EhIZ3DG90" || userinfo.OpenId == "oaKrZwotcenPmZyLKtMyoHZSTlaQ" {
 		payMoney = 1
 	}
+	outTradeNo := fmt.Sprintf("%s-%d-%d", time.Now().Format("2006-01-02_15-04-05"), user.ID, registerInfo.Course.ID)
 	unifiedRsp, err := self.registerUnifiedOrder(
-		user.ID,
+		outTradeNo,
 		payMoney,
 		registerInfo.Course.Name,
 		fmt.Sprintf("%d", registerInfo.Course.CourseType),
@@ -407,6 +410,16 @@ func (self *ReadingHandler) registerPayNotify(rr *HandlerRequest, w http.Respons
 		holmes.Error("msg attach[%s] strconv error: %v", attach, err)
 		return
 	}
+	outTradeNo, ok := msg["out_trade_no"]
+	if !ok {
+		holmes.Error("msg out_trade_no not found.")
+		return
+	}
+	transactionId, ok := msg["transaction_id"]
+	if !ok {
+		holmes.Error("msg transaction_id not found.")
+		return
+	}
 
 	course := &models.Course{
 		CourseType: int64(courseType),
@@ -438,13 +451,15 @@ func (self *ReadingHandler) registerPayNotify(rr *HandlerRequest, w http.Respons
 		}
 	}
 	userCourse := &models.UserCourse{
-		UserId:     user.ID,
-		CourseId:   course.ID,
-		CourseType: course.CourseType,
-		Money:      int64(money),
-		Status:     READING_COURSE_STATUS_PAIED,
-		PayTime:    time.Now().Unix(),
-		Source:     user.Source,
+		UserId:        user.ID,
+		CourseId:      course.ID,
+		CourseType:    course.CourseType,
+		Money:         int64(money),
+		Status:        READING_COURSE_STATUS_PAIED,
+		PayTime:       time.Now().Unix(),
+		Source:        user.Source,
+		OutTradeNo:    outTradeNo,
+		TransactionId: transactionId,
 	}
 	err = models.CreateUserCourse(userCourse)
 	if err != nil {
@@ -534,13 +549,17 @@ func (self *ReadingHandler) registerSuccess(rr *HandlerRequest, w http.ResponseW
 	renderView(w, "./views/register/sign_success.html", registerInfo)
 }
 
-func (self *ReadingHandler) registerUnifiedOrder(payId, payMoney int64, title, attach, openId, userIp, notifyUrl string) (*mchpay.UnifiedOrderResponse, error) {
+func (self *ReadingHandler) registerProto(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	renderView(w, "./views/register/proto.html", nil)
+}
+
+func (self *ReadingHandler) registerUnifiedOrder(outTradeNo string, payMoney int64, title, attach, openId, userIp, notifyUrl string) (*mchpay.UnifiedOrderResponse, error) {
 	uor := &mchpay.UnifiedOrderRequest{
 		DeviceInfo:     "WEB",
 		Body:           title,
 		Detail:         fmt.Sprintf("「小鹿微课」%s", title),
 		Attach:         attach,
-		OutTradeNo:     fmt.Sprintf("%s-%d", time.Now().Format("2006-01-02_15-04-05"), payId),
+		OutTradeNo:     outTradeNo,
 		TotalFee:       payMoney,
 		SpbillCreateIP: userIp,
 		NotifyURL:      notifyUrl,

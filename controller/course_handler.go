@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"github.com/chanxuehong/rand"
-	mpoauth2 "github.com/chanxuehong/wechat.v2/mp/oauth2"
 	"github.com/jinzhu/now"
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-reading/models"
 	"github.com/reechou/real-reading/proto"
+	mpoauth2 "gopkg.in/chanxuehong/wechat.v2/mp/oauth2"
 )
 
 const (

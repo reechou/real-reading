@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/chanxuehong/wechat.v2/mp/core"
-	"github.com/chanxuehong/wechat.v2/mp/jssdk"
-	"github.com/chanxuehong/wechat.v2/mp/message/template"
-	"github.com/chanxuehong/wechat.v2/util"
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-reading/config"
+	"gopkg.in/chanxuehong/wechat.v2/mp/core"
+	"gopkg.in/chanxuehong/wechat.v2/mp/jssdk"
+	"gopkg.in/chanxuehong/wechat.v2/mp/message/template"
+	"gopkg.in/chanxuehong/wechat.v2/util"
 )
 
 type WechatController struct {

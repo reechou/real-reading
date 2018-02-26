@@ -5,12 +5,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/chanxuehong/wechat.v2/mp/message/template"
 	"github.com/jinzhu/now"
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-reading/config"
 	"github.com/reechou/real-reading/models"
 	"github.com/robfig/cron"
+	"gopkg.in/chanxuehong/wechat.v2/mp/message/template"
 )
 
 const (
