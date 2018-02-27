@@ -2,12 +2,14 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-reading/models"
 	"github.com/reechou/real-reading/proto"
+	mchpay "gopkg.in/chanxuehong/wechat.v2/mch/pay"
 )
 
 const (
@@ -113,7 +115,7 @@ func (self *ReadingHandler) deleteCourseChannel(rr *HandlerRequest, w http.Respo
 	defer func() {
 		writeRsp(w, rsp)
 	}()
-	
+
 	req := &models.CourseChannel{}
 	err := json.Unmarshal(rr.Val, &req)
 	if err != nil {
@@ -121,7 +123,7 @@ func (self *ReadingHandler) deleteCourseChannel(rr *HandlerRequest, w http.Respo
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
-	
+
 	err = models.DelCourseChannel(req)
 	if err != nil {
 		holmes.Error("delete course channel error: %v", err)
@@ -158,7 +160,7 @@ func (self *ReadingHandler) setUserCourseRefund(rr *HandlerRequest, w http.Respo
 	defer func() {
 		writeRsp(w, rsp)
 	}()
-	
+
 	req := &models.UserCourse{}
 	err := json.Unmarshal(rr.Val, &req)
 	if err != nil {
@@ -166,11 +168,54 @@ func (self *ReadingHandler) setUserCourseRefund(rr *HandlerRequest, w http.Respo
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
-	
-	req.Status = READING_COURSE_STATUS_REFUND
-	err = models.UpdateUserCourseStatus(req)
+
+	has, err := models.GetUserCourseFromId(req)
 	if err != nil {
-		holmes.Error("update user course status of refund error: %v", err)
+		holmes.Error("get user course from id error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	if !has {
+		holmes.Error("user course[%d] not found", req.ID)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+
+	if req.OutTradeNo == "" || req.TransactionId == "" {
+		holmes.Debug("this user course[%d] cannot refund auto.", req.ID)
+		rsp.Code = proto.RESPONSE_REFUND_NOT_AUTO
+		rsp.Msg = "状态已更新，不能自动退款，请手动在助教个人号退款给用户"
+
+		req.Status = READING_COURSE_STATUS_REFUND
+		err = models.UpdateUserCourseStatus(req)
+		if err != nil {
+			holmes.Error("update user course status of refund error: %v", err)
+			rsp.Code = proto.RESPONSE_ERR
+		}
+		return
+	}
+
+	// auto refund
+	refundReq := &mchpay.RefundRequest{
+		TransactionId: req.TransactionId,
+		OutTradeNo:    req.OutTradeNo,
+		TotalFee:      req.Money,
+		RefundFee:     req.Money,
+		OutRefundNo:   fmt.Sprintf("%d", req.ID),
+	}
+	refundRsp, err := mchpay.Refund2(self.mchClient, refundReq)
+	if err != nil {
+		holmes.Error("mch pay refund error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR_EXT
+		return
+	}
+	req.OutRefundNo = refundRsp.OutRefundNo
+	req.RefundId = refundRsp.RefundId
+	req.RefundFee = refundRsp.RefundFee
+	req.Status = READING_COURSE_STATUS_REFUND
+	err = models.UpdateUserCourseRefundInfo(req)
+	if err != nil {
+		holmes.Error("update user course refund info error: %v", err)
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
