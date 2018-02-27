@@ -244,7 +244,7 @@ func (self *ReadingHandler) setUserCourseManualRefund(rr *HandlerRequest, w http
 		return
 	}
 
-	req.Status = READING_COURSE_STATUS_REFUND
+	req.Status = READING_COURSE_STATUS_REFUND_MANUAL
 	err = models.UpdateUserCourseStatus(req)
 	if err != nil {
 		holmes.Error("update user course status of refund error: %v", err)
