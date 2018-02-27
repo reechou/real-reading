@@ -39,6 +39,8 @@ type ReadingOauth struct {
 	ReadingOauth2ScopeBase   string
 	ReadingOauth2ScopeUser   string
 	MpVerifyDir              string
+	MchCertFile              string
+	MchKeyFile               string
 }
 
 type SMSNotify struct {

@@ -90,11 +90,15 @@ func NewReadingHandler(l *Logic) *ReadingHandler {
 	lh.oauth2Client = &oauth2.Client{
 		Endpoint: lh.oauth2Endpoint,
 	}
+	tlsHttpClient, err := mchcore.NewTLSHttpClient(lh.l.cfg.ReadingOauth.MchCertFile, lh.l.cfg.ReadingOauth.MchKeyFile)
+	if err != nil {
+		holmes.Error("new tls http client error: %v", err)
+	}
 	lh.mchClient = mchcore.NewClient(
 		lh.l.cfg.ReadingOauth.ReadingWxAppId,
 		lh.l.cfg.ReadingOauth.ReadingMchId,
 		lh.l.cfg.ReadingOauth.ReadingMchApiKey,
-		nil,
+		tlsHttpClient,
 	)
 
 	return lh
