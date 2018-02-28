@@ -12,6 +12,11 @@ type ReadingRefundReq struct {
 	UserCourseId int64 `json:"userCourseId"`
 }
 
+type ReadingRefundFromTransactionReq struct {
+	UserCourseId  int64  `json:"userCourseId"`
+	TransactionId string `json:"transactionId"`
+}
+
 type ReadingCourseSignIn struct {
 	OpenId    string `json:"openId"`
 	UserId    int64  `json:"userId"`

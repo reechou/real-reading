@@ -17,14 +17,20 @@ const (
 )
 
 const (
-	DATA_STATISTICS_CREATE_COURSE_TYPE        = "createcoursetype"
-	DATA_STATISTICS_GET_COURSE_TYPE_LIST      = "getcoursetypelist"
-	DATA_STATISTICS_CREATE_COURSE_CHANNEL     = "createcoursechannel"
-	DATA_STATISTICS_DELETE_COURSE_CHANNEL     = "deletecoursechannel"
-	DATA_STATISTICS_GET_COURSE_CHANNEL_LIST   = "getcoursechannellist"
-	DATA_STATISTICS_SET_USER_COURSE_REFUND    = "setusercourserefund"
-	DATA_STATISTICS_USER_COURSE_MANUAL_REFUND = "usercoursemanualrefund"
-	DATA_STATISTICS_GET_COURSE_STATISTICS     = "getcoursedatastatistics"
+	REFUND_WAY_AUTO             = 1
+	REFUND_WAY_FROM_TRANSACTION = 2
+)
+
+const (
+	DATA_STATISTICS_CREATE_COURSE_TYPE                  = "createcoursetype"
+	DATA_STATISTICS_GET_COURSE_TYPE_LIST                = "getcoursetypelist"
+	DATA_STATISTICS_CREATE_COURSE_CHANNEL               = "createcoursechannel"
+	DATA_STATISTICS_DELETE_COURSE_CHANNEL               = "deletecoursechannel"
+	DATA_STATISTICS_GET_COURSE_CHANNEL_LIST             = "getcoursechannellist"
+	DATA_STATISTICS_SET_USER_COURSE_REFUND              = "setusercourserefund"
+	DATA_STATISTICS_USER_COURSE_MANUAL_REFUND           = "usercoursemanualrefund"
+	DATA_STATISTICS_USER_COURSE_REFUND_FROM_TRANSACTION = "usercourserefundfromtransaction"
+	DATA_STATISTICS_GET_COURSE_STATISTICS               = "getcoursedatastatistics"
 )
 
 func (self *ReadingHandler) dataStatisticsHandle(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
@@ -49,6 +55,8 @@ func (self *ReadingHandler) dataStatisticsHandle(rr *HandlerRequest, w http.Resp
 		self.setUserCourseRefund(rr, w, r)
 	case DATA_STATISTICS_USER_COURSE_MANUAL_REFUND:
 		self.setUserCourseManualRefund(rr, w, r)
+	case DATA_STATISTICS_USER_COURSE_REFUND_FROM_TRANSACTION:
+		self.setUserCourseRefundFromTransaction(rr, w, r)
 	case DATA_STATISTICS_GET_COURSE_STATISTICS:
 		self.getCourseDataStatistics(rr, w, r)
 	}
@@ -187,7 +195,7 @@ func (self *ReadingHandler) setUserCourseRefund(rr *HandlerRequest, w http.Respo
 	if req.OutTradeNo == "" || req.TransactionId == "" {
 		holmes.Debug("this user course[%d] cannot refund auto.", req.ID)
 		rsp.Code = proto.RESPONSE_REFUND_NOT_AUTO
-		rsp.Msg = "状态已更新，不能自动退款，请手动在助教个人号退款给用户"
+		rsp.Msg = "不能自动退款，请填写用户微信支付订单号"
 
 		req.Status = READING_COURSE_STATUS_REFUND_NOT_AUTO
 		err = models.UpdateUserCourseStatus(req)
@@ -222,6 +230,7 @@ func (self *ReadingHandler) setUserCourseRefund(rr *HandlerRequest, w http.Respo
 	req.RefundId = refundRsp.RefundId
 	req.RefundFee = refundRsp.RefundFee
 	req.Status = READING_COURSE_STATUS_REFUND
+	req.RefundWay = REFUND_WAY_AUTO
 	err = models.UpdateUserCourseRefundInfo(req)
 	if err != nil {
 		holmes.Error("update user course refund info error: %v", err)
@@ -253,6 +262,86 @@ func (self *ReadingHandler) setUserCourseManualRefund(rr *HandlerRequest, w http
 	}
 }
 
+func (self *ReadingHandler) setUserCourseRefundFromTransaction(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+
+	req := &proto.ReadingRefundFromTransactionReq{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+
+	userCourse := &models.UserCourse{
+		ID: req.UserCourseId,
+	}
+	has, err := models.GetUserCourseFromId(userCourse)
+	if err != nil {
+		holmes.Error("get user course from id error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	if !has {
+		holmes.Error("user course[%d] not found", userCourse.ID)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+
+	user := &models.User{
+		ID: userCourse.UserId,
+	}
+	has, err = models.GetUser(user)
+	if err != nil {
+		holmes.Error("get user error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	if !has {
+		holmes.Error("cannot found this user[%d]", userCourse.UserId)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+
+	orderQueryRsp, err := self.getWechatPayOrder(req.TransactionId)
+	if err != nil {
+		holmes.Error("get wechat pay order error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR_EXT
+		return
+	}
+	if orderQueryRsp.TotalFee != userCourse.Money {
+		holmes.Error("order query total fee[%d] != user course money[%d]", orderQueryRsp.TotalFee, userCourse.Money)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	if orderQueryRsp.OpenId != user.OpenId {
+		holmes.Error("order query openid[%s] != user openid[%s]", orderQueryRsp.OpenId, user.OpenId)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+
+	refundRsp, err := self.refundWechatPay(orderQueryRsp.TransactionId, orderQueryRsp.OutTradeNo, fmt.Sprintf("%d", userCourse.ID), userCourse.Money)
+	if err != nil {
+		holmes.Error("wechat pay refund error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR_EXT
+		return
+	}
+	userCourse.OutRefundNo = refundRsp.OutRefundNo
+	userCourse.RefundId = refundRsp.RefundId
+	userCourse.RefundFee = refundRsp.RefundFee
+	userCourse.Status = READING_COURSE_STATUS_REFUND
+	userCourse.RefundWay = REFUND_WAY_FROM_TRANSACTION
+	err = models.UpdateUserCourseRefundInfo(userCourse)
+	if err != nil {
+		holmes.Error("update user course refund info error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+}
+
 func (self *ReadingHandler) getCourseDataStatistics(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
 	rsp := &proto.Response{Code: proto.RESPONSE_OK}
 	defer func() {
@@ -274,4 +363,34 @@ func (self *ReadingHandler) getCourseDataStatistics(rr *HandlerRequest, w http.R
 		return
 	}
 	rsp.Data = list
+}
+
+// wechat pay refund
+func (self *ReadingHandler) getWechatPayOrder(transactionId string) (*mchpay.OrderQueryResponse, error) {
+	orderQueryReq := &mchpay.OrderQueryRequest{
+		TransactionId: transactionId,
+	}
+	orderQueryRsp, err := mchpay.OrderQuery2(self.mchClient, orderQueryReq)
+	if err != nil {
+		holmes.Error("order query error: %v", err)
+		return nil, err
+	}
+	holmes.Debug("get wechat pay order success: %v", orderQueryRsp)
+	return orderQueryRsp, nil
+}
+
+func (self *ReadingHandler) refundWechatPay(transactionId, outTradeNo, outRefundNo string, money int64) (*mchpay.RefundResponse, error) {
+	refundReq := &mchpay.RefundRequest{
+		TransactionId: transactionId,
+		OutTradeNo:    outTradeNo,
+		TotalFee:      money,
+		RefundFee:     money,
+		OutRefundNo:   outRefundNo,
+	}
+	refundRsp, err := mchpay.Refund2(self.mchClient, refundReq)
+	if err != nil {
+		holmes.Error("mch pay refund error: %v", err)
+		return nil, err
+	}
+	return refundRsp, nil
 }

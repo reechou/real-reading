@@ -20,6 +20,7 @@ type UserCourse struct {
 	OutRefundNo   string `xorm:"not null default '' varchar(128)" json:"outRefundNo"`
 	RefundId      string `xorm:"not null default '' varchar(128)" json:"refundId"`
 	RefundFee     int64  `xorm:"not null default 0 int" json:"refundFee"`
+	RefundWay     int64  `xorm:"not null default 0 int" json:"refundWay"`
 	CreatedAt     int64  `xorm:"not null default 0 int" json:"createdAt"`
 	UpdatedAt     int64  `xorm:"not null default 0 int" json:"-"`
 }
@@ -79,6 +80,6 @@ func UpdateUserCourseStatus(info *UserCourse) error {
 
 func UpdateUserCourseRefundInfo(info *UserCourse) error {
 	info.UpdatedAt = time.Now().Unix()
-	_, err := x.ID(info.ID).Cols("out_refund_no", "refund_id", "refund_fee", "status", "updated_at").Update(info)
+	_, err := x.ID(info.ID).Cols("out_refund_no", "refund_id", "refund_fee", "status", "refund_way", "updated_at").Update(info)
 	return err
 }
