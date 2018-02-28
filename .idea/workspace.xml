@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="646c20b3-f422-431f-9634-28d58f288d0c" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/reezhou.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/models/refund_info.go" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/models/update_course.go" />
-      <change beforePath="$PROJECT_DIR$/controller/data_statistics_manager.go" afterPath="$PROJECT_DIR$/controller/data_statistics_manager.go" />
-      <change beforePath="$PROJECT_DIR$/models/user_course.go" afterPath="$PROJECT_DIR$/models/user_course.go" />
-      <change beforePath="$PROJECT_DIR$/proto/reading_call.go" afterPath="$PROJECT_DIR$/proto/reading_call.go" />
-      <change beforePath="$PROJECT_DIR$/script/update_course/logic/logic.go" afterPath="$PROJECT_DIR$/script/update_course/logic/logic.go" />
-      <change beforePath="$PROJECT_DIR$/script/update_course/main.go" afterPath="$PROJECT_DIR$/script/update_course/main.go" />
+      <change beforePath="$PROJECT_DIR$/models/update_course.go" afterPath="$PROJECT_DIR$/models/update_course.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,7 +13,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="data_statistics_manager.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="data_statistics_manager.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controller/data_statistics_manager.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="419">
@@ -28,6 +21,16 @@
               <folding>
                 <element signature="e#20#239#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="update_course.go" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/models/update_course.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="18">
+              <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -123,11 +126,11 @@
         <option value="$PROJECT_DIR$/views/register/sign_success.html" />
         <option value="$PROJECT_DIR$/views/reading_sign_success.html" />
         <option value="$PROJECT_DIR$/script/update_course/logic/logic.go" />
-        <option value="$PROJECT_DIR$/models/update_course.go" />
         <option value="$PROJECT_DIR$/models/refund_info.go" />
         <option value="$PROJECT_DIR$/proto/reading_call.go" />
         <option value="$PROJECT_DIR$/models/user_course.go" />
         <option value="$PROJECT_DIR$/controller/data_statistics_manager.go" />
+        <option value="$PROJECT_DIR$/models/update_course.go" />
       </list>
     </option>
   </component>
@@ -650,16 +653,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/update_course.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="725">
-          <caret line="47" column="83" lean-forward="false" selection-start-line="47" selection-start-column="83" selection-end-line="47" selection-end-column="83" />
-          <folding>
-            <element signature="e#16#71#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/refund_info.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
@@ -723,6 +716,14 @@
           <folding>
             <element signature="e#20#239#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/update_course.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

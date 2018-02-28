@@ -1,12 +1,5 @@
 package models
 
-import (
-	"fmt"
-	"time"
-
-	"github.com/reechou/holmes"
-)
-
 func GetMonthCourseFromCourse(courseId int64) ([]MonthCourse, error) {
 	var mcs []MonthCourse
 	err := x.Where("course_id = ?", courseId).Find(&mcs)
