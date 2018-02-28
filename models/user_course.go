@@ -83,3 +83,9 @@ func UpdateUserCourseRefundInfo(info *UserCourse) error {
 	_, err := x.ID(info.ID).Cols("out_refund_no", "refund_id", "refund_fee", "status", "refund_way", "updated_at").Update(info)
 	return err
 }
+
+func UpdateUserCourseTransactionRefundInfo(info *UserCourse) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols("out_trade_no", "transaction_id", "out_refund_no", "refund_id", "refund_fee", "status", "refund_way", "updated_at").Update(info)
+	return err
+}

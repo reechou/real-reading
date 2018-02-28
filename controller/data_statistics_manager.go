@@ -329,12 +329,14 @@ func (self *ReadingHandler) setUserCourseRefundFromTransaction(rr *HandlerReques
 		rsp.Code = proto.RESPONSE_ERR_EXT
 		return
 	}
+	userCourse.TransactionId = refundRsp.TransactionId
+	userCourse.OutTradeNo = refundRsp.OutTradeNo
 	userCourse.OutRefundNo = refundRsp.OutRefundNo
 	userCourse.RefundId = refundRsp.RefundId
 	userCourse.RefundFee = refundRsp.RefundFee
 	userCourse.Status = READING_COURSE_STATUS_REFUND
 	userCourse.RefundWay = REFUND_WAY_FROM_TRANSACTION
-	err = models.UpdateUserCourseRefundInfo(userCourse)
+	err = models.UpdateUserCourseTransactionRefundInfo(userCourse)
 	if err != nil {
 		holmes.Error("update user course refund info error: %v", err)
 		rsp.Code = proto.RESPONSE_ERR
