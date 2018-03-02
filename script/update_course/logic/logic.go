@@ -119,7 +119,7 @@ func (ucl *UpdateCourseLogic) Run() {
 		}
 	}
 
-	dstCourseTaskTimeOfWeekBegin := now.New(time.Unix(dstCourse.StartTime, 0).UTC()).BeginningOfWeek().Unix()
+	dstCourseTaskTimeOfWeekBegin := now.New(time.Unix(dstCourse.StartTime, 0)).BeginningOfWeek().Unix()
 	holmes.Debug("start: %d begin: %d", dstCourse.StartTime, dstCourseTaskTimeOfWeekBegin)
 	var taskWeekIdx = -1
 	// get month course book list
@@ -204,8 +204,7 @@ func (ucl *UpdateCourseLogic) Run() {
 					taskTime = mccs2[k].TaskTime
 				}
 				if taskTime != 0 {
-					dstCourseTaskTimeOfWeekBegin = now.New(time.Unix(taskTime, 0).UTC()).BeginningOfWeek().Unix()
-					//holmes.Debug("tasktime: %d %d", taskTime, dstCourseTaskTimeOfWeekBegin)
+					dstCourseTaskTimeOfWeekBegin = now.New(time.Unix(taskTime, 0)).BeginningOfWeek().Unix()
 					taskWeekDay := (taskTime-dstCourseTaskTimeOfWeekBegin)/86400 + 1
 					var ifFindWeekIdx bool
 					for ii := 0; ii < len(ucl.cfg.CopyCourse.TaskWeekDate); ii++ {
