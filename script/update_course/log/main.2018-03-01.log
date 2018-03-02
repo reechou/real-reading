@@ -1,0 +1,195 @@
+2018/03/01 15:51:11  INFO [models.CreateMonthCourse](course.go:205) create month course[&{2 2 2 2018 4 Apr. reezhou reezhou 1519890671 1519890671}] success.
+2018/03/01 15:51:11  INFO [models.CreateMonthCourseBook](course.go:238) create month course book[&{2 2 2 1 2 1519890671 1519890671}] success.
+2018/03/01 15:51:11  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{4 2 2 1 2 reezhou 1520352000 1519890671 1519890671}] success.
+2018/03/01 15:51:11  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{5 2 2 1 3 reezhou2 1520524800 1519890671 1519890671}] success.
+2018/03/01 15:51:11  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{6 2 2 1 4 reezhou3 1520784000 1519890671 1519890671}] success.
+2018/03/01 15:51:11  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{4 4 1 1 1 1519890671 1519890671}] success.
+2018/03/01 15:51:11  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{5 5 1 2 2 1519890671 1519890671}] success.
+2018/03/01 15:51:11  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{6 6 1 3 3 1519890671 1519890671}] success.
+2018/03/01 15:54:52 DEBUG [logic.(*UpdateCourseLogic).Run] (logic.go:82) - year: %d month: %d start: %v2018 3 2018-03-05 00:00:00 +0800 CST
+2018/03/01 15:54:52  INFO [models.CreateMonthCourse](course.go:205) create month course[&{3 2 2 2018 4 Apr. reezhou reezhou 1519890892 1519890892}] success.
+2018/03/01 15:54:52  INFO [models.CreateMonthCourseBook](course.go:238) create month course book[&{3 2 3 1 2 1519890892 1519890892}] success.
+2018/03/01 15:54:52  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{7 2 3 1 2 reezhou 1520352000 1519890892 1519890892}] success.
+2018/03/01 15:54:52  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{8 2 3 1 3 reezhou2 1520524800 1519890892 1519890892}] success.
+2018/03/01 15:54:52  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{9 2 3 1 4 reezhou3 1520784000 1519890892 1519890892}] success.
+2018/03/01 15:54:52  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{7 7 1 1 1 1519890892 1519890892}] success.
+2018/03/01 15:54:52  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{8 8 1 2 2 1519890892 1519890892}] success.
+2018/03/01 15:54:52  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{9 9 1 3 3 1519890892 1519890892}] success.
+2018/03/01 16:06:23 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:166) books: []
+2018/03/01 16:07:57 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:166) books: []
+2018/03/01 16:09:45 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:174) books: [1]
+2018/03/01 16:09:45 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:245) mccs2: [{7 2 3 1 2 reezhou 1520352000 1519890892 1519890892} {8 2 3 1 3 reezhou2 1520524800 1519890892 1519890892} {9 2 3 1 4 reezhou3 1520784000 1519890892 1519890892}]
+2018/03/01 16:09:45  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{10 8 1 2 2 1519891785 1519891785}] success.
+2018/03/01 16:09:45  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{11 9 1 3 3 1519891785 1519891785}] success.
+2018/03/01 16:12:41 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:174) books: [1]
+2018/03/01 16:12:41 ERROR [logic.(*UpdateCourseLogic).Run](logic.go:215) task week day[4] cannot found in config: [1 3 5]
+2018/03/01 16:14:01 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:174) books: [1]
+2018/03/01 16:14:01 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:205) tasktime: 1520352000 1520092800
+2018/03/01 16:14:01 ERROR [logic.(*UpdateCourseLogic).Run](logic.go:216) task week day[4] cannot found in config: [1 3 5]
+2018/03/01 16:16:00  INFO [models.CreateMonthCourse](course.go:205) create month course[&{4 2 2 2018 3 Mar. reezhou reezhou 1519892160 1519892160}] success.
+2018/03/01 16:16:00  INFO [models.CreateMonthCourseBook](course.go:238) create month course book[&{4 2 4 1 2 1519892160 1519892160}] success.
+2018/03/01 16:16:00 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:174) books: [1]
+2018/03/01 16:16:00  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{10 2 4 1 2 reezhou 1520352000 1519892160 1519892160}] success.
+2018/03/01 16:16:00  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{11 2 4 1 3 reezhou2 1520524800 1519892160 1519892160}] success.
+2018/03/01 16:16:00  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{12 2 4 1 4 reezhou3 1520784000 1519892160 1519892160}] success.
+2018/03/01 16:16:00 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:246) mccs2: [{10 2 4 1 2 reezhou 1520352000 1519892160 1519892160} {11 2 4 1 3 reezhou2 1520524800 1519892160 1519892160} {12 2 4 1 4 reezhou3 1520784000 1519892160 1519892160}]
+2018/03/01 16:16:00  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{12 10 1 1 1 1519892160 1519892160}] success.
+2018/03/01 16:16:00  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{13 11 1 2 2 1519892160 1519892160}] success.
+2018/03/01 16:16:00  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{14 12 1 3 3 1519892160 1519892160}] success.
+2018/03/01 16:25:02  INFO [models.CreateMonthCourse](course.go:205) create month course[&{5 2 2 2018 3 Mar. reezhou reezhou 1519892702 1519892702}] success.
+2018/03/01 16:25:02  INFO [models.CreateMonthCourseBook](course.go:238) create month course book[&{5 2 5 1 2 1519892702 1519892702}] success.
+2018/03/01 16:25:02 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:174) books: [1]
+2018/03/01 16:25:02  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{13 2 5 1 2 reezhou 1520179200 1519892702 1519892702}] success.
+2018/03/01 16:25:02  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{14 2 5 1 3 reezhou2 1520352000 1519892702 1519892702}] success.
+2018/03/01 16:25:02  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{15 2 5 1 4 reezhou3 1520524800 1519892702 1519892702}] success.
+2018/03/01 16:25:02  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{15 13 1 1 1 1519892702 1519892702}] success.
+2018/03/01 16:25:02  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{16 14 1 2 2 1519892702 1519892702}] success.
+2018/03/01 16:25:02  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{17 15 1 3 3 1519892702 1519892702}] success.
+2018/03/01 16:26:05 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:174) books: [1]
+2018/03/01 16:26:05 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:205) tasktime: 1520179200 1520092800
+2018/03/01 16:26:05 ERROR [logic.(*UpdateCourseLogic).Run](logic.go:216) task week day[2] cannot found in config: [1 3 5]
+2018/03/01 16:31:44 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:176) books: [1]
+2018/03/01 16:31:44 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:207) tasktime: 1520179200 1520179200
+2018/03/01 16:31:44  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{16 2 5 1 3 reezhou2 1520352000 1519893104 1519893104}] success.
+2018/03/01 16:31:44  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{17 2 5 1 4 reezhou3 1520524800 1519893104 1519893104}] success.
+2018/03/01 16:31:44  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{18 16 1 2 2 1519893104 1519893104}] success.
+2018/03/01 16:31:44  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{19 17 1 3 3 1519893104 1519893104}] success.
+2018/03/01 16:34:53  INFO [models.CreateMonthCourse](course.go:205) create month course[&{6 2 1 2018 3 Mar. reezhou reezhou 1519893293 1519893293}] success.
+2018/03/01 16:34:53  INFO [models.CreateMonthCourseBook](course.go:238) create month course book[&{6 2 6 1 1 1519893293 1519893293}] success.
+2018/03/01 16:34:53 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:176) books: [1]
+2018/03/01 16:34:53  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{18 2 6 1 1 reezhou 1520179200 1519893293 1519893293}] success.
+2018/03/01 16:34:53  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{19 2 6 1 2 reezhou2 1520352000 1519893293 1519893293}] success.
+2018/03/01 16:34:53  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{20 2 6 1 3 reezhou3 1520524800 1519893293 1519893293}] success.
+2018/03/01 16:34:53  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{20 18 1 1 1 1519893293 1519893293}] success.
+2018/03/01 16:34:53  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{21 19 1 2 2 1519893293 1519893293}] success.
+2018/03/01 16:34:53  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{22 20 1 3 3 1519893293 1519893293}] success.
+2018/03/01 16:39:20  INFO [models.CreateMonthCourseBook](course.go:238) create month course book[&{8 2 6 2 2 1519893560 1519893560}] success.
+2018/03/01 16:39:20 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:176) books: [1 1]
+2018/03/01 16:42:00  INFO [models.CreateMonthCourseBook](course.go:238) create month course book[&{9 2 6 2 2 1519893720 1519893720}] success.
+2018/03/01 16:42:00 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:176) books: [1 2]
+2018/03/01 16:42:00  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{24 2 6 2 1 111 1520179200 1519893720 1519893720}] success.
+2018/03/01 16:42:00  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{25 2 6 2 2 333 1520352000 1519893720 1519893720}] success.
+2018/03/01 16:42:00  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{26 2 6 2 3 222 1520524800 1519893720 1519893720}] success.
+2018/03/01 16:42:00  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{30 24 2 4 1 1519893720 1519893720}] success.
+2018/03/01 16:42:00  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{31 24 2 5 2 1519893720 1519893720}] success.
+2018/03/01 16:42:00  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{32 25 2 4 1 1519893720 1519893720}] success.
+2018/03/01 16:42:00  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{33 25 2 5 2 1519893720 1519893720}] success.
+2018/03/01 16:42:00  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{34 25 2 6 3 1519893720 1519893720}] success.
+2018/03/01 16:42:00  INFO [models.CreateMonthCourseCatalogAudio](course.go:341) create month course catalog audio[&{2 25 ssss http://ali.baicizhan.com/readin/audios/1499411864_Aesop's%20Fables_1451_1.mp3 316 1519893720 1519893720}] success.
+2018/03/01 16:42:00  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{35 26 2 5 2 1519893720 1519893720}] success.
+2018/03/01 16:42:00  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{36 26 2 6 3 1519893720 1519893720}] success.
+2018/03/01 16:49:08  INFO [models.CreateMonthCourseBook](course.go:238) create month course book[&{10 2 6 2 2 1519894148 1519894148}] success.
+2018/03/01 16:49:08 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:176) books: [1 2]
+2018/03/01 16:49:08  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{27 2 6 2 1 111 1520179200 1519894148 1519894148}] success.
+2018/03/01 16:49:08  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{28 2 6 2 2 222 1520352000 1519894148 1519894148}] success.
+2018/03/01 16:49:08  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{29 2 6 2 3 333 1520524800 1519894148 1519894148}] success.
+2018/03/01 16:49:08  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{37 27 2 4 1 1519894148 1519894148}] success.
+2018/03/01 16:49:08  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{38 27 2 5 2 1519894148 1519894148}] success.
+2018/03/01 16:49:08  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{39 28 2 5 2 1519894148 1519894148}] success.
+2018/03/01 16:49:08  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{40 28 2 6 3 1519894148 1519894148}] success.
+2018/03/01 16:49:08  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{41 29 2 4 1 1519894148 1519894148}] success.
+2018/03/01 16:49:08  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{42 29 2 5 2 1519894148 1519894148}] success.
+2018/03/01 16:49:08  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{43 29 2 6 3 1519894148 1519894148}] success.
+2018/03/01 16:49:08  INFO [models.CreateMonthCourseCatalogAudio](course.go:341) create month course catalog audio[&{3 29 ssss http://ali.baicizhan.com/readin/audios/1499411864_Aesop's%20Fables_1451_1.mp3 316 1519894148 1519894148}] success.
+2018/03/01 17:02:12  INFO [models.CreateMonthCourseBook](course.go:238) create month course book[&{11 2 6 2 2 1519894932 1519894932}] success.
+2018/03/01 17:02:12 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:176) books: [1 2]
+2018/03/01 17:02:12 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:207) tasktime: 1520524800 1520179200
+2018/03/01 17:02:12  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{30 2 6 2 1 111 1520784000 1519894932 1519894932}] success.
+2018/03/01 17:02:12  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{31 2 6 2 2 222 1520956800 1519894932 1519894932}] success.
+2018/03/01 17:02:12  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{32 2 6 2 3 333 1521129600 1519894932 1519894932}] success.
+2018/03/01 17:02:12  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{44 30 2 4 1 1519894932 1519894932}] success.
+2018/03/01 17:02:12  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{45 30 2 5 2 1519894932 1519894932}] success.
+2018/03/01 17:02:12  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{46 31 2 5 2 1519894932 1519894932}] success.
+2018/03/01 17:02:12  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{47 31 2 6 3 1519894932 1519894932}] success.
+2018/03/01 17:02:12  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{48 32 2 4 1 1519894932 1519894932}] success.
+2018/03/01 17:02:12  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{49 32 2 5 2 1519894932 1519894932}] success.
+2018/03/01 17:02:12  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{50 32 2 6 3 1519894932 1519894932}] success.
+2018/03/01 17:02:12  INFO [models.CreateMonthCourseCatalogAudio](course.go:341) create month course catalog audio[&{4 32 ssss http://ali.baicizhan.com/readin/audios/1499411864_Aesop's%20Fables_1451_1.mp3 316 1519894932 1519894932}] success.
+2018/03/01 17:39:05  INFO [models.CreateMonthCourse](course.go:205) create month course[&{8 2 2 2018 4 Apr. oioioi oioioi 1519897145 1519897145}] success.
+2018/03/01 17:39:05 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:176) books: [1 2]
+2018/03/01 17:39:05 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:207) tasktime: 1520524800 1520179200
+2018/03/01 17:39:05 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:207) tasktime: 1521129600 1520784000
+2018/03/01 17:39:05  INFO [models.CreateMonthCourseBook](course.go:238) create month course book[&{13 2 8 1 1 1519897145 1519897145}] success.
+2018/03/01 17:39:05 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:176) books: [1]
+2018/03/01 17:39:05  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{34 2 8 1 1 ppppp 1521388800 1519897145 1519897145}] success.
+2018/03/01 17:39:05  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{52 34 1 1 1 1519897145 1519897145}] success.
+2018/03/01 17:51:43 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:176) books: [1 2]
+2018/03/01 17:51:43  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{39 2 6 1 1 1111 1520179200 1519897903 1519897903}] success.
+2018/03/01 17:51:43  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{40 2 6 1 2 2222 1520352000 1519897903 1519897903}] success.
+2018/03/01 17:51:43  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{41 2 6 1 3 3333 1520524800 1519897903 1519897903}] success.
+2018/03/01 17:51:43  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{56 39 1 1 1 1519897903 1519897903}] success.
+2018/03/01 17:51:43  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{57 40 1 2 2 1519897903 1519897903}] success.
+2018/03/01 17:51:43  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{58 41 1 3 3 1519897903 1519897903}] success.
+2018/03/01 17:51:43  INFO [models.CreateMonthCourseCatalogAudio](course.go:341) create month course catalog audio[&{6 41 3333 http://ali.baicizhan.com/readin/audios/1499411864_Aesop's%20Fables_1451_1.mp3 316 1519897903 1519897903}] success.
+2018/03/01 17:51:43 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:176) books: [1]
+2018/03/01 17:56:08 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:176) books: [1 2]
+2018/03/01 17:56:08 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:222) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520179200
+2018/03/01 17:56:08 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:232) new task time: 1520179200
+2018/03/01 17:57:54 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:176) books: [1 2]
+2018/03/01 17:57:54 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:222) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520179200
+2018/03/01 17:57:54  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{42 2 6 1 1 1111 1520179200 1519898274 1519898274}] success.
+2018/03/01 17:57:54  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{43 2 6 1 2 2222 1520352000 1519898274 1519898274}] success.
+2018/03/01 17:57:54  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{44 2 6 1 3 3333 1520524800 1519898274 1519898274}] success.
+2018/03/01 17:57:54  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{59 42 1 1 1 1519898274 1519898274}] success.
+2018/03/01 17:57:54  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{60 43 1 2 2 1519898274 1519898274}] success.
+2018/03/01 17:57:54  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{61 44 1 3 3 1519898274 1519898274}] success.
+2018/03/01 17:57:54  INFO [models.CreateMonthCourseCatalogAudio](course.go:341) create month course catalog audio[&{7 44 3333 http://ali.baicizhan.com/readin/audios/1499411864_Aesop's%20Fables_1451_1.mp3 316 1519898274 1519898274}] success.
+2018/03/01 17:57:54 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:222) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520179200
+2018/03/01 17:57:54 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:176) books: [1]
+2018/03/01 17:57:54 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:222) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520179200
+2018/03/01 18:00:19 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:123) start: 1520179200
+2018/03/01 18:00:19 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:177) books: [1 2]
+2018/03/01 18:00:19 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520179200
+2018/03/01 18:00:19  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{45 2 6 1 1 1111 1520179200 1519898419 1519898419}] success.
+2018/03/01 18:00:19  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{46 2 6 1 2 2222 1520352000 1519898419 1519898419}] success.
+2018/03/01 18:00:19  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{47 2 6 1 3 3333 1520524800 1519898419 1519898419}] success.
+2018/03/01 18:00:19  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{62 45 1 1 1 1519898419 1519898419}] success.
+2018/03/01 18:00:19  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{63 46 1 2 2 1519898419 1519898419}] success.
+2018/03/01 18:00:19  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{64 47 1 3 3 1519898419 1519898419}] success.
+2018/03/01 18:00:19  INFO [models.CreateMonthCourseCatalogAudio](course.go:341) create month course catalog audio[&{8 47 3333 http://ali.baicizhan.com/readin/audios/1499411864_Aesop's%20Fables_1451_1.mp3 316 1519898419 1519898419}] success.
+2018/03/01 18:00:19 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520179200
+2018/03/01 18:00:19 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:177) books: [1]
+2018/03/01 18:00:19 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520179200
+2018/03/01 18:01:11 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:123) start: 1520208000 begin: 1520179200
+2018/03/01 18:01:11 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:177) books: [1 2]
+2018/03/01 18:01:11 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 1520524800 dstCourseTaskTimeOfWeekBegin: 1520179200
+2018/03/01 18:01:11 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520179200
+2018/03/01 18:01:11 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:177) books: [1]
+2018/03/01 18:01:11 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520179200
+2018/03/01 18:02:18 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:123) start: 1520208000 begin: 1520208000
+2018/03/01 18:02:18 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:177) books: [1 2]
+2018/03/01 18:02:18 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 1520524800 dstCourseTaskTimeOfWeekBegin: 1520179200
+2018/03/01 18:02:18 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520179200
+2018/03/01 18:02:18 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:177) books: [1]
+2018/03/01 18:02:18 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520179200
+2018/03/01 18:03:34 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:123) start: 1520208000 begin: 1520208000
+2018/03/01 18:03:34 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:177) books: [1 2]
+2018/03/01 18:03:34 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520208000
+2018/03/01 18:03:34  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{48 2 6 1 1 1111 1520208000 1519898614 1519898614}] success.
+2018/03/01 18:03:34  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{49 2 6 1 2 2222 1520380800 1519898614 1519898614}] success.
+2018/03/01 18:03:34  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{50 2 6 1 3 3333 1520553600 1519898614 1519898614}] success.
+2018/03/01 18:03:34  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{65 48 1 1 1 1519898614 1519898614}] success.
+2018/03/01 18:03:34  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{66 49 1 2 2 1519898614 1519898614}] success.
+2018/03/01 18:03:34  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{67 50 1 3 3 1519898614 1519898614}] success.
+2018/03/01 18:03:34  INFO [models.CreateMonthCourseCatalogAudio](course.go:341) create month course catalog audio[&{9 50 3333 http://ali.baicizhan.com/readin/audios/1499411864_Aesop's%20Fables_1451_1.mp3 316 1519898614 1519898614}] success.
+2018/03/01 18:03:34 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520208000
+2018/03/01 18:03:34 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:177) books: [1]
+2018/03/01 18:03:34 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520208000
+2018/03/01 22:09:31 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:123) start: 1520208000 begin: 1520208000
+2018/03/01 22:09:31 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:177) books: [1 2]
+2018/03/01 22:09:31 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 1520553600 dstCourseTaskTimeOfWeekBegin: 1520208000
+2018/03/01 22:09:31 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520208000
+2018/03/01 22:09:31 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:177) books: [1]
+2018/03/01 22:09:31 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520208000
+2018/03/01 22:12:59 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:123) start: 1520208000 begin: 1520208000
+2018/03/01 22:12:59 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:177) books: [1 2]
+2018/03/01 22:12:59 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 1520553600 dstCourseTaskTimeOfWeekBegin: 1520208000
+2018/03/01 22:12:59 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520208000
+2018/03/01 22:12:59 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:177) books: [1]
+2018/03/01 22:12:59 DEBUG [logic.(*UpdateCourseLogic).Run](logic.go:223) taskTime: 0 dstCourseTaskTimeOfWeekBegin: 1520208000
+2018/03/01 22:12:59  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{54 2 8 1 1 777 1520812800 1519913579 1519913579}] success.
+2018/03/01 22:12:59  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{55 2 8 1 2 888 1520985600 1519913579 1519913579}] success.
+2018/03/01 22:12:59  INFO [models.CreateMonthCourseCatalog](course.go:270) create month course catalog[&{56 2 8 1 3 999 1521158400 1519913579 1519913579}] success.
+2018/03/01 22:12:59  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{71 54 1 1 1 1519913579 1519913579}] success.
+2018/03/01 22:12:59  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{72 55 1 2 2 1519913579 1519913579}] success.
+2018/03/01 22:12:59  INFO [models.CreateMonthCourseCatalogChapter](course.go:303) create month course catalog chapter[&{73 56 1 3 3 1519913579 1519913579}] success.

@@ -2,7 +2,7 @@ package models
 
 func GetMonthCourseFromCourse(courseId int64) ([]MonthCourse, error) {
 	var mcs []MonthCourse
-	err := x.Where("course_id = ?", courseId).Find(&mcs)
+	err := x.Where("course_id = ?", courseId).OrderBy("index_id").Find(&mcs)
 	if err != nil {
 		return nil, err
 	}
@@ -11,7 +11,7 @@ func GetMonthCourseFromCourse(courseId int64) ([]MonthCourse, error) {
 
 func GetMonthCourseBookFromMonthCourse(monthCourseId int64) ([]MonthCourseBook, error) {
 	var mcbs []MonthCourseBook
-	err := x.Where("month_course_id = ?", monthCourseId).Find(&mcbs)
+	err := x.Where("month_course_id = ?", monthCourseId).OrderBy("index_id").Find(&mcbs)
 	if err != nil {
 		return nil, err
 	}
@@ -20,7 +20,7 @@ func GetMonthCourseBookFromMonthCourse(monthCourseId int64) ([]MonthCourseBook, 
 
 func GetMonthCourseCatalogFromCourse(courseId, monthCourseId, bookId int64) ([]MonthCourseCatalog, error) {
 	var mccs []MonthCourseCatalog
-	err := x.Where("course_id = ?", courseId).And("month_course_id = ?", monthCourseId).And("book_id = ?", bookId).Find(&mccs)
+	err := x.Where("course_id = ?", courseId).And("month_course_id = ?", monthCourseId).And("book_id = ?", bookId).OrderBy("index_id").Find(&mccs)
 	if err != nil {
 		return nil, err
 	}

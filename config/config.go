@@ -56,6 +56,12 @@ type Graduation struct {
 	TmpPath string
 }
 
+type CopyCourse struct {
+	SrcCourseId  int64
+	DstCourseId  int64
+	TaskWeekDate []int64
+}
+
 type Config struct {
 	Debug     bool
 	Path      string
@@ -83,6 +89,8 @@ type Config struct {
 	ReadingOauth
 
 	Graduation
+
+	CopyCourse
 }
 
 func NewConfig() *Config {
