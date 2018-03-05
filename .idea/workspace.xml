@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="646c20b3-f422-431f-9634-28d58f288d0c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/controller/register_handler.go" afterPath="$PROJECT_DIR$/controller/register_handler.go" />
       <change beforePath="$PROJECT_DIR$/views/register/sign_success.html" afterPath="$PROJECT_DIR$/views/register/sign_success.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="register_handler.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="register_handler.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controller/register_handler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2859">
-              <caret line="300" column="13" lean-forward="true" selection-start-line="300" selection-start-column="13" selection-end-line="300" selection-end-column="13" />
+            <state relative-caret-position="810">
+              <caret line="208" column="7" lean-forward="true" selection-start-line="208" selection-start-column="7" selection-end-line="208" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -45,11 +43,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sign_success.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="sign_success.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/register/sign_success.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="59" column="17" lean-forward="false" selection-start-line="59" selection-start-column="17" selection-end-line="59" selection-end-column="17" />
+            <state relative-caret-position="380">
+              <caret line="63" column="21" lean-forward="false" selection-start-line="63" selection-start-column="21" selection-end-line="63" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -134,8 +132,8 @@
         <option value="$PROJECT_DIR$/views/register/enroll.html" />
         <option value="$PROJECT_DIR$/views/register/pay.html" />
         <option value="$PROJECT_DIR$/views/register/sign.html" />
-        <option value="$PROJECT_DIR$/views/register/sign_success.html" />
         <option value="$PROJECT_DIR$/controller/register_handler.go" />
+        <option value="$PROJECT_DIR$/views/register/sign_success.html" />
       </list>
     </option>
   </component>
@@ -691,14 +689,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/register/sign_success.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="59" column="17" lean-forward="false" selection-start-line="59" selection-start-column="17" selection-end-line="59" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/register/pay.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="173">
@@ -725,8 +715,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/controller/register_handler.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2859">
-          <caret line="300" column="13" lean-forward="true" selection-start-line="300" selection-start-column="13" selection-end-line="300" selection-end-column="13" />
+        <state relative-caret-position="810">
+          <caret line="208" column="7" lean-forward="true" selection-start-line="208" selection-start-column="7" selection-end-line="208" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/register/sign_success.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="63" column="21" lean-forward="false" selection-start-line="63" selection-start-column="21" selection-end-line="63" selection-end-column="21" />
           <folding />
         </state>
       </provider>
