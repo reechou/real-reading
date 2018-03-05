@@ -128,35 +128,6 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 		io.WriteString(w, MSG_ERROR_SYSTEM)
 		return
 	}
-	if has {
-		if user.Name != userinfo.Name || user.AvatarUrl != userinfo.AvatarUrl {
-			user.Name = userinfo.Name
-			user.AvatarUrl = userinfo.AvatarUrl
-			err = models.UpdateUserWxInfo(user)
-			if err != nil {
-				holmes.Error("update user wxinfo error: %v", err)
-			}
-		}
-		courseList, err := models.GetUserCourseList(user.ID)
-		if err != nil {
-			holmes.Error("get user course list error: %v", err)
-			io.WriteString(w, MSG_ERROR_SYSTEM)
-			return
-		}
-		for _, v := range courseList {
-			if v.Course.CourseType == registerInfo.Course.CourseType {
-				registerInfo.Course = v.Course
-				registerInfo.StartTime = time.Unix(v.Course.StartTime, 0).Format("2006.01.02")
-				registerInfo.EndTime = time.Unix(v.Course.EndTime, 0).Format("2006.01.02")
-				if v.Course.StartTime <= time.Now().Unix() {
-					registerInfo.IfCourseStart = 1
-				}
-				renderView(w, "./views/register/sign_success.html", registerInfo)
-				return
-			}
-		}
-	}
-
 	if !has {
 		user.AppId = self.l.cfg.ReadingOauth.ReadingWxAppId
 		user.Name = userinfo.Name
@@ -167,19 +138,55 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 			holmes.Error("create user error: %v", err)
 			return
 		}
+		io.WriteString(w, MSG_ERROR_USER_COURSE_NOT_JOIN)
+		return
 	}
 
-	has, err = models.GetCourseMaxNum(&registerInfo.Course)
+	if user.Name != userinfo.Name || user.AvatarUrl != userinfo.AvatarUrl {
+		user.Name = userinfo.Name
+		user.AvatarUrl = userinfo.AvatarUrl
+		err = models.UpdateUserWxInfo(user)
+		if err != nil {
+			holmes.Error("update user wxinfo error: %v", err)
+		}
+	}
+	courseList, err := models.GetUserCourseList(user.ID)
 	if err != nil {
-		holmes.Error("get course max num error: %v", err)
+		holmes.Error("get user course list error: %v", err)
 		io.WriteString(w, MSG_ERROR_SYSTEM)
 		return
 	}
-	if !has {
-		holmes.Error("get course max num has none")
-		io.WriteString(w, MSG_ERROR_COURSE_NOT_FOUND)
+	var ifHasThisCourse bool
+	for _, v := range courseList {
+		if v.Course.CourseType == registerInfo.Course.CourseType {
+			registerInfo.Course = v.Course
+			registerInfo.StartTime = time.Unix(v.Course.StartTime, 0).Format("2006.01.02")
+			registerInfo.EndTime = time.Unix(v.Course.EndTime, 0).Format("2006.01.02")
+			if v.Course.StartTime <= time.Now().Unix() {
+				registerInfo.IfCourseStart = 1
+			}
+			//renderView(w, "./views/register/sign_success.html", registerInfo)
+			//return
+			ifHasThisCourse = true
+		}
+	}
+	if !ifHasThisCourse {
+		holmes.Error("user[%d] not has this course[%d], but in this course's enroll.", user.ID, registerInfo.Course.CourseType)
+		io.WriteString(w, MSG_ERROR_USER_COURSE_NOT_JOIN)
 		return
 	}
+
+	//has, err = models.GetCourseMaxNum(&registerInfo.Course)
+	//if err != nil {
+	//	holmes.Error("get course max num error: %v", err)
+	//	io.WriteString(w, MSG_ERROR_SYSTEM)
+	//	return
+	//}
+	//if !has {
+	//	holmes.Error("get course max num has none")
+	//	io.WriteString(w, MSG_ERROR_COURSE_NOT_FOUND)
+	//	return
+	//}
 
 	if user.RealName != "" {
 		registerInfo.EnrollName = user.RealName
@@ -268,6 +275,35 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 		io.WriteString(w, MSG_ERROR_USER_NOT_FOUND)
 		return
 	}
+
+	// check if user has this course
+	if user.Name != userinfo.Name || user.AvatarUrl != userinfo.AvatarUrl {
+		user.Name = userinfo.Name
+		user.AvatarUrl = userinfo.AvatarUrl
+		err = models.UpdateUserWxInfo(user)
+		if err != nil {
+			holmes.Error("update user wxinfo error: %v", err)
+		}
+	}
+	courseList, err := models.GetUserCourseList(user.ID)
+	if err != nil {
+		holmes.Error("get user course list error: %v", err)
+		io.WriteString(w, MSG_ERROR_SYSTEM)
+		return
+	}
+	for _, v := range courseList {
+		if v.Course.CourseType == registerInfo.Course.CourseType {
+			registerInfo.Course = v.Course
+			registerInfo.StartTime = time.Unix(v.Course.StartTime, 0).Format("2006.01.02")
+			registerInfo.EndTime = time.Unix(v.Course.EndTime, 0).Format("2006.01.02")
+			if v.Course.StartTime <= time.Now().Unix() {
+				registerInfo.IfCourseStart = 1
+			}
+			renderView(w, "./views/register/sign_success.html", registerInfo)
+			return
+		}
+	}
+
 	registerInfo.NickName = user.Name
 	registerInfo.AvatarUrl = user.AvatarUrl
 	has, err = models.GetCourseMaxNum(&registerInfo.Course)
