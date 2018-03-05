@@ -26,14 +26,14 @@
 
     <section class="enroll-box">
         <ol class="enroll-status">
-            <li class="eb-tone eb-icon current">
-                <span class="icon-enroll"></span>
-                <p>报名</p>
-            </li>
-            <li class="eb-tone eb-line"></li>
             <li class="eb-tone eb-icon">
                 <span class="icon-fee"></span>
                 <p>付费</p>
+            </li>
+            <li class="eb-tone eb-line"></li>
+            <li class="eb-tone eb-icon current">
+                <span class="icon-enroll"></span>
+                <p>报到</p>
             </li>
             <li class="eb-tone eb-line"></li>
             <li class="eb-tone eb-icon">
@@ -64,7 +64,7 @@
                     </li>
                 </ul>
 
-                <div class="enroll-dobox"><span class="offer-btn do-enroll" onclick="doEnroll()">报名</span></div>
+                <div class="enroll-dobox"><span class="offer-btn do-enroll" onclick="doEnroll()">报到</span></div>
             </li>
         </ul>
     </section>
@@ -112,8 +112,8 @@
             ),
             success: function(d){
                 if(d.code == 0){
-                    location.assign('/reading/register/pay/{{.Course.CourseType}}?src={{.Source}}');
-                    // alert("go ok");
+                    // location.assign('/reading/register/pay/{{.Course.CourseType}}?src={{.Source}}');
+                    location.assign('/reading/register/success/{{.Course.CourseType}}');
                 } else {
                     alert(d.msg);
                 }
