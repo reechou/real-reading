@@ -449,6 +449,7 @@ func (self *ReadingHandler) checkUser(w http.ResponseWriter, r *http.Request, if
 			}
 			ui.Name = user.Name
 			ui.AvatarUrl = user.AvatarUrl
+			ui.Source = int(user.Source)
 		}
 		return
 	}

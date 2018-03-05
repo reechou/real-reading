@@ -97,7 +97,7 @@ func (self *ReadingHandler) registerSignup(rr *HandlerRequest, w http.ResponseWr
 }
 
 func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
-	userinfo, ifRedirect := self.checkUser(w, r, true)
+	userinfo, ifRedirect := self.checkUserBase(w, r)
 	if ifRedirect {
 		return
 	}
@@ -108,10 +108,7 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 	}
 
 	registerInfo := new(RegisterInfo)
-	registerInfo.NickName = userinfo.Name
-	registerInfo.AvatarUrl = userinfo.AvatarUrl
 	registerInfo.OpenId = userinfo.OpenId
-	registerInfo.Source = userinfo.Source
 	var err error
 	registerInfo.Course.CourseType, err = strconv.ParseInt(rr.Params[1], 10, 0)
 	if err != nil {
@@ -142,14 +139,10 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 		return
 	}
 
-	if user.Name != userinfo.Name || user.AvatarUrl != userinfo.AvatarUrl {
-		user.Name = userinfo.Name
-		user.AvatarUrl = userinfo.AvatarUrl
-		err = models.UpdateUserWxInfo(user)
-		if err != nil {
-			holmes.Error("update user wxinfo error: %v", err)
-		}
-	}
+	registerInfo.NickName = user.Name
+	registerInfo.AvatarUrl = user.AvatarUrl
+	registerInfo.Source = int(user.Source)
+
 	courseList, err := models.GetUserCourseList(user.ID)
 	if err != nil {
 		holmes.Error("get user course list error: %v", err)
@@ -197,8 +190,8 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 	if user.Wechat != "" {
 		registerInfo.EnrollWechat = user.Wechat
 	}
-	registerInfo.StartTime = time.Unix(registerInfo.Course.StartTime, 0).Format("2006-01-02")
-	registerInfo.EndTime = time.Unix(registerInfo.Course.EndTime, 0).Format("2006-01-02")
+	//registerInfo.StartTime = time.Unix(registerInfo.Course.StartTime, 0).Format("2006-01-02")
+	//registerInfo.EndTime = time.Unix(registerInfo.Course.EndTime, 0).Format("2006-01-02")
 	renderView(w, "./views/register/enroll.html", registerInfo)
 }
 
@@ -242,7 +235,7 @@ func (self *ReadingHandler) registerGoEnroll(rr *HandlerRequest, w http.Response
 }
 
 func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
-	userinfo, ifRedirect := self.checkUserBase(w, r)
+	userinfo, ifRedirect := self.checkUser(w, r, true)
 	if ifRedirect {
 		return
 	}
@@ -255,6 +248,8 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 	registerInfo := new(RegisterInfo)
 	registerInfo.OpenId = userinfo.OpenId
 	registerInfo.Source = userinfo.Source
+	registerInfo.NickName = userinfo.Name
+	registerInfo.AvatarUrl = userinfo.AvatarUrl
 	var err error
 	registerInfo.Course.CourseType, err = strconv.ParseInt(rr.Params[1], 10, 0)
 	if err != nil {
@@ -272,19 +267,18 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 		return
 	}
 	if !has {
-		io.WriteString(w, MSG_ERROR_USER_NOT_FOUND)
-		return
+		user.AppId = self.l.cfg.ReadingOauth.ReadingWxAppId
+		user.Name = userinfo.Name
+		user.AvatarUrl = userinfo.AvatarUrl
+		user.Source = int64(registerInfo.Source)
+		err = models.CreateUser(user)
+		if err != nil {
+			holmes.Error("create user error: %v", err)
+			return
+		}
 	}
 
 	// check if user has this course
-	if user.Name != userinfo.Name || user.AvatarUrl != userinfo.AvatarUrl {
-		user.Name = userinfo.Name
-		user.AvatarUrl = userinfo.AvatarUrl
-		err = models.UpdateUserWxInfo(user)
-		if err != nil {
-			holmes.Error("update user wxinfo error: %v", err)
-		}
-	}
 	courseList, err := models.GetUserCourseList(user.ID)
 	if err != nil {
 		holmes.Error("get user course list error: %v", err)
@@ -304,8 +298,6 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 		}
 	}
 
-	registerInfo.NickName = user.Name
-	registerInfo.AvatarUrl = user.AvatarUrl
 	has, err = models.GetCourseMaxNum(&registerInfo.Course)
 	if err != nil {
 		holmes.Error("get course max num error: %v", err)
