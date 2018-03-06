@@ -14,6 +14,7 @@ import (
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-reading/models"
 	"github.com/reechou/real-reading/proto"
+	"gopkg.in/chanxuehong/wechat.v2/mp/card/membercard/userinfo"
 	mpoauth2 "gopkg.in/chanxuehong/wechat.v2/mp/oauth2"
 )
 
@@ -486,6 +487,7 @@ NEED_OAUTH:
 		http.Redirect(w, r, fmt.Sprintf("http://%s%s", r.Host, r.URL.Path), http.StatusFound)
 		return
 	}
+	ui.OpenId = token.OpenId
 
 	userinfo, err := mpoauth2.GetUserInfo(token.AccessToken, token.OpenId, "zh_CN", nil)
 	if err != nil {
