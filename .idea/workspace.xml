@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="646c20b3-f422-431f-9634-28d58f288d0c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/views/register/pay.html" afterPath="$PROJECT_DIR$/views/register/pay.html" />
+      <change beforePath="$PROJECT_DIR$/controller/course_handler.go" afterPath="$PROJECT_DIR$/controller/course_handler.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,7 +16,7 @@
       <file leaf-file-name="register_handler.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controller/register_handler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
+            <state relative-caret-position="614">
               <caret line="258" column="38" lean-forward="false" selection-start-line="258" selection-start-column="38" selection-end-line="258" selection-end-column="38" />
               <folding>
                 <element signature="e#20#437#0" expanded="true" />
@@ -28,10 +28,22 @@
       <file leaf-file-name="course_handler.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controller/course_handler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="589">
-              <caret line="492" column="126" lean-forward="false" selection-start-line="492" selection-start-column="126" selection-end-line="492" selection-end-column="126" />
+            <state relative-caret-position="346">
+              <caret line="489" column="35" lean-forward="false" selection-start-line="489" selection-start-column="35" selection-end-line="489" selection-end-column="35" />
               <folding>
                 <element signature="e#20#329#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="userinfo.go" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../../../gopkg.in/chanxuehong/wechat.v2/mp/oauth2/userinfo.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="509">
+              <caret line="74" column="15" lean-forward="false" selection-start-line="74" selection-start-column="15" selection-end-line="74" selection-end-column="15" />
+              <folding>
+                <element signature="e#16#190#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -42,16 +54,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="291">
               <caret line="27" column="26" lean-forward="false" selection-start-line="27" selection-start-column="26" selection-end-line="27" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="register_struct.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/controller/register_struct.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="15" column="21" lean-forward="true" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -89,7 +91,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pay.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pay.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/register/pay.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="383">
@@ -139,6 +141,7 @@
       <find>sign_success</find>
       <find>GetUserFromOpenid</find>
       <find>getcoursedatastatistics</find>
+      <find>usercourselist</find>
     </findStrings>
   </component>
   <component name="GOROOT" path="/usr/local/go" />
@@ -173,8 +176,8 @@
         <option value="$PROJECT_DIR$/views/register/enroll.html" />
         <option value="$PROJECT_DIR$/models/course_query.go" />
         <option value="$PROJECT_DIR$/controller/data_statistics_manager.go" />
-        <option value="$PROJECT_DIR$/controller/course_handler.go" />
         <option value="$PROJECT_DIR$/views/register/pay.html" />
+        <option value="$PROJECT_DIR$/controller/course_handler.go" />
       </list>
     </option>
   </component>
@@ -688,16 +691,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../gopkg.in/chanxuehong/wechat.v2/mp/oauth2/userinfo.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-585">
-          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-          <folding>
-            <element signature="e#16#190#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../../gopkg.in/chanxuehong/wechat.v2/oauth2/client.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
@@ -808,20 +801,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/controller/register_handler.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
+        <state relative-caret-position="614">
           <caret line="258" column="38" lean-forward="false" selection-start-line="258" selection-start-column="38" selection-end-line="258" selection-end-column="38" />
           <folding>
             <element signature="e#20#437#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controller/course_handler.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="589">
-          <caret line="492" column="126" lean-forward="false" selection-start-line="492" selection-start-column="126" selection-end-line="492" selection-end-column="126" />
-          <folding>
-            <element signature="e#20#329#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -831,6 +814,26 @@
         <state relative-caret-position="383">
           <caret line="100" column="103" lean-forward="false" selection-start-line="100" selection-start-column="103" selection-end-line="100" selection-end-column="103" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/course_handler.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="489" column="35" lean-forward="false" selection-start-line="489" selection-start-column="35" selection-end-line="489" selection-end-column="35" />
+          <folding>
+            <element signature="e#20#329#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../gopkg.in/chanxuehong/wechat.v2/mp/oauth2/userinfo.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="509">
+          <caret line="74" column="15" lean-forward="false" selection-start-line="74" selection-start-column="15" selection-end-line="74" selection-end-column="15" />
+          <folding>
+            <element signature="e#16#190#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
