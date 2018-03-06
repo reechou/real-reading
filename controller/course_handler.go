@@ -14,7 +14,6 @@ import (
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-reading/models"
 	"github.com/reechou/real-reading/proto"
-	"gopkg.in/chanxuehong/wechat.v2/mp/card/membercard/userinfo"
 	mpoauth2 "gopkg.in/chanxuehong/wechat.v2/mp/oauth2"
 )
 

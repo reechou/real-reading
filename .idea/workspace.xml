@@ -28,11 +28,9 @@
       <file leaf-file-name="course_handler.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controller/course_handler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="444">
-              <caret line="489" column="21" lean-forward="false" selection-start-line="489" selection-start-column="21" selection-end-line="489" selection-end-column="21" />
-              <folding>
-                <element signature="e#20#391#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="-6303">
+              <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -829,11 +827,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/controller/course_handler.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="444">
-          <caret line="489" column="21" lean-forward="false" selection-start-line="489" selection-start-column="21" selection-end-line="489" selection-end-column="21" />
-          <folding>
-            <element signature="e#20#391#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="-6303">
+          <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
