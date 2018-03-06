@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="646c20b3-f422-431f-9634-28d58f288d0c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/controller/course_handler.go" afterPath="$PROJECT_DIR$/controller/course_handler.go" />
       <change beforePath="$PROJECT_DIR$/views/register/pay.html" afterPath="$PROJECT_DIR$/views/register/pay.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,7 +25,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="course_handler.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="course_handler.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controller/course_handler.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="589">
@@ -91,11 +89,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pay.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="pay.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/register/pay.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="383">
-              <caret line="100" column="35" lean-forward="false" selection-start-line="100" selection-start-column="20" selection-end-line="100" selection-end-column="35" />
+              <caret line="100" column="103" lean-forward="false" selection-start-line="100" selection-start-column="103" selection-end-line="100" selection-end-column="103" />
               <folding />
             </state>
           </provider>
@@ -174,9 +172,9 @@
         <option value="$PROJECT_DIR$/controller/register_handler.go" />
         <option value="$PROJECT_DIR$/views/register/enroll.html" />
         <option value="$PROJECT_DIR$/models/course_query.go" />
-        <option value="$PROJECT_DIR$/views/register/pay.html" />
         <option value="$PROJECT_DIR$/controller/data_statistics_manager.go" />
         <option value="$PROJECT_DIR$/controller/course_handler.go" />
+        <option value="$PROJECT_DIR$/views/register/pay.html" />
       </list>
     </option>
   </component>
@@ -800,14 +798,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/register/pay.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="383">
-          <caret line="100" column="35" lean-forward="false" selection-start-line="100" selection-start-column="20" selection-end-line="100" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/controller/reading_handler.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="309">
@@ -833,6 +823,14 @@
           <folding>
             <element signature="e#20#329#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/register/pay.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="383">
+          <caret line="100" column="103" lean-forward="false" selection-start-line="100" selection-start-column="103" selection-end-line="100" selection-end-column="103" />
+          <folding />
         </state>
       </provider>
     </entry>
