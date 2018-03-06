@@ -2,6 +2,8 @@ package models
 
 import (
 	"time"
+
+	"github.com/reechou/holmes"
 )
 
 func GetCourseList() ([]Course, error) {
@@ -344,19 +346,31 @@ func GetUserCourse(openId string) ([]UserCourseDetail, error) {
 }
 
 func GetUserCourseDataStatistics(courseType, source, startTime, endTime int64) ([]UserCourseDetail, error) {
+	if courseType == 0 && source == 0 {
+		holmes.Debug("course type == 0 && source == 0")
+		return nil, nil
+	}
 	var list []UserCourseDetail
 	var err error
-	if source != 0 {
+	if source != 0 && courseType != 0 {
 		err = x.Join("LEFT", "user", "user_course.user_id = user.id").
 			Join("LEFT", "course", "user_course.course_id = course.id").
 			Where("user_course.source = ?", source).
+			And("user_course.course_type = ?", courseType).
+			And("user_course.pay_time >= ?", startTime).
+			And("user_course.pay_time <= ?", endTime).
+			Find(&list)
+	} else if source == 0 {
+		err = x.Join("LEFT", "user", "user_course.user_id = user.id").
+			Join("LEFT", "course", "user_course.course_id = course.id").
+			Where("user_course.course_type = ?", courseType).
 			And("user_course.pay_time >= ?", startTime).
 			And("user_course.pay_time <= ?", endTime).
 			Find(&list)
 	} else {
 		err = x.Join("LEFT", "user", "user_course.user_id = user.id").
 			Join("LEFT", "course", "user_course.course_id = course.id").
-			Where("user_course.course_type = ?", courseType).
+			Where("user_course.source = ?", source).
 			And("user_course.pay_time >= ?", startTime).
 			And("user_course.pay_time <= ?", endTime).
 			Find(&list)

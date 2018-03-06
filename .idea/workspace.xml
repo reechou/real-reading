@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="646c20b3-f422-431f-9634-28d58f288d0c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/models/course_query.go" afterPath="$PROJECT_DIR$/models/course_query.go" />
       <change beforePath="$PROJECT_DIR$/views/register/pay.html" afterPath="$PROJECT_DIR$/views/register/pay.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -56,33 +56,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="course_handler.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/controller/course_handler.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="436">
-              <caret line="482" column="43" lean-forward="true" selection-start-line="482" selection-start-column="43" selection-end-line="482" selection-end-column="43" />
-              <folding>
-                <element signature="e#20#329#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="reading_handler.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controller/reading_handler.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="329">
               <caret line="86" column="38" lean-forward="false" selection-start-line="86" selection-start-column="38" selection-end-line="86" selection-end-column="38" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="user.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/models/user.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="562">
-              <caret line="67" column="19" lean-forward="true" selection-start-line="67" selection-start-column="19" selection-end-line="67" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -100,12 +78,34 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pay.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pay.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/register/pay.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="392">
-              <caret line="104" column="20" lean-forward="false" selection-start-line="104" selection-start-column="20" selection-end-line="104" selection-end-column="20" />
+              <caret line="104" column="0" lean-forward="false" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="data_statistics_manager.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/controller/data_statistics_manager.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="485">
+              <caret line="360" column="39" lean-forward="true" selection-start-line="360" selection-start-column="39" selection-end-line="360" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="course_query.go" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/models/course_query.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="676">
+              <caret line="373" column="0" lean-forward="false" selection-start-line="373" selection-start-column="0" selection-end-line="373" selection-end-column="0" />
+              <folding>
+                <element signature="e#16#64#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -127,6 +127,7 @@
       <find>register</find>
       <find>sign_success</find>
       <find>GetUserFromOpenid</find>
+      <find>getcoursedatastatistics</find>
     </findStrings>
   </component>
   <component name="GOROOT" path="/usr/local/go" />
@@ -162,6 +163,7 @@
         <option value="$PROJECT_DIR$/controller/register_handler.go" />
         <option value="$PROJECT_DIR$/views/register/enroll.html" />
         <option value="$PROJECT_DIR$/views/register/pay.html" />
+        <option value="$PROJECT_DIR$/models/course_query.go" />
       </list>
     </option>
   </component>
@@ -414,13 +416,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/controller/wechat.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/controller/wechat_struct.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
@@ -537,16 +532,6 @@
         <state relative-caret-position="283">
           <caret line="28" column="5" lean-forward="false" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controller/data_statistics_manager.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4590">
-          <caret line="255" column="17" lean-forward="false" selection-start-line="255" selection-start-column="17" selection-end-line="255" selection-end-column="17" />
-          <folding>
-            <element signature="e#20#239#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -760,14 +745,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/course_query.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="88" column="5" lean-forward="false" selection-start-line="88" selection-start-column="5" selection-end-line="88" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/proto/reading_call.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
@@ -815,8 +792,34 @@
     <entry file="file://$PROJECT_DIR$/views/register/pay.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="392">
-          <caret line="104" column="20" lean-forward="false" selection-start-line="104" selection-start-column="20" selection-end-line="104" selection-end-column="20" />
+          <caret line="104" column="0" lean-forward="false" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/data_statistics_manager.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="485">
+          <caret line="360" column="39" lean-forward="true" selection-start-line="360" selection-start-column="39" selection-end-line="360" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/course_remind.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="5" column="31" lean-forward="false" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/course_query.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="676">
+          <caret line="373" column="0" lean-forward="false" selection-start-line="373" selection-start-column="0" selection-end-line="373" selection-end-column="0" />
+          <folding>
+            <element signature="e#16#64#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
