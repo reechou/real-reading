@@ -232,6 +232,27 @@ func (self *ReadingHandler) registerGoEnroll(rr *HandlerRequest, w http.Response
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
+
+	course := &models.Course{
+		ID: req.CourseId,
+	}
+	has, err = models.GetCourse(course)
+	if err != nil {
+		holmes.Error("get course error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	if !has {
+		holmes.Error("cannot found this course id[%d]", req.CourseId)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+
+	params := fmt.Sprintf("#RealName#=%s&#PlanName#=%s&#StartTime#=%s", user.RealName, course.Name, time.Unix(course.StartTime, 0).Format("2006-01-02"))
+	err = self.smsExt.SMSNotifyNormal(user.Phone, self.l.cfg.SMSNotify.RegisterTid, params)
+	if err != nil {
+		holmes.Error("sms notify error: %v", err)
+	}
 }
 
 func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
@@ -494,11 +515,11 @@ func (self *ReadingHandler) registerPayNotify(rr *HandlerRequest, w http.Respons
 		holmes.Error("create user course error: %v", err)
 	}
 
-	params := fmt.Sprintf("#RealName#=%s&#PlanName#=%s&#StartTime#=%s", user.RealName, course.Name, time.Unix(course.StartTime, 0).Format("2006-01-02"))
-	err = self.smsExt.SMSNotifyNormal(user.Phone, self.l.cfg.SMSNotify.RegisterTid, params)
-	if err != nil {
-		holmes.Error("sms notify error: %v", err)
-	}
+	//params := fmt.Sprintf("#RealName#=%s&#PlanName#=%s&#StartTime#=%s", user.RealName, course.Name, time.Unix(course.StartTime, 0).Format("2006-01-02"))
+	//err = self.smsExt.SMSNotifyNormal(user.Phone, self.l.cfg.SMSNotify.RegisterTid, params)
+	//if err != nil {
+	//	holmes.Error("sms notify error: %v", err)
+	//}
 }
 
 func (self *ReadingHandler) registerSuccess(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {

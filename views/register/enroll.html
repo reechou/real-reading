@@ -107,10 +107,11 @@
                     mobile: mobile,
                     realname: name,
                     weixin: wechat,
-                    openid: {{ .OpenId }}
+                    openid: {{ .OpenId }},
+                    courseid: {{ .Course.ID }}
                 }
             ),
-            success: function(d){
+            success: function(d) {
                 if(d.code == 0){
                     // location.assign('/reading/register/pay/{{.Course.CourseType}}?src={{.Source}}');
                     location.assign('/reading/register/success/{{.Course.CourseType}}');

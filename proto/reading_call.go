@@ -6,6 +6,7 @@ type ReadingEnrollReq struct {
 	Realname string `json:"realname"`
 	Weixin   string `json:"weixin"`
 	OpenId   string `json:"openid"`
+	CourseId int64  `json:"courseid"`
 }
 
 type ReadingRefundReq struct {
