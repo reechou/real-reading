@@ -490,6 +490,7 @@ NEED_OAUTH:
 	userinfo, err := mpoauth2.GetUserInfo(token.AccessToken, token.OpenId, "", nil)
 	if err != nil {
 		holmes.Error("get user info error: %v", err)
+		holmes.Error("get user info error, openid[%s], url path[%s] url string[%s]", token.OpenId, r.URL.Path, r.URL.String())
 		return
 	}
 	holmes.Debug("user info: %+v", userinfo)

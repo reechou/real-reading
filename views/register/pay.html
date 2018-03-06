@@ -102,7 +102,7 @@
 			    } else if (res.err_msg == "get_brand_wcpay_request:fail") {
 			        alert("支付失败, 请重新支付");
 			    } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-
+                    
                 } else {
                     WeixinJSBridge.log(res.err_msg);
                     alert(res.err_code+" "+res.err_desc+" "+res.err_msg);
