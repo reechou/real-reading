@@ -26,6 +26,7 @@ const (
 )
 
 func (self *ReadingHandler) registerHandle(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	holmes.Debug("register handle uri: %s", rr.Path)
 	subPath := rr.Path[len(REGISTER_URI_PREFIX)+1:]
 	rr.Params = strings.Split(subPath, "/")
 	if len(rr.Params) == 0 {
