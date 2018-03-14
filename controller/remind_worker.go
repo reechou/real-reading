@@ -171,7 +171,7 @@ func (self *RemindWorker) doRemind(ri *RemindInfo) {
 			Keyword1: &template.DataItem{Value: catalogName},
 			Keyword2: &template.DataItem{Value: readingDate},
 			Keyword3: &template.DataItem{Value: "小鹿微课大学堂"},
-			Remark:   &template.DataItem{Value: ">>>点击这里前往阅读<<< PS: 回复 TD 可以退订哦", Color: "#f76e6c"},
+			Remark:   &template.DataItem{Value: ">>>点击这里前往阅读<<< PS: 回复 TD 可以取消上课提醒通知哦", Color: "#f76e6c"},
 		}
 		msg := &TplMsg{
 			ToUser: v.OpenId,
