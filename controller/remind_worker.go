@@ -164,13 +164,14 @@ func (self *RemindWorker) doRemind(ri *RemindInfo) {
 	courseName := fmt.Sprintf("%s 第%d期", ri.Course.Name, ri.Course.CourseNum)
 	catalogName := fmt.Sprintf("%s - %s", ri.Catalog.Book.BookName, ri.Catalog.Title)
 	readingDate := time.Unix(ri.Catalog.TaskTime, 0).Format("2006.01.02")
+	holmes.Debug("course remind: %s %s %s", courseName, catalogName, readingDate)
 	var sendUserNum int64
 	for _, v := range userList {
 		homeworkMsg := &HomeworkRemindTplMsg{
-			First:    &template.DataItem{Value: courseName, Color: "#f76e6c"},
-			Keyword1: &template.DataItem{Value: catalogName},
-			Keyword2: &template.DataItem{Value: readingDate},
-			Keyword3: &template.DataItem{Value: "小鹿微课大学堂"},
+			First:    &template.DataItem{Value: "您今天的阅读任务已更新", Color: "#f76e6c"},
+			Keyword1: &template.DataItem{Value: courseName},
+			Keyword2: &template.DataItem{Value: catalogName},
+			Keyword3: &template.DataItem{Value: "15分钟"},
 			Remark:   &template.DataItem{Value: ">>>点击这里前往阅读<<< PS: 回复 TD 可以取消上课提醒通知哦", Color: "#f76e6c"},
 		}
 		msg := &TplMsg{
