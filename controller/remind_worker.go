@@ -168,11 +168,11 @@ func (self *RemindWorker) doRemind(ri *RemindInfo) {
 	var sendUserNum int64
 	for _, v := range userList {
 		homeworkMsg := &HomeworkRemindTplMsg{
-			First:    &template.DataItem{Value: "您今天的阅读任务已更新", Color: "#f76e6c"},
+			First:    &template.DataItem{Value: "您今天的阅读任务已更新\n", Color: "#f76e6c"},
 			Keyword1: &template.DataItem{Value: courseName},
 			Keyword2: &template.DataItem{Value: catalogName},
 			Keyword3: &template.DataItem{Value: "15分钟"},
-			Remark:   &template.DataItem{Value: ">>>点击这里前往阅读<<< PS: 回复 TD 可以取消上课提醒通知哦", Color: "#f76e6c"},
+			Remark:   &template.DataItem{Value: "PS: 回复 TD 可以取消上课提醒通知哦"},
 		}
 		msg := &TplMsg{
 			ToUser: v.OpenId,
