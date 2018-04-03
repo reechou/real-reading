@@ -101,7 +101,7 @@ func GetCourse(info *Course) (bool, error) {
 
 func GetNowCourseList() ([]Course, error) {
 	var courses []Course
-	err := x.Select("max(course_num), course_type, course_num, name, introduction, cover").Where("course_type != 1 AND course_type != 1000").GroupBy("course_type").Find(&courses)
+	err := x.Select("max(course_num), course_type, course_num, name, introduction, cover").Where("course_type != 1 AND course_type != 1000 AND course_type != 5").GroupBy("course_type").Find(&courses)
 	if err != nil {
 		return nil, err
 	}
