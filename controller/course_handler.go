@@ -594,7 +594,7 @@ func (self *ReadingHandler) readingCourseList(rr *HandlerRequest, w http.Respons
 	}
 	if len(userCourseList.UserCourseList) == 0 {
 		// TODO: redirect to course recommend
-		self.readingCourseError(w, "/reading/signup")
+		self.readingCourseError(w, "/reading/course/nowcourselist")
 		return
 	}
 	userCourseList.UserId = userCourseList.UserCourseList[0].User.ID
@@ -658,7 +658,7 @@ func (self *ReadingHandler) readingCourseIndex(rr *HandlerRequest, w http.Respon
 	if !self.checkUserCourse(userinfo.OpenId, courseDetail.UserId, courseDetail.CourseId) {
 		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, courseDetail.UserId)
 		// todo: redirect to sign
-		self.readingCourseError(w, "/reading/signup")
+		self.readingCourseError(w, "/reading/course/nowcourselist")
 		return
 	}
 
@@ -753,7 +753,7 @@ func (self *ReadingHandler) readingCourseCatalog(rr *HandlerRequest, w http.Resp
 	if !self.checkUserCourse(userinfo.OpenId, catalogList.UserId, catalogList.CourseId) {
 		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, catalogList.UserId)
 		// todo: redirect to sign
-		self.readingCourseError(w, "/reading/signup")
+		self.readingCourseError(w, "/reading/course/nowcourselist")
 		return
 	}
 
@@ -825,7 +825,7 @@ func (self *ReadingHandler) readingCourseChapterDetail(rr *HandlerRequest, w htt
 		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, catalogDetailList.CourseId)
 		//io.WriteString(w, MSG_ERROR_USER_COURSE_NOT_JOIN)
 		// todo: redirect to sign
-		self.readingCourseError(w, "/reading/signup")
+		self.readingCourseError(w, "/reading/course/nowcourselist")
 		return
 	}
 
@@ -978,7 +978,7 @@ func (self *ReadingHandler) readingCourseAttendanceDetail(rr *HandlerRequest, w 
 	if !self.checkUserCourse(userinfo.OpenId, userCourseAttendanceDetailList.UserId, userCourseAttendanceDetailList.CourseId) {
 		holmes.Error("user[%s] cannot found this courseid[%d]", userinfo.OpenId, userCourseAttendanceDetailList.UserId)
 		// todo: redirect to sign
-		self.readingCourseError(w, "/reading/signup")
+		self.readingCourseError(w, "/reading/course/nowcourselist")
 		return
 	}
 
