@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
-    <title>我的课程</title>
+    <title>首页</title>
     <meta charset="utf-8" >
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
@@ -43,70 +43,23 @@
     <div class="show-sybox sybox-pb80">
         {{ $userId := .UserId }}
         {{ $now := .Now }}
-        {{ $lenToday := len .TodayCatalogs }}
-        {{ if eq $lenToday 0 }}
-        <div class="today-title clearfix">
-            <strong>公告</strong>
-        </div>
-        <div id="tswipe-box" class="pt">
-            <ul class="tswipe-list tswipe-listv1">
-                <li class="tswipe-one" onclick="location.assign('http://mp.weixin.qq.com/s/Lv_K_tz8sQNFn3-5CpXf1w')">
-                    <div class="tonev1-box">
-                        <span v-if="one.Type==1" class="tonev1-type">通知</span>
-                        <span v-else class="tonev2-type">通知</span>
-                        <p class="tonev1-title">关于「小鹿微课」</p>
-                        <p class="show-color">点击查看详情</p>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        {{ else }}
-        <div class="today-title clearfix mt20">
-            <strong>今日任务</strong>
-        </div>
-        {{ range .TodayCatalogs }}
-        <div class="task-info p-rela" onclick="location.assign('/reading/course/bookdetail/{{$userId}}/{{.MonthCourseCatalog.CourseId}}/{{.Book.ID}}/{{.MonthCourseCatalog.ID}}')">
-            {{ if eq .IfCheck 1 }}
-            <span class="task-statusn2"></span>
-            {{ else }}
-            <span class="task-statusv1"></span>
-            {{ end }}
 
-            <div class="task-coverv1">
-                <img class="" src="{{ .Book.Cover }}">
-                <div class="task-btitv1" class="fs-999">{{ .Book.BookName }}</div>
-            </div>
-            <div class="task-infodet">
-                <div class="task-titlev1">
-                    {{ .MonthCourseCatalog.Title }}
-                </div>
-                <p class="task-des fs-12">
-                    {{ .Book.Abstract }}
-                </p>
-                <div class="task-seeboxv1 mt">
-                    <span class="task-seev1">查看任务</span>
-                </div>
-            </div>
-        </div>
-        {{ end }}
-        {{ end }}
-
-        {{ $lenToday := len .UserCourseList }}
-        {{ if gt $lenToday 0 }}
+        {{ $lenCourse := len .Courses }}
+        {{ if gt $lenCourse 0 }}
         <div class="today-title clearfix mt20">
-            <strong>我的课程</strong>
+            <strong>课程列表</strong>
         </div>
-        {{ range .UserCourseList }}
-        <div class="task-info p-rela">
+        {{ range .Courses }}
+        <div class="task-info p-rela" onclick="location.assign('http://reading.dingjiantaoke.cn/reading/register/signup/{{.CourseType}}');">
             <div class="task-cover-course">
-                <img class="" src="{{ .Course.Cover }}">
+                <img class="" src="{{ .Cover }}">
             </div>
             <div class="task-infodet">
                 <div class="task-titlev1">
-                    {{ .Course.Name }} [第{{ .Course.CourseNum }}期]
+                    {{ .Name }} [第{{ .CourseNum }}期]
                 </div>
                 <p class="task-des fs-12">
-                    {{ .Course.Introduction }}
+                    {{ .Introduction }}
                 </p>
                 <div class="task-seeboxv1 mt">
                     {{ if ge $now .Course.StartTime }}
@@ -123,23 +76,6 @@
         {{ end }}
         {{ end }}
     </div>
-
-    <section class="sy-footerbox">
-        <ul class="sy-footer">
-            <li class="sy-footerone current" onclick="location.assign('/reading/course/usercourselist');">
-                <span class="sy-ficon sy-f-clock"></span>
-                <p>课程</p>
-            </li>
-            <!--<li class="sy-footerone" @click="ftGoto('/sy/home')">-->
-                <!--<span class="sy-ficon sy-f-bl"></span>-->
-                <!--<p>推荐</p>-->
-            <!--</li>-->
-            <li class="sy-footerone" onclick="location.assign('/reading/course/myself');">
-                <span class="sy-ficon sy-f-own"></span>
-                <p>我的</p>
-            </li>
-        </ul>
-    </section>
 
     <div class="wxtip" id="byzstips" style="display: none;" >
         <img id="byzstipsimg" src="">

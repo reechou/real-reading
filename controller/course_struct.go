@@ -14,6 +14,12 @@ const (
 	COURSE_BOOK_CATALOG_UNLOCK
 )
 
+type NowCourseList struct {
+	Courses []models.Course
+	UserId  int64
+	Now     int64
+}
+
 // user course
 type UserCourseDetail struct {
 	TodayCatalogs  []models.CourseBookCatalogTime

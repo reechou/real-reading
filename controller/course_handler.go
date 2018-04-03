@@ -32,6 +32,7 @@ const (
 	READING_COURSE_URI_REPLY_COMMENT   = "replycomment"
 	READING_COURSE_URI_GET_GRADUATION  = "getgraduation"
 	// tmp html
+	READING_NOW_COURSE_URI_LIST          = "nowcourselist"
 	READING_COURSE_URI_LIST              = "usercourselist"
 	READING_COURSE_URI_INDEX             = "index"
 	READING_COURSE_URI_BOOK_CATALOG      = "bookcatalog"
@@ -70,6 +71,8 @@ func (self *ReadingHandler) courseHandle(rr *HandlerRequest, w http.ResponseWrit
 	case READING_COURSE_URI_GET_GRADUATION:
 		self.readingGetGraduation(rr, w, r)
 	// tmp html
+	case READING_NOW_COURSE_URI_LIST:
+		self.registerCourseList(rr, w, r)
 	case READING_COURSE_URI_LIST:
 		self.readingCourseList(rr, w, r)
 	case READING_COURSE_URI_INDEX:
@@ -562,6 +565,17 @@ func (self *ReadingHandler) readingCourseError(w http.ResponseWriter, redirectUr
 }
 
 // template view
+func (self *ReadingHandler) registerCourseList(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	var err error
+	nowCourseList := new(NowCourseList)
+	nowCourseList.Courses, err = models.GetNowCourseList()
+	if err != nil {
+		holmes.Error("get now course list error: %v", err)
+		return
+	}
+	renderView(w, "./views/course/register_course_list.html", nowCourseList)
+}
+
 func (self *ReadingHandler) readingCourseList(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
 	//openId := TEST_OPEN_ID
 

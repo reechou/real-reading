@@ -99,6 +99,15 @@ func GetCourse(info *Course) (bool, error) {
 	return true, nil
 }
 
+func GetNowCourseList() ([]Course, error) {
+	var courses []Course
+	err := x.Select("max(course_num), course_type, course_num, name, introduction, cover").Where("course_type != 1 AND course_type != 1000").GroupBy("course_type").Find(&courses)
+	if err != nil {
+		return nil, err
+	}
+	return courses, nil
+}
+
 func GetCourseMaxNum(info *Course) (bool, error) {
 	has, err := x.Where("course_type = ?", info.CourseType).Desc("course_num").Limit(1).Get(info)
 	if err != nil {
