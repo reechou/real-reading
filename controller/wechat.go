@@ -8,6 +8,7 @@ import (
 	"github.com/reechou/real-reading/config"
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
 	"gopkg.in/chanxuehong/wechat.v2/mp/jssdk"
+	"gopkg.in/chanxuehong/wechat.v2/mp/message/custom"
 	"gopkg.in/chanxuehong/wechat.v2/mp/message/template"
 	"gopkg.in/chanxuehong/wechat.v2/util"
 )
@@ -46,6 +47,21 @@ func (self *WechatController) SendTplMsg(msg *TplMsg) error {
 		return err
 	}
 	holmes.Debug("template send msg success, msgid: %d", msgId)
+	return nil
+}
+
+func (self *WechatController) SendCustomMsg(msg *CustomMsg) error {
+	var customMsg interface{}
+	switch msg.MsgType {
+	case custom.MsgTypeText:
+		customMsg = custom.NewText(msg.ToUser, msg.Content, "")
+	}
+	err := custom.Send(self.wxClient, customMsg)
+	if err != nil {
+		holmes.Error("custom send error: %v", err)
+		return err
+	}
+	holmes.Debug("custom send msg to user[%s] success.", msg.ToUser)
 	return nil
 }
 

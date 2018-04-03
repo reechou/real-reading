@@ -10,7 +10,8 @@ import (
 	"github.com/reechou/real-reading/config"
 	"github.com/reechou/real-reading/models"
 	"github.com/robfig/cron"
-	"gopkg.in/chanxuehong/wechat.v2/mp/message/template"
+	//"gopkg.in/chanxuehong/wechat.v2/mp/message/template"
+	"gopkg.in/chanxuehong/wechat.v2/mp/message/custom"
 )
 
 const (
@@ -167,24 +168,33 @@ func (self *RemindWorker) doRemind(ri *RemindInfo) {
 	holmes.Debug("course remind: %s %s %s", courseName, catalogName, readingDate)
 	var sendUserNum int64
 	for _, v := range userList {
-		homeworkMsg := &HomeworkRemindTplMsg{
-			First:    &template.DataItem{Value: "您今天的阅读任务已更新\n", Color: "#f76e6c"},
-			Keyword1: &template.DataItem{Value: courseName},
-			Keyword2: &template.DataItem{Value: catalogName},
-			Keyword3: &template.DataItem{Value: "15分钟"},
-			Remark:   &template.DataItem{Value: "PS: 回复 TD 可以取消上课提醒通知哦"},
+		//homeworkMsg := &HomeworkRemindTplMsg{
+		//	First:    &template.DataItem{Value: "您今天的阅读任务已更新\n", Color: "#f76e6c"},
+		//	Keyword1: &template.DataItem{Value: courseName},
+		//	Keyword2: &template.DataItem{Value: catalogName},
+		//	Keyword3: &template.DataItem{Value: "15分钟"},
+		//	Remark:   &template.DataItem{Value: "PS: 回复 TD 可以取消上课提醒通知哦"},
+		//}
+		//msg := &TplMsg{
+		//	ToUser: v.OpenId,
+		//	TplId:  self.cfg.RemindTplId,
+		//	Url: fmt.Sprintf("%s/reading/course/bookdetail/%d/%d/%d/%d", self.cfg.ReadingHost,
+		//		v.User.ID,
+		//		ri.Catalog.MonthCourseCatalog.CourseId,
+		//		ri.Catalog.Book.ID,
+		//		ri.Catalog.MonthCourseCatalog.ID),
+		//	Data: homeworkMsg,
+		//}
+		//self.wtw.Send(&WechatMsg{MsgType: WECHAT_MSG_TPL, Tpl: msg})
+
+		// custom msg
+		msg := &CustomMsg{
+			MsgType: custom.MsgTypeText,
+			ToUser:  v.OpenId,
+			Content: "上课提醒\n\n你今天上课了吗？请在本公众号右下角“我的课堂”——“小鹿微课”进去查看课程任务哦！如有疑问，可联系小鹿微课助教咨询。",
 		}
-		msg := &TplMsg{
-			ToUser: v.OpenId,
-			TplId:  self.cfg.RemindTplId,
-			Url: fmt.Sprintf("%s/reading/course/bookdetail/%d/%d/%d/%d", self.cfg.ReadingHost,
-				v.User.ID,
-				ri.Catalog.MonthCourseCatalog.CourseId,
-				ri.Catalog.Book.ID,
-				ri.Catalog.MonthCourseCatalog.ID),
-			Data: homeworkMsg,
-		}
-		self.wtw.Send(msg)
+		self.wtw.Send(&WechatMsg{MsgType: WECHAT_MSG_CUSTOM, Custom: msg})
+
 		// save send user num
 		sendUserNum++
 		if sendUserNum >= 10 {

@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="646c20b3-f422-431f-9634-28d58f288d0c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/controller/course_handler.go" afterPath="$PROJECT_DIR$/controller/course_handler.go" />
+      <change beforePath="$PROJECT_DIR$/controller/remind_worker.go" afterPath="$PROJECT_DIR$/controller/remind_worker.go" />
+      <change beforePath="$PROJECT_DIR$/controller/wechat.go" afterPath="$PROJECT_DIR$/controller/wechat.go" />
+      <change beforePath="$PROJECT_DIR$/controller/wechat_struct.go" afterPath="$PROJECT_DIR$/controller/wechat_struct.go" />
+      <change beforePath="$PROJECT_DIR$/controller/wechat_tpl_worker.go" afterPath="$PROJECT_DIR$/controller/wechat_tpl_worker.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -13,21 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="register_handler.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/controller/register_handler.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="479">
-              <caret line="79" column="36" lean-forward="false" selection-start-line="79" selection-start-column="36" selection-end-line="79" selection-end-column="36" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="course_handler.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="course_handler.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controller/course_handler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="301">
-              <caret line="827" column="65" lean-forward="false" selection-start-line="827" selection-start-column="36" selection-end-line="827" selection-end-column="65" />
+            <state relative-caret-position="446">
+              <caret line="813" column="73" lean-forward="true" selection-start-line="813" selection-start-column="73" selection-end-line="813" selection-end-column="73" />
               <folding />
             </state>
           </provider>
@@ -45,31 +38,35 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="course_struct.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/controller/course_struct.go">
+      <file leaf-file-name="wechat_tpl_worker.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/controller/wechat_tpl_worker.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="8" column="22" lean-forward="true" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
-              <folding />
+            <state relative-caret-position="149">
+              <caret line="52" column="31" lean-forward="false" selection-start-line="52" selection-start-column="31" selection-end-line="52" selection-end-column="31" />
+              <folding>
+                <element signature="e#20#110#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="course_list.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/course/course_list.html">
+      <file leaf-file-name="wechat.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/controller/wechat.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1847">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="297">
+              <caret line="52" column="40" lean-forward="false" selection-start-line="52" selection-start-column="40" selection-end-line="52" selection-end-column="40" />
+              <folding>
+                <element signature="e#20#347#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="course.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/models/course.go">
+      <file leaf-file-name="msg.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../../gopkg.in/chanxuehong/wechat.v2/mp/message/custom/msg.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="347">
-              <caret line="35" column="68" lean-forward="true" selection-start-line="35" selection-start-column="68" selection-end-line="35" selection-end-column="68" />
+            <state relative-caret-position="54">
+              <caret line="3" column="44" lean-forward="true" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -87,23 +84,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="course_test.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/models/course_test.go">
+      <file leaf-file-name="wechat_struct.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/controller/wechat_struct.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
-              <caret line="59" column="0" lean-forward="true" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="522">
+              <caret line="29" column="5" lean-forward="false" selection-start-line="29" selection-start-column="5" selection-end-line="29" selection-end-column="5" />
+              <folding>
+                <element signature="e#20#126#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="remind_worker.go" pinned="false" current-in-tab="false">
+      <file leaf-file-name="remind_worker.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controller/remind_worker.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="519">
-              <caret line="170" column="81" lean-forward="false" selection-start-line="170" selection-start-column="65" selection-end-line="170" selection-end-column="81" />
+            <state relative-caret-position="652">
+              <caret line="195" column="59" lean-forward="false" selection-start-line="195" selection-start-column="59" selection-end-line="195" selection-end-column="59" />
               <folding>
-                <element signature="e#20#272#0" expanded="true" />
+                <element signature="e#20#326#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -144,8 +143,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/controller/wechat.go" />
-        <option value="$PROJECT_DIR$/controller/wechat_struct.go" />
         <option value="$PROJECT_DIR$/views/register/proto.html" />
         <option value="$PROJECT_DIR$/controller/reading_handler.go" />
         <option value="$PROJECT_DIR$/proto/call_struct.go" />
@@ -168,13 +165,16 @@
         <option value="$PROJECT_DIR$/controller/register_handler.go" />
         <option value="$PROJECT_DIR$/views/register/sign_success.html" />
         <option value="$PROJECT_DIR$/views/reading_sign_success.html" />
-        <option value="$PROJECT_DIR$/controller/remind_worker.go" />
         <option value="$PROJECT_DIR$/views/reading_sign.html" />
         <option value="$PROJECT_DIR$/models/course_test.go" />
         <option value="$PROJECT_DIR$/controller/course_struct.go" />
         <option value="$PROJECT_DIR$/views/course/register_course_list.html" />
         <option value="$PROJECT_DIR$/models/course_query.go" />
         <option value="$PROJECT_DIR$/controller/course_handler.go" />
+        <option value="$PROJECT_DIR$/controller/wechat.go" />
+        <option value="$PROJECT_DIR$/controller/wechat_struct.go" />
+        <option value="$PROJECT_DIR$/controller/wechat_tpl_worker.go" />
+        <option value="$PROJECT_DIR$/controller/remind_worker.go" />
       </list>
     </option>
   </component>
@@ -407,27 +407,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../../../gopkg.in/chanxuehong/wechat.v2/mch/pay/refund.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
-          <caret line="23" column="4" lean-forward="false" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/proto/call_struct.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="30" lean-forward="false" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../gopkg.in/chanxuehong/wechat.v2/mch/pay/orderquery.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
-          <caret line="28" column="5" lean-forward="false" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/controller/const.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
@@ -632,13 +611,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../gopkg.in/chanxuehong/wechat.v2/mp/message/template/send.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="508">
-          <caret line="31" column="31" lean-forward="true" selection-start-line="31" selection-start-column="31" selection-end-line="31" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/book.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -663,41 +635,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controller/wechat.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="37" column="28" lean-forward="false" selection-start-line="37" selection-start-column="28" selection-end-line="37" selection-end-column="28" />
-          <folding>
-            <element signature="e#20#295#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controller/wechat_tpl_worker.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1404">
-          <caret line="78" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
-          <folding>
-            <element signature="e#20#110#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/user_course.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1476">
           <caret line="86" column="26" lean-forward="false" selection-start-line="86" selection-start-column="26" selection-end-line="86" selection-end-column="26" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/controller/wechat_struct.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="17" column="14" lean-forward="false" selection-start-line="17" selection-start-column="14" selection-end-line="17" selection-end-column="14" />
-          <folding>
-            <element signature="e#20#84#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -757,16 +699,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controller/remind_worker.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="519">
-          <caret line="170" column="81" lean-forward="false" selection-start-line="170" selection-start-column="65" selection-end-line="170" selection-end-column="81" />
-          <folding>
-            <element signature="e#20#272#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/course_query.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
@@ -789,9 +721,81 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/controller/course_handler.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="827" column="65" lean-forward="false" selection-start-line="827" selection-start-column="36" selection-end-line="827" selection-end-column="65" />
+        <state relative-caret-position="446">
+          <caret line="813" column="73" lean-forward="true" selection-start-line="813" selection-start-column="73" selection-end-line="813" selection-end-column="73" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../gopkg.in/chanxuehong/wechat.v2/mp/message/template/send.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="36" column="5" lean-forward="false" selection-start-line="36" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../gopkg.in/chanxuehong/wechat.v2/mp/core/mixed_msg.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" column="4" lean-forward="false" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../gopkg.in/chanxuehong/wechat.v2/mp/message/custom/custom.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../gopkg.in/chanxuehong/wechat.v2/mp/message/custom/msg.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" column="44" lean-forward="true" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/wechat.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="52" column="40" lean-forward="false" selection-start-line="52" selection-start-column="40" selection-end-line="52" selection-end-column="40" />
+          <folding>
+            <element signature="e#20#347#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/wechat_tpl_worker.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="52" column="31" lean-forward="false" selection-start-line="52" selection-start-column="31" selection-end-line="52" selection-end-column="31" />
+          <folding>
+            <element signature="e#20#110#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/wechat_struct.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="29" column="5" lean-forward="false" selection-start-line="29" selection-start-column="5" selection-end-line="29" selection-end-column="5" />
+          <folding>
+            <element signature="e#20#126#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/remind_worker.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="652">
+          <caret line="195" column="59" lean-forward="false" selection-start-line="195" selection-start-column="59" selection-end-line="195" selection-end-column="59" />
+          <folding>
+            <element signature="e#20#326#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
