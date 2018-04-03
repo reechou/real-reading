@@ -573,6 +573,7 @@ func (self *ReadingHandler) registerCourseList(rr *HandlerRequest, w http.Respon
 		holmes.Error("get now course list error: %v", err)
 		return
 	}
+	holmes.Debug("now courses: %v", nowCourseList)
 	renderView(w, "./views/course/register_course_list.html", nowCourseList)
 }
 

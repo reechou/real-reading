@@ -75,19 +75,23 @@
 		    {{ range .AttendanceDetailList }}
 		    {
 		       stamp: {{ .MonthCourseCatalog.TaskTime }},
-		       className: 'check-able',
+		       className: 'check-able'
 		    },
-		    {{end}}
+		    {{ end }}
 		],
 		success: function (item, arr) {
 		    console.log(item, arr);
 		},
 		switchRender: function (year, month, cal) {
 			console.log('计算机识别的 - 年份: ' + year + ' 月份: ' + month);
-			var data = [{
-				'stamp': 1507737600000,
-				'className': 'check-able',
-			}];
+			var data = [
+                {{ range .AttendanceDetailList }}
+			    {
+				    'stamp': {{ .MonthCourseCatalog.TaskTime }},
+				    'className': 'check-able'
+			    },
+                {{ end }}
+			];
 			cal.renderCallbackArr(data);
 		}
 	});
