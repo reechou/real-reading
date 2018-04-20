@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="646c20b3-f422-431f-9634-28d58f288d0c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/views/reading_sign.html" afterPath="$PROJECT_DIR$/views/reading_sign.html" />
-      <change beforePath="$PROJECT_DIR$/views/reading_sign_success.html" afterPath="$PROJECT_DIR$/views/reading_sign_success.html" />
       <change beforePath="$PROJECT_DIR$/views/register/sign_success.html" afterPath="$PROJECT_DIR$/views/register/sign_success.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -112,8 +109,8 @@
       <file leaf-file-name="sign_success.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/register/sign_success.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="413">
-              <caret line="152" column="24" lean-forward="false" selection-start-line="152" selection-start-column="24" selection-end-line="152" selection-end-column="24" />
+            <state relative-caret-position="469">
+              <caret line="142" column="57" lean-forward="false" selection-start-line="142" selection-start-column="57" selection-end-line="142" selection-end-column="57" />
               <folding />
             </state>
           </provider>
@@ -807,8 +804,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/views/register/sign_success.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="152" column="24" lean-forward="false" selection-start-line="152" selection-start-column="24" selection-end-line="152" selection-end-column="24" />
+        <state relative-caret-position="469">
+          <caret line="142" column="57" lean-forward="false" selection-start-line="142" selection-start-column="57" selection-end-line="142" selection-end-column="57" />
           <folding />
         </state>
       </provider>
