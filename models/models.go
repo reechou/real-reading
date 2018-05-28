@@ -50,7 +50,8 @@ func InitDB(cfg *config.Config) {
 		new(CourseType),
 		new(CourseChannel),
 		new(BookCatalog),
-		new(BookCatalogChapter)); err != nil {
+		new(BookCatalogChapter),
+		new(Coupon)); err != nil {
 		holmes.Fatal("Fail to sync database: %v", err)
 	}
 }

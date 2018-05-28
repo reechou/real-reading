@@ -86,6 +86,14 @@ type GetCourseDataStatisticsReq struct {
 	EndTime    int64 `json:"endTime"`
 }
 
+// coupon
+type CreateCouponReq struct {
+	Name   string
+	Desc   string
+	Amount int64
+	Num    int
+}
+
 // about response
 type ReadingPayToday struct {
 	OrderNum int64 `json:"orderNum"`

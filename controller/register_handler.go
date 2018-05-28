@@ -333,15 +333,47 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 	}
 
 	payMoney := registerInfo.Course.Money
-	if userinfo.OpenId == "oaKrZwsAF6pRX6z3Qn_EhIZ3DG90" || userinfo.OpenId == "oaKrZwotcenPmZyLKtMyoHZSTlaQ" {
-		payMoney = 1
+	//if userinfo.OpenId == "oaKrZwsAF6pRX6z3Qn_EhIZ3DG90" || userinfo.OpenId == "oaKrZwotcenPmZyLKtMyoHZSTlaQ" {
+	//	payMoney = 1
+	//}
+	var useCoupon int64
+	if userinfo.CouponCDKey != "" {
+		registerInfo.Coupon.CdKey = userinfo.CouponCDKey
+		if has, err := models.GetCoupon(&registerInfo.Coupon); err != nil {
+			holmes.Error("get coupon error: %v", err)
+		} else {
+			if has {
+				if registerInfo.Coupon.IfUse == 0 {
+					if time.Now().Unix() > registerInfo.Coupon.LockTime ||
+						(registerInfo.Coupon.CourseType == registerInfo.Coupon.CourseType && user.ID == registerInfo.Coupon.UserId) {
+						registerInfo.Coupon.CourseType = registerInfo.Course.CourseType
+						registerInfo.Coupon.UserId = user.ID
+						if err = models.UpdateCouponLock(&registerInfo.Coupon); err != nil {
+							holmes.Error("update coupon lock error: %v", err)
+						} else {
+							useCoupon = registerInfo.Coupon.ID
+							if payMoney > registerInfo.Coupon.Amount {
+								payMoney = payMoney - registerInfo.Coupon.Amount
+							} else {
+								payMoney = 1
+							}
+							holmes.Info("user[%d] has locked the coupon[%s]: %s and new pay: %d",
+								user.ID, registerInfo.Coupon.Desc, registerInfo.Coupon.CdKey, payMoney)
+						}
+					}
+				}
+			}
+		}
 	}
+
+	registerInfo.RealPay = strconv.FormatFloat(float64(payMoney)/100, 'f', -1, 64)
+
 	outTradeNo := fmt.Sprintf("%s-%d-%d", time.Now().Format("2006-01-02_15-04-05"), user.ID, registerInfo.Course.ID)
 	unifiedRsp, err := self.registerUnifiedOrder(
 		outTradeNo,
 		payMoney,
 		registerInfo.Course.Name,
-		fmt.Sprintf("%d", registerInfo.Course.CourseType),
+		fmt.Sprintf("%d_%d", registerInfo.Course.CourseType, useCoupon),
 		user.OpenId,
 		GetIPFromRequest(r),
 		fmt.Sprintf("%s%s/%s/%s", r.Host, ReadingPrefix, REGISTER_URI_PREFIX, READING_URI_PAY_NOTIFY),
@@ -455,10 +487,25 @@ func (self *ReadingHandler) registerPayNotify(rr *HandlerRequest, w http.Respons
 		holmes.Error("msg attach not found.")
 		return
 	}
-	courseType, err := strconv.Atoi(attach)
-	if err != nil {
-		holmes.Error("msg attach[%s] strconv error: %v", attach, err)
+	attachs := strings.Split(attach, "_")
+	if len(attach) != 2 {
+		holmes.Error("attach error: %s", attach)
 		return
+	}
+	courseType, err := strconv.Atoi(attachs[0])
+	if err != nil {
+		holmes.Error("msg attach-course_type[%s] strconv error: %v", attachs[0], err)
+		return
+	}
+	couponId, err := strconv.ParseInt(attachs[1], 10, 0)
+	if err != nil {
+		holmes.Error("msg attach-coupon_id[%s] strconv error: %v", attachs[1], err)
+		return
+	}
+	if couponId != 0 {
+		if err = models.UpdateCoupon(&models.Coupon{ID: couponId}); err != nil {
+			holmes.Error("update coupon error: %v", err)
+		}
 	}
 	outTradeNo, ok := msg["out_trade_no"]
 	if !ok {

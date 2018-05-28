@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <title>小鹿微课 - 优惠券</title>
+    <meta charset="utf-8" >
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="keywords" content="" >
+    <meta name="description" content="" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" >
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="/reading/m-main.css" >
+    <link rel="stylesheet" href="/reading/m-show-1.css" >
+    <link rel="stylesheet" href="/reading/m-sy.css" >
+</head>
+<body>
+
+<div class="show-box nobd">
+    <div class="pb-info pt20 clearfix">
+        <span class="show-over">{{ .NickName }}</span>
+        <img src="{{ .AvatarUrl }}">
+    </div>
+
+    <section class="enroll-box">
+        <ol class="enroll-status">
+            <li class="eb-tone eb-icon current">
+                <span class="icon-fee"></span>
+                <p>付费</p>
+            </li>
+            <li class="eb-tone eb-line"></li>
+            <li class="eb-tone eb-icon">
+                <span class="icon-enroll"></span>
+                <p>报到</p>
+            </li>
+            <li class="eb-tone eb-line"></li>
+            <li class="eb-tone eb-icon">
+                <span class="icon-begin"></span>
+                <p>开学</p>
+            </li>
+        </ol>
+        <ul class="enroll-infobox mt20">
+            <li class="eb-block eb-level0">
+                <ul class="eb-form">
+                    <li class="eb-one">
+                        <div>
+                            <input class="eb-text validone" placeholder="请输入优惠码" id="couponCdKey">
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="enroll-dobox"><span class="offer-btn do-enroll" onclick="doExchange()">兑换优惠码</span></div>
+            </li>
+        </ul>
+    </section>
+</div>
+
+<div id="app-pay-loading" :class="{hide: !loadingStatus}"><defined-pay-loading></defined-pay-loading></div>
+
+<script src="http://oe3slowqt.bkt.clouddn.com/zepto.min.js"></script>
+<script src="https://jhsy.caizhu.com/static/js/timecountdown.js?data"></script>
+
+<script>
+    function doExchange() {
+        var cdkey = document.getElementById("couponCdKey").value;
+        cdkey = cdkey.trim();
+        if(!cdkey) {
+            alert('请输入优惠码');
+            return ;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/reading/coupon/go-exchange',
+            dataType: 'json',
+            data: JSON.stringify(
+                {
+                    cdkey: cdkey
+                }
+            ),
+            success: function(d) {
+                if(d.code == 0){
+                    location.assign('/reading/register/pay/{{.Course.CourseType}}?src={{.Source}}&cdkey='+cdkey);
+                } else {
+                    alert(d.msg);
+                }
+            },
+            error: function(){}
+        });
+    }
+</script>
+
+<div style="display: none">
+    <script src="https://s19.cnzz.com/z_stat.php?id=1262185690&web_id=1262185690" language="JavaScript"></script>
+</div>
+
+</body>
+</html>

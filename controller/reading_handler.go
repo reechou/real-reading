@@ -144,6 +144,10 @@ func (self *ReadingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		self.registerHandle(rr, w, r)
 		return
 	}
+	if strings.HasPrefix(rr.Path, COUPON_URI_PREFIX) {
+		self.couponHandle(rr, w, r)
+		return
+	}
 	if strings.HasPrefix(rr.Path, DATA_STATISTICS_URI_PREFIX) {
 		self.dataStatisticsHandle(rr, w, r)
 		return

@@ -14,6 +14,9 @@ type RegisterInfo struct {
 	Source       int
 
 	Course models.Course
+	Coupon models.Coupon
+
+	RealPay string
 
 	IfCourseStart  int64
 	StartTime      string

@@ -360,10 +360,11 @@ func (self *ReadingHandler) readingGetGraduation(rr *HandlerRequest, w http.Resp
 
 // check user
 type UserInfo struct {
-	OpenId    string
-	Name      string
-	AvatarUrl string
-	Source    int
+	OpenId      string
+	Name        string
+	AvatarUrl   string
+	Source      int
+	CouponCDKey string
 }
 
 func (self *ReadingHandler) checkUserBase(w http.ResponseWriter, r *http.Request) (ui *UserInfo, ifRedirect bool) {
@@ -453,6 +454,22 @@ func (self *ReadingHandler) checkUser(w http.ResponseWriter, r *http.Request, if
 			ui.Name = user.Name
 			ui.AvatarUrl = user.AvatarUrl
 			ui.Source = int(user.Source)
+
+			queryValues, err := url.ParseQuery(r.URL.RawQuery)
+			if ui.Source == 0 {
+				src := queryValues.Get("src")
+				if src != "" {
+					ui.Source, err = strconv.Atoi(src)
+					if err != nil {
+						holmes.Error("strconv src[%s] error: %v", src, err)
+					}
+				}
+			}
+			if err != nil {
+				holmes.Error("url parse query error: %v", err)
+				return
+			}
+			ui.CouponCDKey = queryValues.Get("cdkey")
 		}
 		return
 	}
@@ -482,6 +499,7 @@ NEED_OAUTH:
 			holmes.Error("strconv src[%s] error: %v", src, err)
 		}
 	}
+	ui.CouponCDKey = queryValues.Get("cdkey")
 
 	token, err := self.oauth2Client.ExchangeToken(code)
 	if err != nil {
