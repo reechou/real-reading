@@ -94,6 +94,11 @@ type CreateCouponReq struct {
 	Num    int
 }
 
+type GetCouponListReq struct {
+	Offset int
+	Num    int
+}
+
 // about response
 type ReadingPayToday struct {
 	OrderNum int64 `json:"orderNum"`

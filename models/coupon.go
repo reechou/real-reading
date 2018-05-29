@@ -1,8 +1,9 @@
 package models
 
 import (
-	"github.com/reechou/holmes"
 	"time"
+
+	"github.com/reechou/holmes"
 )
 
 type Coupon struct {
@@ -15,7 +16,7 @@ type Coupon struct {
 	LockTime   int64  `xorm:"not null default 0 int" json:"lockTime"`
 	CourseType int64  `xorm:"not null default 0 int" json:"courseType"`
 	UserId     int64  `xorm:"not null default 0 int" json:"userId"`
-	CreatedAt  int64  `xorm:"not null default 0 int" json:"createdAt"`
+	CreatedAt  int64  `xorm:"not null default 0 int index" json:"createdAt"`
 	UpdatedAt  int64  `xorm:"not null default 0 int" json:"-"`
 }
 
@@ -37,6 +38,15 @@ func GetCoupon(info *Coupon) (bool, error) {
 		return false, err
 	}
 	return has, nil
+}
+
+func GetCouponList(offset, limit int) ([]Coupon, error) {
+	var coupons []Coupon
+	if err := x.Limit(limit, offset).Desc("created_at").Find(&coupons); err != nil {
+		holmes.Error("get coupon list error: %v", err)
+		return nil, err
+	}
+	return coupons, nil
 }
 
 func UpdateCoupon(info *Coupon) error {

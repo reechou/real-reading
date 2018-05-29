@@ -19,6 +19,7 @@ const (
 	COUPON_URI_CREATE      = "create"
 	COUPON_URI_EXCHANGE    = "exchange"
 	COUPON_URI_GO_EXCHANGE = "go-exchange"
+	COUPON_URI_LIST        = "list"
 )
 
 func (self *ReadingHandler) couponHandle(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
@@ -36,6 +37,8 @@ func (self *ReadingHandler) couponHandle(rr *HandlerRequest, w http.ResponseWrit
 		self.exchangeCoupon(rr, w, r)
 	case COUPON_URI_GO_EXCHANGE:
 		self.goexchangeCoupon(rr, w, r)
+	case COUPON_URI_LIST:
+		self.listCoupon(rr, w, r)
 	}
 }
 
@@ -133,4 +136,27 @@ func (self *ReadingHandler) goexchangeCoupon(rr *HandlerRequest, w http.Response
 		rsp.Msg = fmt.Sprintf("该优惠券码已锁定，请%d分%d秒后再试", lost/60, lost%60)
 		return
 	}
+}
+
+func (self *ReadingHandler) listCoupon(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+
+	req := &proto.GetCouponListReq{}
+	var err error
+	if err = json.Unmarshal(rr.Val, &req); err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+
+	list, err := models.GetCouponList(req.Offset, req.Num)
+	if err != nil {
+		holmes.Error("get coupon list error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	rsp.Data = list
 }
