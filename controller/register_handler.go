@@ -488,7 +488,7 @@ func (self *ReadingHandler) registerPayNotify(rr *HandlerRequest, w http.Respons
 		return
 	}
 	attachs := strings.Split(attach, "_")
-	if len(attach) != 2 {
+	if len(attachs) != 2 {
 		holmes.Error("attach error: %s", attach)
 		return
 	}
