@@ -71,6 +71,7 @@ func (self *ReadingHandler) createCoupon(rr *HandlerRequest, w http.ResponseWrit
 		rsp.Code = proto.RESPONSE_ERR
 		return
 	}
+	rsp.Data = coupons
 }
 
 func (self *ReadingHandler) exchangeCoupon(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
