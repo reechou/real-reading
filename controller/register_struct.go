@@ -12,6 +12,7 @@ type RegisterInfo struct {
 	EnrollMobile string
 	EnrollWechat string
 	Source       int
+	UserId       int64
 
 	Course models.Course
 	Coupon models.Coupon

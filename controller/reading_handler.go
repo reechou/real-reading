@@ -35,13 +35,14 @@ const (
 )
 
 const (
-	READING_URI_SIGN_UP    = "signup"
-	READING_URI_ENROLL     = "enroll"
-	READING_URI_GO_ENROLL  = "goenroll"
-	READING_URI_PAY        = "pay"
-	READING_URI_PAY_NOTIFY = "paynotify"
-	READING_URI_SUCCESS    = "success"
-	READING_URI_PROTO      = "proto"
+	READING_URI_SIGN_UP      = "signup"
+	READING_URI_ENROLL       = "enroll"
+	READING_URI_GO_ENROLL    = "goenroll"
+	READING_URI_PAY          = "pay"
+	READING_URI_PAY_NOTIFY   = "paynotify"
+	READING_URI_SUCCESS      = "success"
+	READING_URI_PROTO        = "proto"
+	READING_URI_CHECK_COURSE = "check_course"
 )
 
 // manager uri

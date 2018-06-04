@@ -48,6 +48,8 @@ func (self *ReadingHandler) registerHandle(rr *HandlerRequest, w http.ResponseWr
 		self.registerSuccess(rr, w, r)
 	case READING_URI_PROTO:
 		self.registerProto(rr, w, r)
+	case READING_URI_CHECK_COURSE:
+		self.registerCheckCourse(rr, w, r)
 	}
 }
 
@@ -256,6 +258,30 @@ func (self *ReadingHandler) registerGoEnroll(rr *HandlerRequest, w http.Response
 	}
 }
 
+func (self *ReadingHandler) registerCheckCourse(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
+	rsp := &proto.Response{Code: proto.RESPONSE_OK}
+	defer func() {
+		writeRsp(w, rsp)
+	}()
+
+	req := &models.UserCourse{}
+	err := json.Unmarshal(rr.Val, &req)
+	if err != nil {
+		holmes.Error("json unmarshal error: %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+
+	req.Status = READING_COURSE_STATUS_PAIED
+	_, err = models.GetUserCourseFromUser(req)
+	if err != nil {
+		holmes.Error("get user course from user eror; %v", err)
+		rsp.Code = proto.RESPONSE_ERR
+		return
+	}
+	rsp.Data = req
+}
+
 func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWriter, r *http.Request) {
 	userinfo, ifRedirect := self.checkUser(w, r, true)
 	if ifRedirect {
@@ -299,6 +325,7 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 			return
 		}
 	}
+	registerInfo.UserId = user.ID
 
 	// check if user has this course
 	courseList, err := models.GetUserCourseList(user.ID)

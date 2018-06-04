@@ -122,7 +122,10 @@
 		);
 	}
     function doPay() {
-        if(typeof WeixinJSBridge == "undefined") {
+        // var timer = setInterval(function() {
+        //     checkCourse();
+        // }, 1000);
+        if (typeof WeixinJSBridge == "undefined") {
             if (document.addEventListener) {
 		        document.addEventListener('WeixinJSBridgeReady', jsApiCallPay, false);
 		    } else if (document.attachEvent) {
@@ -132,6 +135,27 @@
         } else {
             jsApiCallPay();
         }
+    }
+    function checkCourse() {
+        $.ajax({
+            type: 'POST',
+            url: '/reading/register/check_course',
+            dataType: 'json',
+            data: JSON.stringify(
+                    {
+                        userId: {{ .UserId }},
+                        courseType: {{ .Course.CourseType }}
+                    }
+            ),
+            success: function(d) {
+                if (d.code == 0){
+                    if (d.data.id != 0) {
+                        location.assign('/reading/register/enroll/{{.Course.CourseType}}?src={{.Source}}&vt='+(new Date().getTime()));
+                    }
+                }
+            },
+            error: function(){}
+        });
     }
 </script>
 

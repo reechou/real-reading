@@ -53,14 +53,11 @@ func GetUserCourseFromId(info *UserCourse) (bool, error) {
 }
 
 func GetUserCourseFromUser(info *UserCourse) (bool, error) {
-	has, err := x.Where("user_id = ?", info.UserId).Get(info)
+	has, err := x.Where("user_id = ? AND course_type = ? AND status = ?", info.UserId, info.CourseType, info.Status).Get(info)
 	if err != nil {
 		return false, err
 	}
-	if !has {
-		return false, nil
-	}
-	return true, nil
+	return has, nil
 }
 
 func GetUserCourseFromTime(fromTime int64) ([]UserCourse, error) {
