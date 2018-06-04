@@ -122,9 +122,9 @@
 		);
 	}
     function doPay() {
-        // var timer = setInterval(function() {
-        //     checkCourse();
-        // }, 1000);
+        var timer = setInterval(function() {
+            checkCourse();
+        }, 1000);
         if (typeof WeixinJSBridge == "undefined") {
             if (document.addEventListener) {
 		        document.addEventListener('WeixinJSBridgeReady', jsApiCallPay, false);
