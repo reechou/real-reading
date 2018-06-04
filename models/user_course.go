@@ -15,10 +15,10 @@ type UserCourse struct {
 	Status        int64  `xorm:"not null default 0 int index" json:"status"`
 	PayTime       int64  `xorm:"not null default 0 int index" json:"payTime"`
 	Source        int64  `xorm:"not null default 0 int index" json:"source"`
-	OutTradeNo    string `xorm:"not null default '' varchar(128)" json:"outTradeNo"`
-	TransactionId string `xorm:"not null default '' varchar(128)" json:"transactionId"`
-	OutRefundNo   string `xorm:"not null default '' varchar(128)" json:"outRefundNo"`
-	RefundId      string `xorm:"not null default '' varchar(128)" json:"refundId"`
+	OutTradeNo    string `xorm:"not null default '' varchar(128)" json:"-"`
+	TransactionId string `xorm:"not null default '' varchar(128)" json:"-"`
+	OutRefundNo   string `xorm:"not null default '' varchar(128)" json:"-"`
+	RefundId      string `xorm:"not null default '' varchar(128)" json:"-"`
 	RefundFee     int64  `xorm:"not null default 0 int" json:"refundFee"`
 	RefundWay     int64  `xorm:"not null default 0 int" json:"refundWay"`
 	CreatedAt     int64  `xorm:"not null default 0 int" json:"createdAt"`
