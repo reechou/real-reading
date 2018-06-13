@@ -400,7 +400,7 @@ func (self *ReadingHandler) checkUserBase(w http.ResponseWriter, r *http.Request
 	code := queryValues.Get("code")
 	if code == "" {
 		state := string(rand.NewHex())
-		redirectUrl := fmt.Sprintf("http://%s%s", r.Host, r.URL.String())
+		redirectUrl := fmt.Sprintf("https://%s%s", r.Host, r.URL.String())
 		AuthCodeURL := mpoauth2.AuthCodeURL(self.l.cfg.ReadingOauth.ReadingWxAppId,
 			redirectUrl,
 			self.l.cfg.ReadingOauth.ReadingOauth2ScopeBase, state)
@@ -484,7 +484,7 @@ NEED_OAUTH:
 	code := queryValues.Get("code")
 	if code == "" {
 		state := string(rand.NewHex())
-		redirectUrl := fmt.Sprintf("http://%s%s", r.Host, r.URL.String())
+		redirectUrl := fmt.Sprintf("https://%s%s", r.Host, r.URL.String())
 		AuthCodeURL := mpoauth2.AuthCodeURL(self.l.cfg.ReadingOauth.ReadingWxAppId,
 			redirectUrl,
 			self.l.cfg.ReadingOauth.ReadingOauth2ScopeUser, state)
