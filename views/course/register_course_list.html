@@ -50,7 +50,7 @@
             <strong>课程列表</strong>
         </div>
         {{ range .Courses }}
-        <div class="task-info p-rela" onclick="location.assign('http://reading.dingjiantaoke.cn/reading/register/signup/{{.CourseType}}');">
+        <div class="task-info p-rela" onclick="location.assign('/reading/register/signup/{{.CourseType}}');">
             <div class="task-cover-course">
                 <img class="" src="{{ .Cover }}">
             </div>
