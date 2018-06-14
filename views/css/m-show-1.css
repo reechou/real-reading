@@ -5,7 +5,7 @@ body{color: #333; font-family: Microsoft Yahei;}
 
 .show-h2{padding: 25px 0 0; font-size: 18px; line-height: 30px;}
 .show-tit02{margin: 0 15px;}
-.show-box{margin-left: 25px; margin-right: 25px; border-bottom: #e6e6e6 solid 1px;}
+.show-box{margin-left: 25px; margin-right: 25px; border-bottom: #e6e6e6 solid 1px; background: #ffffff;}
 .show-sybox{margin-left: 25px; margin-right: 25px; padding-bottom: 20px;}
 .show-sybox-pb50{padding-bottom: 50px;}
 .sybox-pb20{padding-bottom: 20px;}
