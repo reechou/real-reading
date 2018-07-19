@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="646c20b3-f422-431f-9634-28d58f288d0c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/controller/course_handler.go" afterPath="$PROJECT_DIR$/controller/course_handler.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -37,8 +36,8 @@
       <file leaf-file-name="course_handler.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controller/course_handler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="635">
-              <caret line="1038" column="115" lean-forward="false" selection-start-line="1038" selection-start-column="115" selection-end-line="1038" selection-end-column="115" />
+            <state relative-caret-position="573">
+              <caret line="1038" column="78" lean-forward="false" selection-start-line="1038" selection-start-column="78" selection-end-line="1038" selection-end-column="78" />
               <folding />
             </state>
           </provider>
@@ -821,8 +820,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/controller/course_handler.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="635">
-          <caret line="1038" column="115" lean-forward="false" selection-start-line="1038" selection-start-column="115" selection-end-line="1038" selection-end-column="115" />
+        <state relative-caret-position="573">
+          <caret line="1038" column="78" lean-forward="false" selection-start-line="1038" selection-start-column="78" selection-end-line="1038" selection-end-column="78" />
           <folding />
         </state>
       </provider>

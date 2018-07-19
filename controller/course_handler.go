@@ -1036,7 +1036,7 @@ func (self *ReadingHandler) readingCourseAttendanceDetail(rr *HandlerRequest, w 
 		userCourseAttendanceDetailList.AttendanceDetailList[i].TaskTime *= 1000
 	}
 
-	holmes.Debug("start: %d %d %d end: %d %d %d task list: %v", userCourseAttendanceDetailList.AttendanceDetailList)
+	holmes.Debug("attendance detail list: %+v", userCourseAttendanceDetailList)
 
 	renderView(w, "./views/course/course_check_detail.html", userCourseAttendanceDetailList)
 }
