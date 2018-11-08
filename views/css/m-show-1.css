@@ -227,14 +227,14 @@ body{color: #333; font-family: Microsoft Yahei; background: #ffffff;}
 .eb-icon.current > p{color: #f76e6c;}
 
 .icon-enroll, .icon-fee, .icon-team, .icon-begin{background: no-repeat center top; background-size: auto 100%;}
-.icon-enroll{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/a_03.png');}
-.current .icon-enroll{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/apply_07.png');}
-.icon-fee{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/apply_12.png');}
-.current .icon-fee{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/pay_03.png');}
+.icon-enroll{background-image: url('https://oss.ririyuedu.com/reading/img/bao_1.png');}
+.current .icon-enroll{background-image: url('https://oss.ririyuedu.com/reading/img/bao_2.png');}
+.icon-fee{background-image: url('https://oss.ririyuedu.com/reading/img/pay_1.png');}
+.current .icon-fee{background-image: url('https://oss.ririyuedu.com/reading/img/pay_2.png');}
 .icon-team{background-image: url('http://img.caizhu.com/jhsy/images/m/e-icon-class.png');}
 .current .icon-team{background-image: url('http://img.caizhu.com/jhsy/images/m/e-icon-class-on.png');}
-.icon-begin{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/apply_09.png');}
-.current .icon-begin{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/succeed_03.png');}
+.icon-begin{background-image: url('https://oss.ririyuedu.com/reading/img/suc_1.png');}
+.current .icon-begin{background-image: url('https://oss.ririyuedu.com/reading/img/suc_2.png');}
 
 .eb-line{-webkit-box-flex: 1; box-flex: 1;}
 .eb-line:after{content: ''; display: block; height: 0; border-bottom: #e6e6e6 solid 1px; margin: 16px 0 0;}
