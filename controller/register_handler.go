@@ -360,9 +360,9 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 	}
 
 	payMoney := registerInfo.Course.Money
-	//if userinfo.OpenId == "oaKrZwsAF6pRX6z3Qn_EhIZ3DG90" || userinfo.OpenId == "oaKrZwotcenPmZyLKtMyoHZSTlaQ" {
-	//	payMoney = 1
-	//}
+	if userinfo.OpenId == "oaKrZwsAF6pRX6z3Qn_EhIZ3DG90" || userinfo.OpenId == "oaKrZwotcenPmZyLKtMyoHZSTlaQ" {
+		payMoney = 1
+	}
 	var useCoupon int64
 	if userinfo.CouponCDKey != "" {
 		registerInfo.Coupon.CdKey = userinfo.CouponCDKey
