@@ -275,11 +275,20 @@ func (UserCourseList) TableName() string {
 	return "user_course"
 }
 
-func GetUserCourseList(userId int64) ([]UserCourseList, error) {
+func GetUserCourseList(userId, status int64) ([]UserCourseList, error) {
 	userCourseList := make([]UserCourseList, 0)
-	err := x.Join("LEFT", "course", "user_course.course_id = course.id").
-		Where("user_course.user_id = ?", userId).
-		Find(&userCourseList)
+	var err error
+	if status == 0 {
+		err = x.Join("LEFT", "course", "user_course.course_id = course.id").
+			Where("user_course.user_id = ?", userId).
+			Find(&userCourseList)
+	} else {
+		err = x.Join("LEFT", "course", "user_course.course_id = course.id").
+			Where("user_course.user_id = ?", userId).
+			And("user_course.status = ?", status).
+			Find(&userCourseList)
+	}
+
 	if err != nil {
 		return nil, err
 	}

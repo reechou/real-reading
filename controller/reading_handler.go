@@ -260,7 +260,7 @@ func (self *ReadingHandler) readingEnroll(rr *HandlerRequest, w http.ResponseWri
 				holmes.Error("update user wxinfo error: %v", err)
 			}
 		}
-		courseList, err := models.GetUserCourseList(user.ID)
+		courseList, err := models.GetUserCourseList(user.ID, 0)
 		if err != nil {
 			holmes.Error("get user course list error: %v", err)
 			io.WriteString(w, MSG_ERROR_SYSTEM)

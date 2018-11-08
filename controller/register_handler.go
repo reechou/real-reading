@@ -146,7 +146,7 @@ func (self *ReadingHandler) registerEnroll(rr *HandlerRequest, w http.ResponseWr
 	registerInfo.AvatarUrl = user.AvatarUrl
 	registerInfo.Source = int(user.Source)
 
-	courseList, err := models.GetUserCourseList(user.ID)
+	courseList, err := models.GetUserCourseList(user.ID, 0)
 	if err != nil {
 		holmes.Error("get user course list error: %v", err)
 		io.WriteString(w, MSG_ERROR_SYSTEM)
@@ -328,7 +328,7 @@ func (self *ReadingHandler) registerPay(rr *HandlerRequest, w http.ResponseWrite
 	registerInfo.UserId = user.ID
 
 	// check if user has this course
-	courseList, err := models.GetUserCourseList(user.ID)
+	courseList, err := models.GetUserCourseList(user.ID, 0)
 	if err != nil {
 		holmes.Error("get user course list error: %v", err)
 		io.WriteString(w, MSG_ERROR_SYSTEM)

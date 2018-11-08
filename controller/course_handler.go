@@ -962,7 +962,7 @@ func (self *ReadingHandler) readingCourseAttendance(rr *HandlerRequest, w http.R
 		return
 	}
 
-	userCourseAttendanceList.AttendanceList, err = models.GetUserCourseList(userCourseAttendanceList.UserId)
+	userCourseAttendanceList.AttendanceList, err = models.GetUserCourseList(userCourseAttendanceList.UserId, int64(READING_COURSE_STATUS_PAIED))
 	if err != nil {
 		holmes.Error("get user course list error: %v", err)
 		return
