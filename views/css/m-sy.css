@@ -135,10 +135,10 @@
 .sy-footerone.current .sy-f-now{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/today-now.png');}
 /*.sy-f-clock{background-image: url('http://img.caizhu.com/jhsy/images/m/today-clock.png');}
 .sy-footerone.current .sy-f-clock{background-image: url('http://img.caizhu.com/jhsy/images/m/today-clock-on.png');}*/
-.sy-f-clock{background-image: url('https://oss.ririyuedu.com/reading/img/kecheng.png');}
-.sy-footerone.current .sy-f-clock{background-image: url('https://oss.ririyuedu.com/reading/img/kechenghui.png');}
-.sy-f-own{background-image: url('https://oss.ririyuedu.com/reading/img/wode.png');}
-.sy-footerone.current .sy-f-own{background-image: url('https://oss.ririyuedu.com/reading/img/wodehui.png');}
+.sy-f-clock{background-image: url('https://oss.ririyuedu.com/reading/img/kechenghui.png');}
+.sy-footerone.current .sy-f-clock{background-image: url('https://oss.ririyuedu.com/reading/img/kecheng.png');}
+.sy-f-own{background-image: url('https://oss.ririyuedu.com/reading/img/wodehui.png');}
+.sy-footerone.current .sy-f-own{background-image: url('https://oss.ririyuedu.com/reading/img/wode.png');}
 .sy-f-bl{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/icon-ft-bl-org.png'); background-size: 20px 16px;}
 .sy-footerone.current .sy-f-bl{background-image: url('http://7xpo0j.com1.z0.glb.clouddn.com/reading/img/icon-ft-bl.png');}
 .sy-footerone > p{color: #999; font-size: 12px; line-height: 20px;}
