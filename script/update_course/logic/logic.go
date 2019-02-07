@@ -47,7 +47,7 @@ func (ucl *UpdateCourseLogic) Run() {
 		holmes.AlsoStdout,
 		holmes.DebugLevel).Stop()
 
-	now.FirstDayMonday = true
+	now.WeekStartDay = time.Monday
 
 	// get dst course info
 	dstCourse := &models.Course{ID: ucl.cfg.CopyCourse.DstCourseId}
